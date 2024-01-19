@@ -1,0 +1,11 @@
+framework module RtcSDK {
+  umbrella header "RtcSDK.h"
+
+  export *
+  module * { export * }
+}
+
+module RtcSDK.Swift {
+  header "RtcSDK-Swift.h"
+  requires objc
+}

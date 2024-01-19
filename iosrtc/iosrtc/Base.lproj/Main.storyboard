@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="RtcDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aOM-xQ-POM" customClass="LJPreviewView" customModule="RtcSDK">
+                                <rect key="frame" x="300.66666666666669" y="10" width="103.33333333333331" height="184"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ga-MQ-1ah">
+                                <rect key="frame" x="30" y="50" width="120" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="切换摄像头"/>
+                                <connections>
+                                    <action selector="handleCapture:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IE9-Nh-RBN"/>
+                                </connections>
+                            </button>
+                            <view userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ULO-LU-ktA">
+                                <rect key="frame" x="-5" y="10" width="424" height="726"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KEg-ge-8Ua">
+                                <rect key="frame" x="33" y="120" width="70" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="PUSH"/>
+                                <connections>
+                                    <action selector="handlePush:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Tc-OH-kGA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ito-Ig-M4h">
+                                <rect key="frame" x="125" y="120" width="65" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="PULL"/>
+                                <connections>
+                                    <action selector="handlePull:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9lB-rf-XuP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YiS-ib-T4D">
+                                <rect key="frame" x="210" y="120" width="74" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="LEAVE"/>
+                                <connections>
+                                    <action selector="handleLeave:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WQo-0d-UCl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PG6-pe-loC">
+                                <rect key="frame" x="32" y="190" width="106" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="local audio"/>
+                                <connections>
+                                    <action selector="muteLocalAudio:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0ex-72-cma"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hNo-gW-CbG">
+                                <rect key="frame" x="160" y="190" width="129" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="remote audio "/>
+                                <connections>
+                                    <action selector="muteRemoteAudio:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TnR-dv-cv2"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="ULO-LU-ktA" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="HUC-st-BEF"/>
+                            <constraint firstItem="aOM-xQ-POM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Jtk-wS-UaH"/>
+                            <constraint firstItem="aOM-xQ-POM" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.25" id="Wst-J0-J0Y"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ULO-LU-ktA" secondAttribute="trailing" constant="-5" id="iTf-WR-lro"/>
+                            <constraint firstItem="aOM-xQ-POM" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.25" id="nsV-WO-T5u"/>
+                            <constraint firstItem="ULO-LU-ktA" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="pVL-Km-qwu"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="aOM-xQ-POM" secondAttribute="trailing" constant="10" id="ug3-qA-L94"/>
+                            <constraint firstItem="ULO-LU-ktA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="5" id="z6R-zG-xhP"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="previewView" destination="aOM-xQ-POM" id="qxQ-Oi-yag"/>
+                        <outlet property="remoteView" destination="ULO-LU-ktA" id="0t1-8b-fOO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="130.43478260869566" y="-35.054347826086961"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
