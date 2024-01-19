@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="horizontal">-->
+<!--        <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--        <Button-->
+<!--            android:id="@+id/camera"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="相机采集"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/screen"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="屏幕采集"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/pull_stream"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="拉流显示"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/camera_push"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="相机推流"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/audio_capture"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="音频采集"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/rtmp_push"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="RTMP推流"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/agora_push"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="声网API推流"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/agora_extra_push"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="声网API自定义输入推流"/>-->
+
+
+<!--        <Button-->
+<!--            android:id="@+id/agora_pull"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="声网API拉流"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/voip_call"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="通话模式"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/custom_player"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/hyzs_dp50"-->
+<!--            android:layout_margin="@dimen/hyzs_dp8"-->
+<!--            android:text="自定义播放器"/>-->
+<!--    </LinearLayout>-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical">-->
+<!--            <Button-->
+
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/hyzs_dp50"-->
+<!--                android:layout_margin="@dimen/hyzs_dp8"-->
+<!--                android:text="相机采集"/>-->
+
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+</RelativeLayout>

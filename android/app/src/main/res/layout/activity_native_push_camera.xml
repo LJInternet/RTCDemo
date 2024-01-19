@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp">
+
+        <FrameLayout
+            android:id="@+id/video_view_layout"
+            android:layout_width="240dp"
+            android:layout_height="320dp"
+            android:background="#ffffffff"
+            android:baselineAligned="false"
+            android:orientation="horizontal"/>
+
+<!--        <SurfaceView-->
+<!--            android:id="@+id/surface_view"-->
+<!--            android:layout_width="240dp"-->
+<!--            android:layout_height="320dp"-->
+<!--            android:visibility="visible" />-->
+
+        <TextView
+            android:id="@+id/tv_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/video_view_layout"
+            android:text="sessionId"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/et_sessionId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_preview"
+            android:layout_toEndOf="@+id/video_view_layout" />
+
+        <Button
+            android:id="@+id/et_server_ip_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_sessionId"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@+id/video_view_layout"
+            android:text="设置" />
+
+        <Button
+            android:id="@+id/capture_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/et_server_ip_confirm"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@+id/video_view_layout"
+            android:text="相机采集" />
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/start_encode"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:text="开始编码"
+        tools:ignore="MissingConstraints" />
+
+
+    <Button
+        android:id="@+id/stop_encode"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:text="结束编码"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/start_encode"
+        android:layout_marginStart="10dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/start_upload"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:text="开始推流"
+        android:layout_above="@+id/start_encode"
+        tools:ignore="MissingConstraints" />
+
+
+    <Button
+        android:id="@+id/stop_upload"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:text="结束推流"
+        android:layout_above="@+id/stop_encode"
+        android:layout_toEndOf="@+id/start_encode"
+        android:layout_marginStart="10dp"
+        tools:ignore="MissingConstraints" />
+
+
+    <Button
+        android:id="@+id/switch_camera"
+        android:layout_width="110dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+
+        android:layout_toEndOf="@+id/stop_encode"
+        android:text="切换摄像头"
+        tools:ignore="MissingConstraints" />
+
+
+</RelativeLayout>

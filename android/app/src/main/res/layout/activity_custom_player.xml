@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fl_remote_view"
+            android:layout_width="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="40dp"
+            android:layout_centerHorizontal="true"
+            android:text="开始"
+            android:layout_width="80dp"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:id="@+id/tvDelay"
+            android:textColor="@color/white"
+            android:background="#FF6200EE"
+            android:padding="4dp"
+            android:layout_marginTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:layout_below="@id/tvDelay">
+                <Button
+                    android:id="@+id/full_mode"
+                    android:text="全屏"
+                    android:onClick="onFullMode"
+                    android:layout_margin="6dp"
+                    android:layout_width="65dp"
+                    android:layout_height="50dp"/>
+                <Button
+                    android:id="@+id/full_min_mode"
+                    android:text="画中画"
+                    android:onClick="onFullMinMOde"
+                    android:layout_margin="6dp"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"/>
+
+                <Button
+                    android:id="@+id/lef_mode"
+                    android:text="左边"
+                    android:onClick="onLeftMode"
+                    android:layout_margin="6dp"
+                    android:layout_width="65dp"
+                    android:layout_height="50dp"/>
+
+                <Button
+                    android:id="@+id/right_mode"
+                    android:text="右边"
+                    android:onClick="onRightMode"
+                    android:layout_margin="6dp"
+                    android:layout_width="65dp"
+                    android:layout_height="50dp"/>
+
+                <Button
+                    android:id="@+id/ori"
+                    android:text="横竖"
+                    android:onClick="onClickOri"
+                    android:layout_margin="6dp"
+                    android:layout_width="65dp"
+                    android:layout_height="50dp"/>
+        </LinearLayout>
+
+</RelativeLayout>
