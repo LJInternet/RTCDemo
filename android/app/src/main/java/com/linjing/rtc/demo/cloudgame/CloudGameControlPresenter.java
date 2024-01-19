@@ -13,6 +13,7 @@ import com.linjing.rtc.api.ChannelConfig;
 import com.linjing.rtc.api.RtcEngineConfig;
 import com.linjing.rtc.base.IRtcEngine;
 import com.linjing.rtc.demo.BuildConfig;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rudp.RUDPCallback;
 import com.linjing.rudp.RudpEngineJni;
 import com.linjing.sdk.api.DelayData;
@@ -169,7 +170,8 @@ public class CloudGameControlPresenter implements View.OnTouchListener, RUDPCall
 
     private void doJoinChannel(int channelId) {
         if (mRudpEngine != null) {
-            mRudpEngine.joinChannel(BuildConfig.token, 0, true, 0, currentUid, 1, channelId+ "");
+            mRudpEngine.joinChannel(BuildConfig.token, 0, true, 0,
+                    UserInfo.userId, (int)BuildConfig.appId, channelId+ "");
         }
     }
 

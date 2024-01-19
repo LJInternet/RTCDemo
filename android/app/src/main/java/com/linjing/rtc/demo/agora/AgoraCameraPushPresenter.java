@@ -10,6 +10,7 @@ import com.linjing.rtc.api.ChannelConfig;
 import com.linjing.rtc.api.RtcEngineConfig;
 import com.linjing.rtc.base.IRtcEngine;
 import com.linjing.rtc.demo.BuildConfig;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rudp.RUDPCallback;
 import com.linjing.rudp.RudpEngineJni;
 import com.linjing.sdk.LJSDK;
@@ -188,13 +189,13 @@ public class AgoraCameraPushPresenter extends IAgoraPushPresenter implements RUD
 //        channelConfig.configs.add(initConfig2);
 
         channelConfig.appID = BuildConfig.appId;
-        channelConfig.userID = BuildConfig.userId;
+        channelConfig.userID = UserInfo.userId;
         channelConfig.channelID = sessionId;
         channelConfig.token = BuildConfig.token;
 
         mRtcEngine.joinChannel(channelConfig);
         if (mRudpEngine != null) {
-            mRudpEngine.joinChannel(BuildConfig.token, 0, true, 0, 1, 1, sessionId);
+            mRudpEngine.joinChannel(BuildConfig.token, 0, true, 0, UserInfo.userId, (int)BuildConfig.appId, sessionId);
         }
 
 

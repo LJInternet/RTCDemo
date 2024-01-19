@@ -27,7 +27,7 @@ public class MyApplication extends Application {
     }
 
     private void initReport() {
-        long uid = BuildConfig.userId;
+        long uid = UserInfo.userId;
         ReportCenterConfig config = new ReportCenterConfig();
         config.isTestEv = true;
         config.collectDuration = 10000;

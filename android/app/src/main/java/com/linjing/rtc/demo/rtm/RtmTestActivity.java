@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.linjing.rtc.demo.BuildConfig;
 import com.linjing.rtc.demo.R;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rudp.RudpEngineWrapperJni;
 
 import java.nio.charset.StandardCharsets;
@@ -28,7 +29,7 @@ public class RtmTestActivity extends AppCompatActivity implements RudpEngineWrap
     private TextView mTvMessage;
     private boolean mPush = true;
     private RudpEngineWrapperJni mRudpEngine;
-    private long currentUid = BuildConfig.userId;
+    private long currentUid = UserInfo.userId;
     private String currentChannelId;
 
     @Override

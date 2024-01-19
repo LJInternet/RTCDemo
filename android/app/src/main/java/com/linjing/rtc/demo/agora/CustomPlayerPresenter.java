@@ -21,6 +21,7 @@ import com.linjing.rtc.demo.BuildConfig;
 import com.linjing.rtc.api.ChannelConfig;
 import com.linjing.rtc.api.RtcEngineConfig;
 import com.linjing.rtc.base.IRtcEngine;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rtc.demo.camera.bean.ResolutionParam;
 import com.linjing.rtc.demo.camera.helper.MediaConfigHelper;
 import com.linjing.rtc.demo.camera.helper.ResolutionOptions;
@@ -196,7 +197,7 @@ public class CustomPlayerPresenter implements VideoRenderCallback, ICustomPlayer
     public void startVoip() {
         ChannelConfig channelConfig = new ChannelConfig();
         channelConfig.appID = BuildConfig.appId;
-        channelConfig.userID = BuildConfig.userId;
+        channelConfig.userID = UserInfo.userId;
         channelConfig.channelID = BuildConfig.channelId+ "";
         channelConfig.token = BuildConfig.token;
         mRtcEngine.joinChannel(channelConfig);

@@ -11,6 +11,7 @@ import com.linjing.rtc.api.ChannelConfig;
 import com.linjing.rtc.api.RtcEngineConfig;
 import com.linjing.rtc.base.IRtcEngine;
 import com.linjing.rtc.demo.BuildConfig;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rudp.RUDPCallback;
 import com.linjing.rudp.RudpEngineJni;
 import com.linjing.sdk.api.DelayData;
@@ -194,13 +195,13 @@ public class AgoraPullPresenter implements RUDPCallback {
 //        channelConfig.configs.add(initConfig);
 //        channelConfig.configs.add(initConfig2);
         channelConfig.appID = BuildConfig.appId;
-        channelConfig.userID = 2;
+        channelConfig.userID = UserInfo.userId;
         channelConfig.channelID = sessionIdStr;
         channelConfig.token = BuildConfig.token;
         mRtcEngine.setClientRole(rudpMode ? RTCEngineConstants.ClientRole.CLIENT_ROLE_PULL : RTCEngineConstants.ClientRole.CLIENT_ROLE_PUSH);
         mRtcEngine.joinChannel(channelConfig);
         if (mRudpEngine != null) {
-            mRudpEngine.joinChannel(BuildConfig.token, 1, true, 0, 2, 1, sessionIdStr);
+            mRudpEngine.joinChannel(BuildConfig.token, 1, true, 0, UserInfo.userId, (int)BuildConfig.appId, sessionIdStr);
         }
 
 //        String msg = "{\"p2pSignalServerIp\":\"61.155.136.209\", \"p2pSignalServerPort\":9988, \"liveid\": " + BuildConfig.sessionId  + "}";

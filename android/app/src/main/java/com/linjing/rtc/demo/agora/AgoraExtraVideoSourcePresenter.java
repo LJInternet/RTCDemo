@@ -15,6 +15,7 @@ import com.linjing.rtc.LJRtcEngine;
 import com.linjing.rtc.api.ChannelConfig;
 import com.linjing.rtc.api.RtcEngineConfig;
 import com.linjing.rtc.base.IRtcEngine;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rtc.demo.camera.bean.ResolutionParam;
 import com.linjing.rtc.demo.camera.helper.MediaConfigHelper;
 import com.linjing.rtc.demo.camera.helper.ResolutionOptions;
@@ -272,7 +273,7 @@ public class AgoraExtraVideoSourcePresenter extends IAgoraPushPresenter {
         ChannelConfig channelConfig = new ChannelConfig();
 
         channelConfig.appID = BuildConfig.appId;
-        channelConfig.appID = BuildConfig.userId;
+        channelConfig.userID = UserInfo.userId;
         channelConfig.channelID = BuildConfig.channelId+"";
         channelConfig.token = BuildConfig.token;
 

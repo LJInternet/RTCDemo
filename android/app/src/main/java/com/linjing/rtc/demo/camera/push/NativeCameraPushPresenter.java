@@ -12,6 +12,7 @@ import com.linjing.capture.api.LiveMode;
 import com.linjing.capture.videocapture.VideoFileCapture;
 import com.linjing.rtc.demo.BuildConfig;
 import com.linjing.rtc.demo.R;
+import com.linjing.rtc.demo.UserInfo;
 import com.linjing.rtc.demo.camera.bean.ResolutionParam;
 import com.linjing.rtc.demo.camera.helper.MediaConfigHelper;
 import com.linjing.rtc.demo.camera.helper.ResolutionOptions;
@@ -85,7 +86,7 @@ public class NativeCameraPushPresenter {
         TransferConfig transferConfig = new TransferConfig();
 
         transferConfig.appID = BuildConfig.appId;
-        transferConfig.userID = BuildConfig.userId;
+        transferConfig.userID = UserInfo.userId;
         transferConfig.channelID = BuildConfig.channelId+ "";
         transferConfig.token = BuildConfig.token;
         transferConfig.transferMode = TransferMode.PUSH_MODE;
