@@ -2,7 +2,19 @@
 
 ## 一.Android RTC使用说明
 
-#### 1.初始LJSDK，设置日志、统计上报等基础信息
+#### 1.增加权限，在AndroidManifest.xml增新增权限
+```java
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+```
+
+#### 2.初始LJSDK，设置日志、统计上报等基础信息
 ```java
     /**
      * 初始化SDK需要填写的配置
@@ -47,7 +59,7 @@
     }
 ```
 
-#### 2.创建RTCEngine
+#### 3.创建RTCEngine
 ```java
 // 暂时无用
     public class RtcEngineConfig {
@@ -133,7 +145,7 @@
     // 启动音频模块，在加入频道成功后，则会自动编码推流
     mRtcEngine.enableAudio();
 ```
-#### 3.设置本地预览
+#### 4.设置本地预览
 ```java
 
     public void setupLocalVideo(Context context, FrameLayout group) {
@@ -146,7 +158,7 @@
     }
 ```
 
-#### 4.设置远端用户预览
+#### 5.设置远端用户预览
 ```java
 
     public void setupRemoteUi(Context context, FrameLayout group) {
@@ -160,7 +172,7 @@
     }
 ```
 
-#### 5.加入频道
+#### 6.加入频道
 ```java
     public class ChannelConfig {
         public List<UdpInitConfig> configs = new ArrayList<UdpInitConfig>();
@@ -190,26 +202,14 @@
     channelConfig.channelID = BuildConfig.sessionId + "";
     channelConfig.token = "token";
     mRtcEngine.joinChannel(channelConfig);
-```[readme.md](..%2Freadme.md)
+```
 
-#### 6.退出频道
-```java[readme.md](..%2Freadme.md)
+#### 7.退出频道
+```java
      mRtcEngine.leaveChannel();
 ```
 
-#### 7.销毁RTCEngine
+#### 8.销毁RTCEngine
 ```java
      mRtcEngine.destroy();
-```
-
-#### 8.增加权限，在AndroidManifest.xml增新增权限
-```java
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 ```
