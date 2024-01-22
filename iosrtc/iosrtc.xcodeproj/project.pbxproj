@@ -26,7 +26,7 @@
 		CF503E072B5A7BD900CC4032 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF503E062B5A7BD900CC4032 /* libc++.tbd */; };
 		CF503E092B5A7BE600CC4032 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF503E082B5A7BE600CC4032 /* libbz2.1.0.tbd */; };
 		CF503E0B2B5A7BF300CC4032 /* libz.1.1.3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CF503E0A2B5A7BF300CC4032 /* libz.1.1.3.tbd */; };
-		CF503E0D2B5A82B500CC4032 /* RtcSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF503E0C2B5A82B500CC4032 /* RtcSDK.framework */; };
+		CFA6E59F2B5E1A6C00E71AB5 /* RtcSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF503DEE2B5A7B4D00CC4032 /* RtcSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF503E0D2B5A82B500CC4032 /* RtcSDK.framework in Frameworks */,
+				CFA6E59F2B5E1A6C00E71AB5 /* RtcSDK.framework in Frameworks */,
 				CF503E0B2B5A7BF300CC4032 /* libz.1.1.3.tbd in Frameworks */,
 				CF503E092B5A7BE600CC4032 /* libbz2.1.0.tbd in Frameworks */,
 				CF503E072B5A7BD900CC4032 /* libc++.tbd in Frameworks */,
@@ -365,6 +365,8 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosrtc/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "使用相机";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "使用麦克风";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -403,6 +405,8 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosrtc/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "使用相机";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "使用麦克风";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

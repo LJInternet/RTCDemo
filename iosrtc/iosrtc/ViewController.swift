@@ -144,9 +144,9 @@ class ViewController: UIViewController {
         
         let config = ChannelConfig()
         config.userID = 111
-        config.token = "token"
+        config.token = "linjing@2023"
         config.appID = 1
-        config.channelID = "54544343"
+        config.channelID = "954523111"
         let udpConfig = UdpInitConfig()
         config.configs.append(udpConfig)
         _ = engine.joinChannel(channelConfig: config)
