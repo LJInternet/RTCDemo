@@ -1,11 +1,8 @@
 package com.linjing.rtc.demo;
 
-import android.Manifest;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +14,9 @@ import com.linjing.rtc.demo.agora.AgoraCameraPushActivity;
 import com.linjing.rtc.demo.agora.AgoraPullActivity;
 import com.linjing.rtc.demo.agora.CustomPlayerActivity;
 import com.linjing.rtc.demo.agora.VoipCallActivity;
-import com.linjing.rtc.demo.camera.push.NativeCameraPushActivity;
 import com.linjing.rtc.demo.cloudgame.CloudGameControlJoinActivity;
 import com.linjing.rtc.demo.rtm.RtmTestActivity;
 import com.linjing.rtc.demo.screen.ScreenCaptureActivity;
-import com.linjing.sdk.api.log.JLog;
 import com.linjing.rtc.demo.MainListAdapter.MainData;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         MainListAdapter adapter = new MainListAdapter();
         List<MainData> list = new ArrayList<>();
         list.add(new MainData("屏幕采集", 1, ScreenCaptureActivity.class));
-        list.add(new MainData("native相机推流", 1, NativeCameraPushActivity.class));
         list.add(new MainListAdapter.MainData("声网API推流", 1, AgoraCameraPushActivity.class));
         list.add(new MainData("声网API自定义输入推流", 2, AgoraCameraPushActivity.class));
         list.add(new MainData("声网API拉流", 1, AgoraPullActivity.class));

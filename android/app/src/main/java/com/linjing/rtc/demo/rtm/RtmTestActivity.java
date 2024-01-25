@@ -14,11 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.linjing.rtc.demo.BuildConfig;
 import com.linjing.rtc.demo.R;
 import com.linjing.rtc.demo.UserInfo;
+import com.linjing.rudp.RUDPCallback;
 import com.linjing.rudp.RudpEngineWrapperJni;
 
 import java.nio.charset.StandardCharsets;
 
-public class RtmTestActivity extends AppCompatActivity implements RudpEngineWrapperJni.RUDPCallback {
+public class RtmTestActivity extends AppCompatActivity implements RUDPCallback, RudpEngineWrapperJni.RUDPExCallback {
 
     private Button mBtnJoin;
     private Button mBtnLeave;
@@ -139,5 +140,30 @@ public class RtmTestActivity extends AppCompatActivity implements RudpEngineWrap
                 mTvMessage.setText(text);
             }
         });
+    }
+
+    @Override
+    public void onUserJoined(long l) {
+
+    }
+
+    @Override
+    public void onUserOffLine(long l) {
+
+    }
+
+    @Override
+    public void onLinkStatus(long l, String s, int i) {
+
+    }
+
+    @Override
+    public void onJoinChannelSuccess() {
+
+    }
+
+    @Override
+    public void onLeveChannelSuccess() {
+
     }
 }

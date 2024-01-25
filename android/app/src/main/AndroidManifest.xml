@@ -56,7 +56,6 @@
         </activity>
         <activity android:name="com.linjing.rtc.demo.cloudgame.CloudGameControlJoinActivity" />
 
-        <activity android:name=".camera.push.NativeCameraPushActivity" />
         <activity android:name="com.linjing.rtc.demo.rtm.RtmTestActivity" />
 
         <activity android:name=".agora.AgoraCameraPushActivity" />

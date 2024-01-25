@@ -15,8 +15,8 @@ import com.linjing.capture.api.surface.SurfaceFactory;
 import com.linjing.capture.bitmap.EmptyCapture;
 import com.linjing.capture.camera.CameraCaptureFactory;
 import com.linjing.capture.videocapture.VideoFileCapture;
-import com.linjing.decode.api.data.VideoDecodeData;
-import com.linjing.decode.api.data.VideoDecodedData;
+import com.linjing.decode.api.data.LJVideoFrame;
+import com.linjing.decode.api.data.VideoDecodedFrame;
 import com.linjing.rtc.demo.BuildConfig;
 import com.linjing.rtc.api.ChannelConfig;
 import com.linjing.rtc.api.RtcEngineConfig;
@@ -157,26 +157,26 @@ public class CustomPlayerPresenter implements VideoRenderCallback, ICustomPlayer
                 return 0;
             }
 
-            private VideoDecodeData mVideoDecodeData;
+            private LJVideoFrame mVideoDecodeData;
             @Override
             public int onPreviewDrawFrame(int textureId, byte[] nv21, int width, int height, int rotation, long timestampNs) {
                 if (mPlayer != null) {
                     mPlayer.onLocalTexture(textureId, width, height, false);
                     if (mVideoDecodeData == null) {
-                        mVideoDecodeData = new VideoDecodeData();
-                        mVideoDecodeData.mVideoDecodedData = new VideoDecodedData();
+                        mVideoDecodeData = new LJVideoFrame();
+                        mVideoDecodeData.mVideoDecodedFrame = new VideoDecodedFrame();
                     }
                     mVideoDecodeData.mData = nv21;
-                    mVideoDecodeData.mVideoDecodedData.width = width;
-                    mVideoDecodeData.mVideoDecodedData.height = height;
-                    mVideoDecodeData.mVideoDecodedData.len = nv21.length;
-                    mVideoDecodeData.mVideoDecodedData.widthY = width;
-                    mVideoDecodeData.mVideoDecodedData.widthUV = width / 2;
-                    mVideoDecodeData.mVideoDecodedData.heightY = height;
-                    mVideoDecodeData.mVideoDecodedData.heightUV = height;
-                    mVideoDecodeData.mVideoDecodedData.offsetY = 0;
-                    mVideoDecodeData.mVideoDecodedData.offsetU = width * height;
-                    mVideoDecodeData.mVideoDecodedData.offsetV = width * height + width * height / 4;
+                    mVideoDecodeData.mVideoDecodedFrame.width = width;
+                    mVideoDecodeData.mVideoDecodedFrame.height = height;
+                    mVideoDecodeData.mVideoDecodedFrame.len = nv21.length;
+                    mVideoDecodeData.mVideoDecodedFrame.widthY = width;
+                    mVideoDecodeData.mVideoDecodedFrame.widthUV = width / 2;
+                    mVideoDecodeData.mVideoDecodedFrame.heightY = height;
+                    mVideoDecodeData.mVideoDecodedFrame.heightUV = height;
+                    mVideoDecodeData.mVideoDecodedFrame.offsetY = 0;
+                    mVideoDecodeData.mVideoDecodedFrame.offsetU = width * height;
+                    mVideoDecodeData.mVideoDecodedFrame.offsetV = width * height + width * height / 4;
                     mPlayer.onDecodeVideoFrame(mVideoDecodeData);
                 }
                 return 0;
