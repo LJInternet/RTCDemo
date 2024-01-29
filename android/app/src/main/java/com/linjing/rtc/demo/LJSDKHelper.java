@@ -9,7 +9,6 @@ import com.linjing.sdk.LJSDK;
 import com.linjing.sdk.LJSDKConfig;
 import com.linjing.sdk.api.log.IJLog;
 import com.linjing.sdk.api.report.IReportApi;
-import com.linjing.sdk.wrapper.live.BuildConfig;
 
 import java.util.Map;
 
@@ -22,7 +21,7 @@ public class LJSDKHelper {
                 .setDebugMode(true)
                 .setAppUa("test&1.1.0&offical")
                 .setTestEv(true)
-                .setJLog(initLogger(context))
+                //.setJLog(initLogger(context))
                 .setReportApi(new IReportApi() {
                     @Override
                     public void report(String tag, Map<String, Object> info) {

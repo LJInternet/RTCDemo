@@ -43,7 +43,7 @@ android {
             buildConfigField 'long', 'appId', appId == null ? '1' : appId
             buildConfigField 'long', 'userId', userId == null ? '1222' : userId
             buildConfigField 'String', 'token', token == null ? "\"\"" :  "\"${token}\""
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         }

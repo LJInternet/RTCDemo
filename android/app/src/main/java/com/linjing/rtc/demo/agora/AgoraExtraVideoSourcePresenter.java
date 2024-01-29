@@ -177,7 +177,7 @@ public class AgoraExtraVideoSourcePresenter extends IAgoraPushPresenter {
         videoConfig.showBitmap = BitmapFactory.decodeResource(LJSDK.instance().getAppContext().getResources(),
                 R.drawable.ic_test);
         mCameraMediaClient.startVideoStream(videoConfig);
-        mCameraMediaClient.videoStream().setDrawFrameListener(new DrawFrameListener() {
+        mCameraMediaClient.setDrawFrameListener(new DrawFrameListener() {
             float[] mTransform = GlHelper.newIdentityTransform();
             @Override
             public int onPreviewDrawFrame(int textureId, int width, int height, long timestampNs) {

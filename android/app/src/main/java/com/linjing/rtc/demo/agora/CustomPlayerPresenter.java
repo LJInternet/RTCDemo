@@ -8,13 +8,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.linjing.capture.api.CaptureError;
-import com.linjing.capture.api.IVideoCapture;
 import com.linjing.capture.api.LiveMode;
 import com.linjing.capture.api.camera.CameraParam;
-import com.linjing.capture.api.surface.SurfaceFactory;
-import com.linjing.capture.bitmap.EmptyCapture;
-import com.linjing.capture.camera.CameraCaptureFactory;
-import com.linjing.capture.videocapture.VideoFileCapture;
 import com.linjing.decode.api.data.LJVideoFrame;
 import com.linjing.decode.api.data.VideoDecodedFrame;
 import com.linjing.rtc.demo.BuildConfig;
@@ -36,15 +31,12 @@ import com.linjing.sdk.api.video.VideoEncodedFrame;
 import com.linjing.sdk.api.video.VideoEncoderConfiguration;
 import com.linjing.sdk.encode.api.video.IVideoEncoder;
 import com.linjing.sdk.encode.api.video.core.IEncodeCore;
-import com.linjing.sdk.encode.hard.video.mediacodec.AsyncHardVideoEncoder;
-import com.linjing.sdk.encode.hard.video.mediacodec.MediaHardEncodeCore;
-import com.linjing.sdk.utils.FileUtil;
+import com.linjing.sdk.wrapper.camera.CameraMediaClient;
 import com.linjing.sdk.wrapper.video.VideoConfig;
 import com.linjing.sdk.wrapper.video.VideoStream;
 import com.linjing.sdk.wrapper.video.api.DrawFrameListener;
 import com.linjing.sdk.wrapper.video.api.VideoProvider;
 import com.linjing.sdk.wrapper.video.api.VideoRenderCallback;
-import com.linjing.transfer.upload.api.UdpInitConfig;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
@@ -55,7 +47,7 @@ public class CustomPlayerPresenter implements VideoRenderCallback, ICustomPlayer
 
     IRtcEngine mRtcEngine;
 
-    private VideoStream mVideoStream;
+    private CameraMediaClient mVideoStream;
     private CustomRemotePlayer mPlayer;
 
     public CustomPlayerPresenter(CustomPlayerActivity view) {
@@ -101,51 +93,29 @@ public class CustomPlayerPresenter implements VideoRenderCallback, ICustomPlayer
     private VideoConfig getVideoConfig(int captureType) {
         ResolutionParam resolutionParam = ResolutionOptions.screenMid.clone();
         resolutionParam.setLand(false);
-        if (captureType == 1) {
-            FileUtil.copyAssetsTosSd(VideoFileCapture.DefaultPath, VideoFileCapture.DefaultName);
-            VideoConfig config = MediaConfigHelper.createVideoConfig(LiveMode.VIDEO_FILE, resolutionParam);
-            config.videoFilePath = VideoFileCapture.DefaultPath + VideoFileCapture.DefaultName;
-            if (!FileUtil.isExists(config.videoFilePath)) {
-                JLog.error("file not found!!!");
-            }
-            return config;
-        }
+//        if (captureType == 1) {
+//            FileUtil.copyAssetsTosSd(VideoFileCapture.DefaultPath, VideoFileCapture.DefaultName);
+//            VideoConfig config = MediaConfigHelper.createVideoConfig(LiveMode.VIDEO_FILE, resolutionParam);
+//            config.videoFilePath = VideoFileCapture.DefaultPath + VideoFileCapture.DefaultName;
+//            if (!FileUtil.isExists(config.videoFilePath)) {
+//                JLog.error("file not found!!!");
+//            }
+//            return config;
+//        }
         return MediaConfigHelper.createVideoConfig(LiveMode.CAMERA, resolutionParam);
     }
 
     private void initVideoStream() {
-        mVideoStream = new VideoStream();
+        mVideoStream = new CameraMediaClient();
         ResolutionParam resolutionParam = ResolutionOptions.screenMid.clone();
         resolutionParam.setLand(false);
-        VideoConfig videoConfig = getVideoConfig(1);
+        VideoConfig videoConfig = getVideoConfig(0);
 //        videoConfig.showBitmap = BitmapFactory.decodeResource(LJSDK.instance().getAppContext().getResources(),
 //                R.drawable.ic_test);
         videoConfig.needYFLip = true;
         videoConfig.yuvOnly = false;
         videoConfig.listener = this;
-        mVideoStream.startStream(videoConfig, new VideoProvider() {
-            @Override
-            public IVideoCapture createCapture(int mode, String type) {
-                switch (mode) {
-                    case LiveMode.CAMERA:
-                        return CameraCaptureFactory.createCameraCapture(type, SurfaceFactory.SurfaceType.SurfaceTextureImpl);
-                    case LiveMode.VIDEO_FILE:
-                        return new VideoFileCapture(SurfaceFactory.SurfaceType.SurfaceTextureImpl);
-                    default:
-                        return new EmptyCapture(Looper.myLooper());
-                }
-            }
-
-            @Override
-            public IVideoEncoder createEncoder(int type) {
-                return new AsyncHardVideoEncoder();
-            }
-
-            @Override
-            public IEncodeCore createEncodeCore(boolean useHardEncode) {
-                return new MediaHardEncodeCore();
-            }
-        });
+        mVideoStream.startVideoStream(videoConfig);
         mVideoStream.setDrawFrameListener(new DrawFrameListener() {
             @Override
             public int onPreviewDrawFrame(int textureId, int width, int height, long timestampNs) {
@@ -242,7 +212,7 @@ public class CustomPlayerPresenter implements VideoRenderCallback, ICustomPlayer
 
     public void stop() {
         if (mVideoStream != null) {
-            mVideoStream.stopStream(null);
+            mVideoStream.startVideoStream(null);
             mVideoStream = null;
         }
         if (mPlayer != null) {
@@ -261,7 +231,7 @@ public class CustomPlayerPresenter implements VideoRenderCallback, ICustomPlayer
     @Override
     public void onEGLContextResult(long eglContextNativeHandle) {
         if (mPlayer != null) {
-            mPlayer.start(mVideoStream.getEglCore().getContext());
+            mPlayer.start(mVideoStream.videoStream().getEglCore().getContext());
         }
     }
 
