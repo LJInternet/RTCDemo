@@ -2,7 +2,8 @@
 
 #### 1.拷贝demo中的famework RTC相关依赖到项目中
 
-#### 2.在项目工程中添加framework依赖![frame_image.jpg](image%2Fframe_image.jpg)
+#### 2.在项目工程中添加framework依赖
+![frame_image.jpg](image%2Fframe_image.jpg)
 
 #### 3.初始化RTCSDK
 ```swift
