@@ -80,7 +80,7 @@
     rtcEngine.muteLocalAudioStream(mute: localMuted)
 ```
 
-#### 12.禁止远端音频采集播放
+#### 12.禁止远端音频播放
 ```swift
     rtcEngine.muteRemoteAudioStream(mute: remoteMuted)
 ```
@@ -130,4 +130,3 @@
 ```swift
     engine.destroy()
 ```
-destroy
