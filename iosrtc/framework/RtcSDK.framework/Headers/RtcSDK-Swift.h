@@ -360,6 +360,36 @@ SWIFT_CLASS("_TtC6RtcSDK13ChannelConfig")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class VideoDelayInfo;
+
+SWIFT_PROTOCOL("_TtP6RtcSDK28DecodeVideoDelayInfoDelegate_")
+@protocol DecodeVideoDelayInfoDelegate
+- (void)onVideoDecodeFrameWithDelayInfo:(VideoDelayInfo * _Nonnull)delayInfo;
+@end
+
+
+SWIFT_PROTOCOL("_TtP6RtcSDK24DecodeVideoFrameDelegate_")
+@protocol DecodeVideoFrameDelegate
+- (void)onVideoDecodeFrameWithBuf:(void * _Nonnull)buf size:(NSInteger)size width:(NSInteger)width height:(NSInteger)height pixelFmt:(NSInteger)pixelFmt;
+@end
+
+
+SWIFT_CLASS("_TtC6RtcSDK4FLog")
+@interface FLog : NSObject
++ (void)initLogWithLevel:(int32_t)level logPath:(NSString * _Nonnull)logPath logPreName:(NSString * _Nonnull)logPreName openConsole:(BOOL)openConsole SWIFT_METHOD_FAMILY(none);
++ (void)destroy;
++ (void)infoWithTag:(NSString * _Nonnull)tag logStr:(NSString * _Nonnull)logStr;
++ (void)debugWithTag:(NSString * _Nonnull)tag logStr:(NSString * _Nonnull)logStr;
++ (void)errorWithTag:(NSString * _Nonnull)tag logStr:(NSString * _Nonnull)logStr;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+typedef SWIFT_ENUM(int32_t, ISoftDecodeEvents, closed) {
+  ISoftDecodeEventsSTART_SOFT_DECODE_EVENT = 0,
+  ISoftDecodeEventsSTOP_SOFT_DECODE_EVENT = 1,
+  ISoftDecodeEventsON_SOFT_DECODE_SURFACE_CHANGE = 2,
+};
+
 @class AVCaptureSession;
 @class AVCaptureVideoPreviewLayer;
 enum DeviceType : NSUInteger;
@@ -392,12 +422,12 @@ typedef SWIFT_ENUM(NSUInteger, FlashMode, closed) {
   FlashModeAuto = 2,
 };
 
-@class LJVideoCapturer;
+@class LJVideoCapture;
 @class NSCoder;
 
 SWIFT_CLASS("_TtC6RtcSDK13LJPreviewView")
 @interface LJPreviewView : UIView
-@property (nonatomic, strong) LJVideoCapturer * _Nullable captureSession;
+@property (nonatomic, strong) LJVideoCapture * _Nullable captureSession;
 @property (nonatomic, readonly, strong) AVCaptureVideoPreviewLayer * _Nullable previewLayer;
 @property (nonatomic) BOOL autorotate;
 - (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
@@ -437,8 +467,10 @@ SWIFT_CLASS("_TtC6RtcSDK11LJRtcEngine")
 - (void)stopPreview;
 - (BOOL)switchCamera SWIFT_WARN_UNUSED_RESULT;
 - (void)setupLocalVideoWithView:(LJPreviewView * _Nonnull)view;
-- (void)setupRemoteVideoWithView:(UIView * _Nonnull)view;
+- (void)setupRemoteVideoWithView:(UIView * _Nullable)view;
 - (BOOL)joinChannelWithChannelConfig:(ChannelConfig * _Nonnull)channelConfig SWIFT_WARN_UNUSED_RESULT;
+- (void)registerDecodeVideoFrameObserverWithDelegate:(id <DecodeVideoFrameDelegate> _Nonnull)delegate;
+- (void)registerVideoDelayInfoObserverWithDelegate:(id <DecodeVideoDelayInfoDelegate> _Nonnull)delegate;
 - (void)leaveChannel;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
@@ -456,8 +488,8 @@ SWIFT_CLASS("_TtC6RtcSDK7LJUtils")
 @class AVCaptureOutput;
 @class AVCaptureConnection;
 
-SWIFT_CLASS("_TtC6RtcSDK15LJVideoCapturer")
-@interface LJVideoCapturer : LJCaptureSessionBase <AVCaptureVideoDataOutputSampleBufferDelegate>
+SWIFT_CLASS("_TtC6RtcSDK14LJVideoCapture")
+@interface LJVideoCapture : LJCaptureSessionBase <AVCaptureVideoDataOutputSampleBufferDelegate>
 - (nonnull instancetype)initWithConfig:(CameraCapturerConfiguration * _Nonnull)config OBJC_DESIGNATED_INITIALIZER;
 - (void)capture:(id <VideoCapturerDelegate> _Nonnull)callback;
 - (void)captureOutput:(AVCaptureOutput * _Nonnull)captureOutput didOutputSampleBuffer:(CMSampleBufferRef _Nonnull)sampleBuffer fromConnection:(AVCaptureConnection * _Nonnull)connection;
@@ -508,6 +540,7 @@ SWIFT_CLASS("_TtC6RtcSDK15RtcEngineConfig")
 @property (nonatomic, copy) NSString * _Nonnull mAppUa;
 @property (nonatomic) BOOL isTestEv;
 @property (nonatomic) BOOL enableNativeLog;
+@property (nonatomic, copy) NSString * _Nonnull logPath;
 - (NSArray<NSNumber *> * _Nonnull)marshall SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -546,10 +579,34 @@ SWIFT_CLASS("_TtC6RtcSDK13UdpInitConfig")
 - (NSArray<NSNumber *> * _Nonnull)marshall SWIFT_WARN_UNUSED_RESULT;
 @end
 
+typedef SWIFT_ENUM(int32_t, UnsubscribeType, closed) {
+  UnsubscribeTypeAUDIO_CALLBACK_MIC = 1,
+  UnsubscribeTypeAUDIO_CALLBACK_SUBMIX = 2,
+  UnsubscribeTypeAUDIO_CALLBACK_MIXED = 3,
+  UnsubscribeTypeAUDIO_CALLBACK_DECODE = 4,
+  UnsubscribeTypeAUDIO_CALLBACK_DECODE_EX = 5,
+  UnsubscribeTypeVIDEO_CALLBACK_ENCODE = 50,
+  UnsubscribeTypeVIDEO_CALLBACK_DECODE = 51,
+  UnsubscribeTypeVIDEO_CALLBACK_CAPTURE = 52,
+  UnsubscribeTypeVIDEO_CALLBACK_SCREEN_CAPTURE = 53,
+};
+
 
 SWIFT_PROTOCOL("_TtP6RtcSDK21VideoCapturerDelegate_")
 @protocol VideoCapturerDelegate
 - (void)onVideoCaptureWithSampleBuffer:(CVPixelBufferRef _Nonnull)sampleBuffer buf:(void * _Nonnull)buf size:(NSInteger)size bytesPerRow:(NSInteger)bytesPerRow width:(NSInteger)width height:(NSInteger)height pixelFmt:(NSInteger)pixelFmt;
+@end
+
+
+SWIFT_CLASS("_TtC6RtcSDK14VideoDelayInfo")
+@interface VideoDelayInfo : NSObject
+@property (nonatomic) NSInteger totalDelay;
+@property (nonatomic) NSInteger decodeDelay;
+@property (nonatomic) NSInteger encodeDelay;
+@property (nonatomic) NSInteger transDelay;
+@property (nonatomic) NSInteger reciveDealy;
+@property (nonatomic) NSInteger fps;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
 

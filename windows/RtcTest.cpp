@@ -109,6 +109,14 @@ static void onEventCallback(int type, const char* buf, int size, void* context) 
         linkStatus.unmarshal(up);
         // 1 connected 2 disconnectd 3 lost 4 close by peer
     }
+	 else if (RUDP_CB_VIDEO_FRAME_RATE_CONTROL == type) {
+        VideoFrameRateControl framecontrol;
+        std::string framecontrolStr(buf, size);
+        ljtransfer::mediaSox::Unpack up(framecontrolStr.data(), size);
+        linkStatus.unmarshal(up);
+		framecontrol.frameRate
+        
+    }
 }
 
 static void testWindowPush() {

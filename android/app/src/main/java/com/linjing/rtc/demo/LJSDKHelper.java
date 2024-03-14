@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 
 import com.linjing.reporter.ReportCenter;
+import com.linjing.rtc.log.LJLogImpl;
 import com.linjing.sdk.LJSDK;
 import com.linjing.sdk.LJSDKConfig;
 import com.linjing.sdk.api.log.IJLog;
@@ -21,7 +22,7 @@ public class LJSDKHelper {
                 .setDebugMode(true)
                 .setAppUa("test&1.1.0&offical")
                 .setTestEv(true)
-                //.setJLog(initLogger(context))
+                .setJLog(initLogger(context))
                 .setReportApi(new IReportApi() {
                     @Override
                     public void report(String tag, Map<String, Object> info) {

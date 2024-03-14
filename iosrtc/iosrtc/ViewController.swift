@@ -82,7 +82,15 @@ class VideoSettingsViewController: UITableViewController {
     }
 }
 
-class ViewController: UIViewController {
+class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDelayInfoDelegate {
+    func onVideoDecodeFrame(buf: UnsafeMutableRawPointer, size: Int, width: Int, height: Int, pixelFmt: Int) {
+        <#code#>
+    }
+    
+    func onVideoDecodeFrame(delayInfo: RtcSDK.VideoDelayInfo) {
+        <#code#>
+    }
+    
     
     @IBOutlet weak var zoomLabel: UILabel!
     
@@ -115,9 +123,13 @@ class ViewController: UIViewController {
         
 //        volumeView = MPVolumeView(frame: CGRect(x: 50, y: 50, width: 60, height: 60))
 //        self.view.addSubview(volumeView)
+        let folderName = "rtclog" // 自定义文件夹名称
+        let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let folderURL = documentsURL.appendingPathComponent(folderName)
         
         let rtcConfig = RtcEngineConfig()
         rtcConfig.enableNativeLog = true
+        rtcConfig.logPath = folderURL.path
         rtcEngine = LJRtcEngine.sharedEngine(c : rtcConfig)
         let engine = rtcEngine!
 //        join(mode: .push)
@@ -131,6 +143,8 @@ class ViewController: UIViewController {
 //        remoteView.backgroundColor = UIColor(white: 1, alpha: 0.2)
         self.view.insertSubview(remoteView, belowSubview: previewView)
         engine.setupRemoteVideo(view: remoteView)
+        
+        engine.registerDecodeVideoFrameObserver(delegate:self)
     }
     
     func join(mode: RTCWorkMode){
@@ -143,10 +157,10 @@ class ViewController: UIViewController {
         let engine = rtcEngine!
         
         let config = ChannelConfig()
-        config.userID = 111
-        config.token = "linjing@2023"
-        config.appID = 1
-        config.channelID = "954523111"
+		config.userID = ***
+		config.token = "***"
+		config.appID = *
+		config.channelID = "*"
         let udpConfig = UdpInitConfig()
         config.configs.append(udpConfig)
         _ = engine.joinChannel(channelConfig: config)
