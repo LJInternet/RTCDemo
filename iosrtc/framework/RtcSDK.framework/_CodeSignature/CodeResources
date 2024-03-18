@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/RtcSDK.h</key>
 		<data>
-		JMoYj7Cx6HehuGHUVP/TUA1Rz/k=
+		7ZeppTABgenRrvi6Aq4IwSCmPMw=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		Z/oSZEbRm9CjC7dhMAk1ApraJsc=
+		ErRx1EcGr1B1R2YCAe/a/9qaWDA=
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -26,11 +26,11 @@
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		NqEoNFThH8cvhitFuC1pYccLbWg=
+		MdCEUZSu8o6ucpd+qLm5ZNBDqtc=
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		/k/e1rW7xAY3ZDfcz0eH3p8Pkr4=
+		VjxCn7ZXBBB+LZaNHS+bSpxUC/k=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -54,22 +54,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			JMoYj7Cx6HehuGHUVP/TUA1Rz/k=
+			7ZeppTABgenRrvi6Aq4IwSCmPMw=
 			</data>
 			<key>hash2</key>
 			<data>
-			UX+sdIswNbP9crLt1G7WqUUpeZCsDs1nq5QkUHL17sI=
+			cP8WaD6KXGfMpcqYYrRtsUWu/5bKotCAoJrtUgzSbY0=
 			</data>
 		</dict>
 		<key>Modules/RtcSDK.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Z/oSZEbRm9CjC7dhMAk1ApraJsc=
+			ErRx1EcGr1B1R2YCAe/a/9qaWDA=
 			</data>
 			<key>hash2</key>
 			<data>
-			UZucPGagqdX9KUPrTWcYJ55Sjo43d5HPNJvamLN6xDg=
+			StE/iklgVZOrAFWUNsVTE/1QWxMgC1QLaJH7/bs8FDY=
 			</data>
 		</dict>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.abi.json</key>
@@ -87,22 +87,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			NqEoNFThH8cvhitFuC1pYccLbWg=
+			MdCEUZSu8o6ucpd+qLm5ZNBDqtc=
 			</data>
 			<key>hash2</key>
 			<data>
-			l59KDeShPwqCiirAalk4OYi1lbTgC/VhxyPkXtqhuZA=
+			0W/MGPDVzRt81EHkA1LdqFGzkw1FxnA696f9s8E2vO4=
 			</data>
 		</dict>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			/k/e1rW7xAY3ZDfcz0eH3p8Pkr4=
+			VjxCn7ZXBBB+LZaNHS+bSpxUC/k=
 			</data>
 			<key>hash2</key>
 			<data>
-			lpqj/0PDs7d2yXpyrEmJgHFnK9tQBTccxcAuefLYE0M=
+			sibIECjELZ6xh3A580HJT/L0D94ew7t/ISpcBnAen/k=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
