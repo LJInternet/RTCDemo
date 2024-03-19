@@ -50,6 +50,17 @@ extern "C" {
 		}
 	};
 
+struct TransDelayInfo {
+	uint64_t id;
+	uint64_t value;
+};
+
+struct TransDelayInfoList {
+	TransDelayInfo* timeInfos;
+	uint32_t size;
+	TransDelayInfoList() : timeInfos(NULL), size(0) {}
+};
+
 	MEDIATRANSFER_EXTERN struct media_engine;
 
 	MEDIATRANSFER_EXTERN typedef void (*video_data_cb)(uint8_t* buf, int32_t len, int32_t width,
@@ -168,7 +179,7 @@ extern "C" {
 	* @param iTsInfos 延时统计数据，应该包含采集开始 采集结束 编码开始 编码结束事件 @see DelayConstants
 	*/
 	MEDIATRANSFER_EXTERN void media_engine_push_encode_video(struct media_engine* engine, int width, int height, int frameType,
-			int pts, int  codecType, uint8_t* buf, int32_t len, std::map<uint64_t, uint64_t> iTsInfos);
+			int pts, int  codecType, uint8_t* buf, int32_t len, TransDelayInfoList* iTsInfos);
 
 	/**
 	* 订阅未解码视频数据

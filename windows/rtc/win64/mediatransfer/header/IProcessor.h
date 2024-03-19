@@ -7,6 +7,7 @@ namespace LJMediaLibrary {
     struct CommonStatistic;
     struct VideoDecodedData;
     struct VideoHead;
+    struct AudioHead;
     struct AudioPlayerEvent;
     struct AudioConfig;
     class IAVMgrController {
@@ -52,7 +53,7 @@ namespace LJMediaLibrary {
 
         virtual void relCallDecodeDataCallback(const char* realBuffer, int len, int frameType, const VideoHead& videoHead) = 0;
 
-        virtual void relCallDecodeDataCallback(uint64_t uid, std::string& channelId, const char* realBuffer, int len, int frameType, const VideoHead& videoHead) {};
+        virtual void relCallDecodeDataCallback(uint64_t uid, uint64_t localUid, std::string& channelId, const char* realBuffer, int len, int frameType, const VideoHead& videoHead) {};
 
         virtual void doUploadCallback(int type, const char* buffer, int len) = 0;
 
@@ -85,7 +86,7 @@ namespace LJMediaLibrary {
 
         virtual void onCaptureVolume(int volume) {};
 
-        virtual void onRevAudioData(uint64_t uid, const char *audioData, int len) {};
+        virtual void onRevAudioData(uint64_t uid, AudioHead& audioHead, const char *audioData, int len) {};
 
         virtual int32_t onCaptureMicData(void* audioData, int32_t numFrames, int32_t channelCount, int32_t byrePerSample, int32_t sampleRate) { return 0; };
 

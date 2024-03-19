@@ -1,3 +1,5 @@
+#ifndef BASE_LOGG_H
+#define BASE_LOGG_H
 #pragma once
 
 #include <cinttypes>
@@ -68,3 +70,4 @@ private:
 };
 
 }
+#endif

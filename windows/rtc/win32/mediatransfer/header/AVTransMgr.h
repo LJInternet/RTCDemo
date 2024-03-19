@@ -113,6 +113,8 @@ namespace LJMediaLibrary {
         void pushEncodedData(int width, int height, int frameType, int pts, int  codecType,
                              uint8_t* buf, int32_t len, std::map<uint64_t, uint64_t> iTsInfos);
 
+        void pushEVD2MultiChannel(MIEPushEncodedVideoData& data);
+
     private:
 
         MIEUploadConfig* config = nullptr;
@@ -129,7 +131,7 @@ namespace LJMediaLibrary {
         IMediaAudioController* audioManager = nullptr;
         MultiChannelMgr* m_multiChannelMgr = nullptr;
 
-        std::atomic<bool> m_connected;
+        std::atomic<bool> m_connected = { false };
         std::atomic<bool> m_setRudpConnected = { false };
 
         int m_lastTargetFrameRate = 0;

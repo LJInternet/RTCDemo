@@ -26,7 +26,7 @@ namespace LJMediaLibrary {
         CB_JOIN_CHANNEL = 10, //加入频道结果回调
         CB_LEAVE_CHANNEL = 11, //离开频道结果回调
         CB_LINK_STATUS = 12, //RUDP 连接状态
-
+        CB_TRANS_STOP = 13, //调用了C++层的LeaveChannel
         MUTI_CHANNEL_REMOTE_JOIN = 1000, //多人RTC远端有人加入
         MUTI_CHANNEL_REMOTE_LEAVE = 1001, //多人RTC远端有人退出
     };
@@ -190,7 +190,7 @@ namespace LJMediaLibrary {
 
         virtual void marshal(ljtransfer::mediaSox::Pack &pak) const {
             pak << iFrameType << iEncodeType << iPts << iDts << iStreamId << width << height;
-            pak.push_varstr32(iData.data(), iData.length());
+//            pak.push_varstr32(iData.data(), iData.length());
             pak.push_varstr32(iMetaDta.data(), iMetaDta.length());
             pak.push_varstr32(iExtraData.data(), iExtraData.length());
             marshal_container(pak, iTsInfos);
@@ -198,30 +198,33 @@ namespace LJMediaLibrary {
 
         virtual void unmarshal(const ljtransfer::mediaSox::Unpack &pak) {
             pak >> iFrameType >> iEncodeType >> iPts >> iDts >> iStreamId >> width >> height;
-            iData = pak.pop_varstr32();
+//            iData = pak.pop_varstr32();
             iMetaDta = pak.pop_varstr32();
             iExtraData = pak.pop_varstr32();
             unmarshal_container(pak, inserter(iTsInfos, iTsInfos.begin()));
         }
     };
 
-    struct MIEPushYUVData : ljtransfer::mediaSox::Marshallable {
+    struct MIEPushVideoRawData : ljtransfer::mediaSox::Marshallable {
         uint32_t width;
         uint32_t height;
-        std::string iData;
+        uint32_t pixelFormat;
+        uint32_t rotation;
+        uint64_t timestamp;
+//        std::string iData;
 
-        MIEPushYUVData()
+        MIEPushVideoRawData()
                 : width(0), height(0) {
         }
 
         virtual void marshal(ljtransfer::mediaSox::Pack &pak) const {
-            pak << width << height;
-            pak.push_varstr32(iData.data(), iData.length());
+            pak << width << height<<pixelFormat<<rotation<<timestamp;
+//            pak.push_varstr32(iData.data(), iData.length());
         }
 
         virtual void unmarshal(const ljtransfer::mediaSox::Unpack &pak) {
-            pak >> width >> height;
-            iData = pak.pop_varstr32();
+            pak >> width >> height>>pixelFormat>>rotation>>timestamp;
+//            iData = pak.pop_varstr32();
         }
     };
 
@@ -582,14 +585,14 @@ namespace LJMediaLibrary {
                >> realVideoBitrateInbps >> codecType >> fps >> mirror >> keyFrameInterval >> mode;
         }
 
-        char* toString() {
+        std::string toString() {
             std::stringstream stream;
             stream << "VideoUploadConfig encodeWidth " << encodeWidth<< " encodeHeight " << encodeHeight
                     << " minVideoBitrateInbps " << minVideoBitrateInbps << " maxVideoBitrateInbps " << maxVideoBitrateInbps
                     << " realVideoBitrateInbps " << realVideoBitrateInbps << " codecType " << codecType
                     << " fps " << fps << " mirror " << mirror << " keyFrameInterval " << keyFrameInterval << " mode " << mode
             << std::endl;
-            return const_cast<char *>(stream.str().c_str());
+            return stream.str();
         }
     };
 
@@ -681,7 +684,7 @@ namespace LJMediaLibrary {
         bool callbackDecodeData = false; // 是否需要回调音频数据
         bool renderAudioData = false; // 数据是否需要播放，false 则直接静音
         bool directDecode = false; // 收到远端音频直接解码，不需要经过JitterBuffer
-        bool directCallback = false; // rudp收到数据包啥也不做，直接返回未解码数据，回调IAudioProcessor onEncodedData
+        bool directCallback = false; // rudp收到数据包啥也不做，直接返回未解码数据，回调IAudioProcessor
         AudioPlayerEvent() {
 
         }

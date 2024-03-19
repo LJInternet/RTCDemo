@@ -113,9 +113,8 @@ static void onEventCallback(int type, const char* buf, int size, void* context) 
         VideoFrameRateControl framecontrol;
         std::string framecontrolStr(buf, size);
         ljtransfer::mediaSox::Unpack up(framecontrolStr.data(), size);
-        linkStatus.unmarshal(up);
-		framecontrol.frameRate
-        
+        framecontrol.unmarshal(up);
+        int frameRate = framecontrol.frameRate;
     }
 }
 

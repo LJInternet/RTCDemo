@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef BASE_LOGGER_H
+#define BASE_LOGGER_H
 #include <cstdio>
 #include <string>
 #include "common_defs.h"
@@ -36,3 +37,4 @@ public:
 };
 
 }
+#endif
