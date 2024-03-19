@@ -9,6 +9,7 @@ import UIKit
 import AVKit
 import MediaPlayer
 import RtcSDK
+import MediaTransfer
 
 class VideoPreviewViewController: UIViewController {
     
@@ -84,11 +85,16 @@ class VideoSettingsViewController: UITableViewController {
 
 class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDelayInfoDelegate {
     func onVideoDecodeFrame(buf: UnsafeMutableRawPointer, size: Int, width: Int, height: Int, pixelFmt: Int) {
-        <#code#>
+
     }
     
     func onVideoDecodeFrame(delayInfo: RtcSDK.VideoDelayInfo) {
-        <#code#>
+        FLog.info(tag: "delayInfo",
+                  logStr: " TDelay:" + String(delayInfo.totalDelay)
+                  + " EDelay:" + String(delayInfo.encodeDelay)
+                  + " DDelay:" + String(delayInfo.decodeDelay)
+                  + " TansDelay:" + String(delayInfo.transDelay)
+                  + " fps:" + String(delayInfo.fps))
     }
     
     
@@ -145,6 +151,7 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
         engine.setupRemoteVideo(view: remoteView)
         
         engine.registerDecodeVideoFrameObserver(delegate:self)
+        engine.registerVideoDelayInfoObserver(delegate:self)
     }
     
     func join(mode: RTCWorkMode){
@@ -157,10 +164,10 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
         let engine = rtcEngine!
         
         let config = ChannelConfig()
-		config.userID = ***
-		config.token = "***"
-		config.appID = *
-		config.channelID = "*"
+        config.userID = 111
+        config.token = "linjing@2023"
+        config.appID = 1
+        config.channelID = "954523111"
         let udpConfig = UdpInitConfig()
         config.configs.append(udpConfig)
         _ = engine.joinChannel(channelConfig: config)

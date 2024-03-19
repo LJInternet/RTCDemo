@@ -14,3 +14,5 @@ FOUNDATION_EXPORT double RtcSDKVersionNumber;
 FOUNDATION_EXPORT const unsigned char RtcSDKVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <RtcSDK/PublicHeader.h>
+
+#import <RtcSDK/RTCEAGLVideoView.h>

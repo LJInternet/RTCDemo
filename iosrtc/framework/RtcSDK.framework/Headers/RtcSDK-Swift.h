@@ -265,10 +265,11 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @import CoreMedia;
 @import CoreVideo;
 @import Foundation;
-@import MediaTransfer;
 @import ObjectiveC;
 @import UIKit;
 #endif
+
+#import <RtcSDK/RtcSDK.h>
 
 #endif
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
