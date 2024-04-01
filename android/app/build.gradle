@@ -15,7 +15,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a", "arm64-v8a"
         }
     }
     sourceSets {
@@ -43,7 +43,7 @@ android {
             buildConfigField 'long', 'appId', appId == null ? '1' : appId
             buildConfigField 'long', 'userId', userId == null ? '1222' : userId
             buildConfigField 'String', 'token', token == null ? "\"\"" :  "\"${token}\""
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         }
