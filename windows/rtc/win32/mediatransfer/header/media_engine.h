@@ -83,6 +83,7 @@ struct TransDelayInfoList {
 
 	MEDIATRANSFER_EXTERN typedef void (*event_cb)(int type, const char *buf, int size, void* context);
 
+	MEDIATRANSFER_EXTERN typedef void (*video_delay_callback)(int totalDelay, int decodeDelay, int encodeDelay, int reciveDelay, int transDelay, int fps, void * context);
 	/**
 	 * 设置xmtp是正式环境还是测试环境
 	 * @param debug
@@ -188,6 +189,14 @@ struct TransDelayInfoList {
 	* @param context
 	*/
 	MEDIATRANSFER_EXTERN void media_engine_subscribe_undecode_video(struct media_engine* engine, video_undecode_cb cb, void* context);
+
+	/**
+	* 订阅视频解码延时数据
+	* @param engine
+	* @param cb
+	* @param context
+	*/
+	MEDIATRANSFER_EXTERN void media_engine_subscribe_video_delay_info(struct media_engine* engine, video_delay_callback cb, void* context);
 	/**
 	 * 订阅解码音频
 	 * @param engine

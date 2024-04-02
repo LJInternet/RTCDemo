@@ -117,7 +117,7 @@ namespace LJMediaLibrary {
 
     private:
 
-        MIEUploadConfig* config = nullptr;
+        MIEUploadConfig* m_uploadConfig = nullptr;
         ITransApi * transApi = nullptr;
         MTransEngine* m_transEngine = nullptr;
 

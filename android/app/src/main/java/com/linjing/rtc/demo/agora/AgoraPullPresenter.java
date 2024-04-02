@@ -62,8 +62,8 @@ public class AgoraPullPresenter implements RUDPCallback {
 //            mRtcEngine.enableAudio();//启用音频模块
             mRtcEngine.enableLocalVideo(false);//关闭使用本地摄像头设备
             mRtcEngine.muteLocalVideoStream(true);//取消发布
-            mRtcEngine.setDecodeType(DecodeConstants.DecodeType.HARD);
-            mRtcEngine.setDecodeLowLatency(false);
+//            mRtcEngine.setDecodeType(DecodeConstants.DecodeType.HARD);
+//            mRtcEngine.setDecodeLowLatency(false);
             mRtcEngine.registerDecodeObserver(new IDecodeObserver() {
                 @Override
                 public void onDelayStatisticData(int frameId, byte[] extraData, Map<Long, Long> delayMap) {
@@ -89,7 +89,7 @@ public class AgoraPullPresenter implements RUDPCallback {
 
                 @Override
                 public boolean onRenderVideoFrame(int uid, VideoFrame videoFrame) {
-                    JLog.info("onRenderVideoFrame");
+                    JLog.info("onRenderVideoFrame " + videoFrame.toString());
                     return false;
                 }
 
@@ -101,7 +101,7 @@ public class AgoraPullPresenter implements RUDPCallback {
 
                 @Override
                 public int getObservedFramePosition() {
-                    return POSITION_PRE_DECODE;
+                    return POSITION_PRE_RENDERER;
                 }
             });
 
