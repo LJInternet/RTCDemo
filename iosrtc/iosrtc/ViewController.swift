@@ -9,7 +9,6 @@ import UIKit
 import AVKit
 import MediaPlayer
 import RtcSDK
-import MediaTransfer
 
 class VideoPreviewViewController: UIViewController {
     
