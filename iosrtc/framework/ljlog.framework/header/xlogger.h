@@ -15,12 +15,12 @@
 #include "preprocessor.h"
 
 #ifdef XLOGGER_DISABLE
-#define  xlogger_IsEnabledFor(_level)	(false)
-#define  xlogger_AssertP(...)			((void)0)
-#define  xlogger_Assert(...)			((void)0)
-#define  xlogger_VPrint(...)			((void)0)
-#define  xlogger_Print(...)				((void)0)
-#define  xlogger_Write(...)				((void)0)
+#define  ljlogger_IsEnabledFor(_level)	(false)
+#define  ljlogger_AssertP(...)			((void)0)
+#define  ljlogger_Assert(...)			((void)0)
+#define  ljlogger_VPrint(...)			((void)0)
+#define  ljlogger_Print(...)				((void)0)
+#define  ljlogger_Write(...)				((void)0)
 #endif
 
 #ifdef __cplusplus
@@ -200,9 +200,9 @@ public:
 		if (m_hook && !m_hook(m_info, m_message)) return;
 		
 		if (m_isassert)
-			xlogger_Assert(m_isinfonull?NULL:&m_info, m_exp, m_message.c_str());
+			ljlogger_Assert(m_isinfonull?NULL:&m_info, m_exp, m_message.c_str());
 		else
-			xlogger_Write(m_isinfonull?NULL:&m_info, m_message.c_str());
+			ljlogger_Write(m_isinfonull?NULL:&m_info, m_message.c_str());
 	}
 
 	XLogger(const XLogger&);
@@ -300,7 +300,7 @@ private:
 class XScopeTracer {
 public:
 	XScopeTracer(TLogLevel _level, const char* _tag, const char* _name, const char* _file, const char* _func, int _line, const char* _log)
-	:m_enable(xlogger_IsEnabledFor(_level)), m_info(), m_tv() {
+	:m_enable(ljlogger_IsEnabledFor(_level)), m_info(), m_tv() {
 		m_info.level = _level;
 
 		if (m_enable) {
@@ -319,7 +319,7 @@ public:
 			m_tv = m_info.timeval;
 			char strout[1024] = {'\0'};
 			snprintf(strout, sizeof(strout), "-> %s %s", m_name, NULL!=_log? _log:"");
-			xlogger_Write(&m_info, strout);
+			ljlogger_Write(&m_info, strout);
 		}
 	}
 
@@ -331,7 +331,7 @@ public:
 			long timeSpan = (tv.tv_sec - m_tv.tv_sec) * 1000 + (tv.tv_usec - m_tv.tv_usec) / 1000;
 			char strout[1024] = {'\0'};
 			snprintf(strout, sizeof(strout), "<- %s +%ld, %s", m_name, timeSpan, m_exitmsg.c_str());
-			xlogger_Write(&m_info, strout);
+			ljlogger_Write(&m_info, strout);
 		}
 	}
 	
@@ -654,7 +654,7 @@ static const char* __my_xlogger_tag = "prefix_"XLOGGER_TAG"_suffix";
 #define XLOGGER_TAG __my_xlogger_tag
 */
 
-#define xdump xlogger_dump
+#define xdump ljlogger_dump
 #define XLOGGER_ROUTER_OUTPUT(op1,op,...) PP_IF(PP_NUM_PARAMS(__VA_ARGS__),PP_IF(PP_DEC(PP_NUM_PARAMS(__VA_ARGS__)),op,op1), )
 
 #if !defined(__cplusplus)
@@ -662,17 +662,17 @@ static const char* __my_xlogger_tag = "prefix_"XLOGGER_TAG"_suffix";
 #ifdef __GNUC__
 __attribute__((__format__ (printf, 2, 3)))
 #endif
-__inline void  __xlogger_c_write(const XLoggerInfo* _info, const char* _log, ...) { xlogger_Write(_info, _log); }
+__inline void  __xlogger_c_write(const XLoggerInfo* _info, const char* _log, ...) { ljlogger_Write(_info, _log); }
 
-#define xlogger2(level, tag, file, func, line, ...)		 if ((!xlogger_IsEnabledFor(level)));\
+#define xlogger2(level, tag, file, func, line, ...)		 if ((!ljlogger_IsEnabledFor(level)));\
 															  else { XLoggerInfo info= {level, tag, file, func, line,\
 																	 {0, 0}, -1, -1, -1};\ gettimeofday(&info.m_tv, NULL);\
-																	 XLOGGER_ROUTER_OUTPUT(__xlogger_c_write(&info, __VA_ARGS__),xlogger_Print(&info, __VA_ARGS__), __VA_ARGS__);}
+																	 XLOGGER_ROUTER_OUTPUT(__xlogger_c_write(&info, __VA_ARGS__),ljlogger_Print(&info, __VA_ARGS__), __VA_ARGS__);}
 
-#define xlogger2_if(exp, level, tag, file, func, line, ...)    if (!(exp) || !xlogger_IsEnabledFor(level));\
+#define xlogger2_if(exp, level, tag, file, func, line, ...)    if (!(exp) || !ljlogger_IsEnabledFor(level));\
 																	else { XLoggerInfo info= {level, tag, file, func, line,\
 																		   {0, 0}, -1, -1, -1}; gettimeofday(&info.timeval, NULL);\
-																		   XLOGGER_ROUTER_OUTPUT(__xlogger_c_write(&info, __VA_ARGS__),xlogger_Print(&info, __VA_ARGS__), __VA_ARGS__);}
+																		   XLOGGER_ROUTER_OUTPUT(__xlogger_c_write(&info, __VA_ARGS__),ljlogger_Print(&info, __VA_ARGS__), __VA_ARGS__);}
 
 #define __xlogger_c_impl(level,  ...)			xlogger2(level, XLOGGER_TAG, __XFILE__, __XFUNCTION__, __LINE__, __VA_ARGS__)
 #define __xlogger_c_impl_if(level, exp, ...)	xlogger2_if(exp, level, XLOGGER_TAG, __XFILE__, __XFUNCTION__, __LINE__, __VA_ARGS__)
@@ -691,11 +691,11 @@ __inline void  __xlogger_c_write(const XLoggerInfo* _info, const char* _log, ...
 #define xerror2_if(exp, ...)	   __xlogger_c_impl_if(kLevelError, exp, __VA_ARGS__)
 #define xfatal2_if(exp, ...)	   __xlogger_c_impl_if(kLevelFatal, exp, __VA_ARGS__)
 
-#define xassert2(exp, ...)	  if (((exp) || !xlogger_IsEnabledFor(kLevelFatal)));else {\
+#define xassert2(exp, ...)	  if (((exp) || !ljlogger_IsEnabledFor(kLevelFatal)));else {\
 									XLoggerInfo info= {kLevelFatal, XLOGGER_TAG, __XFILE__, __XFUNCTION__, __LINE__,\
 									{0, 0}, -1, -1, -1};\
 									gettimeofday(&info.m_tv, NULL);\
-									xlogger_AssertP(&info, #exp, __VA_ARGS__);}
+									ljlogger_AssertP(&info, #exp, __VA_ARGS__);}
 //"##__VA_ARGS__" remove "," if NULL
 #else
 
@@ -703,15 +703,15 @@ __inline void  __xlogger_c_write(const XLoggerInfo* _info, const char* _log, ...
 #define XLOGGER_HOOK NULL
 #endif
 
-#define xlogger(level, tag, file, func, line, ...)	   if ((!xlogger_IsEnabledFor(level)));\
+#define xlogger(level, tag, file, func, line, ...)	   if ((!ljlogger_IsEnabledFor(level)));\
 													   else XLogger(level, tag, file, func, line, XLOGGER_HOOK)\
 															 XLOGGER_ROUTER_OUTPUT(.WriteNoFormat(TSF __VA_ARGS__),(TSF __VA_ARGS__), __VA_ARGS__)
 
-#define xlogger2(level, tag, file, func, line, ...)		if ((!xlogger_IsEnabledFor(level)));\
+#define xlogger2(level, tag, file, func, line, ...)		if ((!ljlogger_IsEnabledFor(level)));\
 														else XLogger(level, tag, file, func, line, XLOGGER_HOOK)\
 															 XLOGGER_ROUTER_OUTPUT(.WriteNoFormat(__VA_ARGS__),(__VA_ARGS__), __VA_ARGS__)
 
-#define xlogger2_if(exp, level, tag, file, func, line, ...)		if ((!(exp) || !xlogger_IsEnabledFor(level)));\
+#define xlogger2_if(exp, level, tag, file, func, line, ...)		if ((!(exp) || !ljlogger_IsEnabledFor(level)));\
 																else XLogger(level, tag, file, func, line, XLOGGER_HOOK)\
 																	 XLOGGER_ROUTER_OUTPUT(.WriteNoFormat(__VA_ARGS__),(__VA_ARGS__), __VA_ARGS__)
 
@@ -738,7 +738,7 @@ __inline void  __xlogger_c_write(const XLoggerInfo* _info, const char* _log, ...
 #define xgroup2(...)			   XLogger(kLevelAll, XLOGGER_TAG, __XFILE__, __XFUNCTION__, __LINE__, XLOGGER_HOOK)(__VA_ARGS__)
 #define xgroup2_if(exp, ...)	   if ((!(exp))); else XLogger(kLevelAll, XLOGGER_TAG, __XFILE__, __XFUNCTION__, __LINE__, XLOGGER_HOOK)(__VA_ARGS__)
 
-#define xassert2(exp, ...)	  if (((exp) || !xlogger_IsEnabledFor(kLevelFatal)));\
+#define xassert2(exp, ...)	  if (((exp) || !ljlogger_IsEnabledFor(kLevelFatal)));\
 							 else XLogger(kLevelFatal, XLOGGER_TAG, __XFILE__, __XFUNCTION__, __LINE__, XLOGGER_HOOK).Assert(#exp)\
 								  XLOGGER_ROUTER_OUTPUT(.WriteNoFormat(__VA_ARGS__),(__VA_ARGS__), __VA_ARGS__)
 

@@ -5,103 +5,66 @@
 #ifndef LJSDK_RUDP_MGR_H
 #define LJSDK_RUDP_MGR_H
 
-#include <string>
-#include <vector>
-#include <mutex>
+#include <atomic>
+#include <map>
+#include "rudp_proxy.h"
 
+class XMTPClient;
 
-#ifdef _WIN32
-/* Windows - set up dll import/export decorators. */
-# if defined(BUILDING_RUDP_SHARED)
-    /* Building shared library. */
-#   define RUDP_EXTERN __declspec(dllexport)
-# elif defined(USING_RUDP_SHARED)
-    /* Using shared library. */
-#   define RUDP_EXTERN __declspec(dllimport)
-# else
-    /* Building static library. */
-#   define RUDP_EXTERN /* nothing */
-# endif
-#elif __GNUC__ >= 4
-# define RUDP_EXTERN __attribute__((visibility("default")))
-#elif defined(__SUNPRO_C) && (__SUNPRO_C >= 0x550) /* Sun Studio >= 8 */
-# define RUDP_EXTERN __global
-#else
-# define RUDP_EXTERN /* nothing */
-#endif
+// each RUDP-Group has at most 2 instances, i.e., one RTC and one RTM; they both
+// have the same channel-id, but with different realtime-mode.
+class RudpGroupInfo {
+public:
+    RudpGroupInfo() {
+        _appId = 0;
+        _uid = "";
+        _channelId = "";
+        generateGroupId();
+    }
 
+    void setGroupInfo(uint64_t appId, std::string uid, std::string channelId) {
+        _appId = appId;
+        _uid = uid;
+        _channelId = channelId;
+        generateGroupId();
+    }
 
-#define NO_CONGESTION                    0
-#define LOW_CONGESTION                   1
-#define MEDIUM_CONGESTION                2
-#define SEVERE_CONGESTION                3
+    void getGroupInfo(uint64_t& appId, std::string& uid, std::string& channelId) {
+        appId = _appId;
+        uid = _uid;
+        channelId = _channelId;
+    }
 
-typedef struct RelayInfo {
-    std::string relayIP;
-    uint16_t relayPort;
-    uint64_t relayId;
-    uint64_t sessionId;
-    bool bgp;
-}RelayInfo;
+    std::string& getGroupId() {
+        return _groupId;
+    }
 
-struct udp_link_info{
-    std::string remoteIP;
-    uint16_t remotePort;
+private:
+    uint64_t _appId;
+    std::string _uid;
+    std::string _channelId;
+    std::string _groupId;
 
-    uint64_t relay_id;
-    uint64_t session_id;
-    uint32_t my_node_id;
-    uint8_t same_isp_flag;
-
-    int link_type;
-    int client_net_type;
-    int rtt;
-    uint32_t max_bw;
-    int score;
+    void generateGroupId() {
+        _groupId = std::to_string(_appId) + "_" + _uid + "_" + _channelId;
+    }
 };
 
-typedef struct rudp_net_info{
-    int rtt;
-    int lost;
-    int congest_level;
-}rudp_net_info;
-
-typedef enum rudp_cb_type{
-    RUDP_CB_DATA = 1,
-    RUDP_CB_AVAILABLE_BW,
-    RUDP_CB_PACKET_DROPPED,
-    RUDP_CB_LINK_OK,
-    RUDP_CB_LINK_FAILURE,
-    RUDP_CB_NET_REPORT = 7,
-}RUDP_CB_TYPE;
-
-typedef enum rudp_mode{
-    RUDP_REALTIME_ULTRA,
-    RUDP_REALTIME_NORMAL
-}RUDP_MODE;
-
-typedef int (*RUDP_CALLBACK)(RUDP_CB_TYPE type, const char* buf, int buf_len);
-typedef void (*RUDP_LINK_CALLBACK)(const udp_link_info* info_array, int count);
-
-struct rudp_instance;
-
-class RUDP_EXTERN RudpProxy {
+class RudpChannelInfo {
 public:
-    RudpProxy(bool isController, RUDP_CALLBACK cb, RUDP_MODE realtime_mode);
-    ~RudpProxy();
+    std::string _channel_id;
+    RUDP_MODE _mode;
+    std::string _token;
+    uint32_t boundLocalIp = 0;  // the local IP that this rudp binds to. in network-byte-order
+    bool _auth_failed = false;
+};
 
-    void updateRelay(std::vector<RelayInfo>& relays);
-
-    int send(const char* buf, int len);
-
-    void startNatTraversal(struct sockaddr_in signal_addr, uint64_t nat_traversal_id, int is_same_isp, int is_mobile_net_allowed);
-    void stopNatTraversal();
-
-    bool setMinBw(int bw);
-    bool setLinkCallback(RUDP_LINK_CALLBACK cb);
-    bool setRcvLatencyTolerate(uint32_t rcv_latency_tolerate);
-private:
-    struct rudp_instance* _instance;
+class SignalConnectionInfo {
+public:
+    int64_t _appid;
+    std::string _uid;
+    bool _disconnected;
+    std::vector<RudpChannelInfo> _channels;
 };
 
 class RUDP_EXTERN RudpManager {
@@ -109,22 +72,62 @@ public:
     static RudpManager &instance();
 
     RudpProxy* createRudp(bool isController, RUDP_CALLBACK cb, RUDP_MODE realtime_mode);
+    RudpProxy* createRudp(bool isController, uint32_t local_ip, RUDP_CALLBACK cb, RUDP_MODE realtime_mode);
+    RudpProxy* createRudp(bool isController, RUDP_CALLBACK_V2 cb, RUDP_MODE realtime_mode, void* aux_param);
+    RudpProxy* createRudp(bool isController, uint32_t local_ip, RUDP_CALLBACK_V2 cb, RUDP_MODE realtime_mode, void* aux_param, RudpGroupInfo groupInfo);
+    RudpProxy* createRudp(bool isController, struct sockaddr_in local_addr, RUDP_CALLBACK_V2 cb, RUDP_MODE realtime_mode, void* aux_param);
+    RudpProxy* createRudp(bool isController, struct sockaddr_in local_addr, RUDP_CALLBACK_V2 cb, RUDP_MODE realtime_mode, void* aux_param, RudpGroupInfo groupInfo);
 
     void destroyRudp(RudpProxy* rudp);
 
-    void updateRelay(std::vector<RelayInfo>& relays);
+    // the 'boundLocalIp' is required to be in network-byte-order
+    void joinChannel(int64_t appID, std::string uid, std::string channelID, RUDP_MODE mode, std::string token, uint32_t boundLocalIp = 0);
 
-    void startNatTraversal(struct sockaddr_in signal_addr, uint64_t nat_traversal_id, int is_same_isp, int is_mobile_net_allowed);
+    void leaveChannel(RudpGroupInfo& group_info, RUDP_MODE mode);
 
+    // rtmReuse: whether rtm uses the same relay(s) as rtc, for backward compatibility
+    void updateRelay(SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode, std::vector<RelayInfo>& relays, bool rtmReuse = false);
+
+    void startNatTraversal(SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode,
+        struct sockaddr_in signal_addr, uint64_t nat_traversal_id, int is_same_isp, int is_mobile_net_allowed);
     void stopNatTraversal();
 
+    void updateRemotePeer(SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode, PeerInfo& info);
+
     void processSDKMessage(const std::string& cmd, const std::string& msg);
+
+    // IP must be network-byte-order
+    //void setLocalIp(uint32_t ipAddr) {_localIp = ipAddr;}
+    //uint32_t getLocalIp() {return _localIp;}
 private:
     RudpManager() = default;
     ~RudpManager() = default;
 
-    std::mutex _lock;
-    std::vector<RudpProxy*> _rudps;
+    void appendRudp(RudpProxy* rudp);
+    void doJoin(XMTPClient* xmtpClient, SignalConnectionInfo& connInfo, RudpChannelInfo& channelInfo);
+    void tryTransferTransportAddr(XMTPClient* client, SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode);
+    void getRtmRelaybyRtc(const std::vector<RelayInfo>& input, std::vector<RelayInfo>& output);
+    void updateRudpRelay(std::vector<RelayInfo>& relays, std::string& rudpGroupId, RUDP_MODE mode);
+
+    std::recursive_mutex _lock;
+    //std::vector<RudpProxy*> _rudps;
+    //std::map<std::string, std::vector<RudpProxy*>> _rudpMap;  // key: groupId_mode
+    std::map<std::string, RudpProxy*> _rudpMap;               // key: groupId_mode
+    std::map<std::string, std::vector<RelayInfo>> _relayMap;  // key: groupId_mode
+    std::map<XMTPClient*, SignalConnectionInfo*> _connMap;
+
+    //XMTPClient* _xmtpClient = nullptr;
+    //std::string _channelID;
+    //int64_t _appID;
+    //std::string _uid;
+    //std::string _token;
+    //std::atomic<bool> _joining = {false};
+    //std::atomic<bool> _join_auth_failed = {false};
+    //std::atomic<int> _disconnected = {false};
+    //std::atomic<int> _using_rtc_relay = {false};
+
+    //std::vector<RelayInfo> _relayList;
+    //uint32_t _localIp = 0;
 
     static RudpManager s_theObj;
 };

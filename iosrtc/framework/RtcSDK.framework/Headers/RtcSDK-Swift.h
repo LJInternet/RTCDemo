@@ -473,6 +473,7 @@ SWIFT_CLASS("_TtC6RtcSDK11LJRtcEngine")
 - (void)registerDecodeVideoFrameObserverWithDelegate:(id <DecodeVideoFrameDelegate> _Nonnull)delegate;
 - (void)registerVideoDelayInfoObserverWithDelegate:(id <DecodeVideoDelayInfoDelegate> _Nonnull)delegate;
 - (void)leaveChannel;
+- (void)setVideoDecodeTypeWithDecodeType:(int32_t)decodeType isLowLatency:(BOOL)isLowLatency;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -596,6 +597,14 @@ typedef SWIFT_ENUM(int32_t, UnsubscribeType, closed) {
 SWIFT_PROTOCOL("_TtP6RtcSDK21VideoCapturerDelegate_")
 @protocol VideoCapturerDelegate
 - (void)onVideoCaptureWithSampleBuffer:(CVPixelBufferRef _Nonnull)sampleBuffer buf:(void * _Nonnull)buf size:(NSInteger)size bytesPerRow:(NSInteger)bytesPerRow width:(NSInteger)width height:(NSInteger)height pixelFmt:(NSInteger)pixelFmt;
+@end
+
+
+SWIFT_CLASS("_TtC6RtcSDK17VideoDecodeConfig")
+@interface VideoDecodeConfig : NSObject
+@property (nonatomic) int32_t decodeType;
+@property (nonatomic) BOOL isLowLatency;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
 

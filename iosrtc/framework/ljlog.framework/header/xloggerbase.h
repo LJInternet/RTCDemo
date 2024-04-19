@@ -53,32 +53,32 @@ XLOG_EXTERN typedef struct XLoggerInfo_t {
     intmax_t maintid;
 } XLoggerInfo;
 
-extern intmax_t xlogger_pid();
-extern intmax_t xlogger_tid();
-extern intmax_t xlogger_maintid();
-typedef void (*xlogger_appender_t)(const XLoggerInfo* _info, const char* _log);
-extern const char* xlogger_dump(const void* _dumpbuffer, size_t _len);
+extern intmax_t ljlogger_pid();
+extern intmax_t ljlogger_tid();
+extern intmax_t ljlogger_amintid();
+typedef void (*ljlogger_appender_t)(const XLoggerInfo* _info, const char* _log);
+extern const char* ljlogger_dump(const void* _dumpbuffer, size_t _len);
 
 TLogLevel XLOG_EXTERN  xlogger_Level();
-XLOG_EXTERN void xlogger_SetLevel(TLogLevel _level);
-XLOG_EXTERN int  xlogger_IsEnabledFor(TLogLevel _level);
-XLOG_EXTERN xlogger_appender_t xlogger_SetAppender(xlogger_appender_t _appender);
+XLOG_EXTERN void ljlogger_SetLevel(TLogLevel _level);
+XLOG_EXTERN int  ljlogger_IsEnabledFor(TLogLevel _level);
+XLOG_EXTERN ljlogger_appender_t ljlogger_SetAppender(ljlogger_appender_t _appender);
 
 // no level filter
 #ifdef __GNUC__
 __attribute__((__format__(printf, 3, 4)))
 #endif
-XLOG_EXTERN void  xlogger_AssertP(const XLoggerInfo* _info, const char* _expression, const char* _format, ...);
-XLOG_EXTERN void  xlogger_Assert(const XLoggerInfo* _info, const char* _expression, const char* _log);
+XLOG_EXTERN void  ljlogger_AssertP(const XLoggerInfo* _info, const char* _expression, const char* _format, ...);
+XLOG_EXTERN void  ljlogger_Assert(const XLoggerInfo* _info, const char* _expression, const char* _log);
 #ifdef __GNUC__
 __attribute__((__format__(printf, 2, 0)))
 #endif
-XLOG_EXTERN void        xlogger_VPrint(const XLoggerInfo* _info, const char* _format, va_list _list);
+XLOG_EXTERN void        ljlogger_VPrint(const XLoggerInfo* _info, const char* _format, va_list _list);
 #ifdef __GNUC__
 __attribute__((__format__(printf, 2, 3)))
 #endif
-XLOG_EXTERN void xlogger_Print(const XLoggerInfo* _info, const char* _format, ...);
-XLOG_EXTERN void xlogger_Write(const XLoggerInfo* _info, const char* _log);
+XLOG_EXTERN void ljlogger_Print(const XLoggerInfo* _info, const char* _format, ...);
+XLOG_EXTERN void ljlogger_Write(const XLoggerInfo* _info, const char* _log);
 
 #ifdef __cplusplus
 }

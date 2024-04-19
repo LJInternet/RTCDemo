@@ -26,7 +26,7 @@
 		</data>
 		<key>Headers/RtcSDK-Swift.h</key>
 		<data>
-		u+e6Tk5HJosN5eGvrgHxBYtCcRI=
+		C9/14aMDUOSK6I+brvBlaFuCErw=
 		</data>
 		<key>Headers/RtcSDK.h</key>
 		<data>
@@ -38,7 +38,7 @@
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		E/SRtXdp111v46421WJvrrp7oWs=
+		XK03EaAN0yu2N0Oe1Z0GpFcwN8A=
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		o2mwk8JyEF7dUk8Pv8kJ7hiOO9k=
+		jMxjKArP/HZvdHO4HGYjfQC9I3o=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -118,11 +118,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			u+e6Tk5HJosN5eGvrgHxBYtCcRI=
+			C9/14aMDUOSK6I+brvBlaFuCErw=
 			</data>
 			<key>hash2</key>
 			<data>
-			pty4PN+8AL/P25sC6/YqYPiPBHsAJH9Iz6Kr3BtyuUI=
+			iGeSwEGojA0hIk8M2IJD5qPRX02PBxbIx0LxQCOz5Ss=
 			</data>
 		</dict>
 		<key>Headers/RtcSDK.h</key>
@@ -140,11 +140,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			E/SRtXdp111v46421WJvrrp7oWs=
+			XK03EaAN0yu2N0Oe1Z0GpFcwN8A=
 			</data>
 			<key>hash2</key>
 			<data>
-			EK7OYDluilFDvEE/8T2BtiXJTKS94PMydQhYwJkqLOA=
+			EfdfXvVdJihRM7CP6DTeFzbaaKFW5eThfNGmbBG4sok=
 			</data>
 		</dict>
 		<key>Modules/RtcSDK.swiftmodule/arm64-apple-ios.abi.json</key>
@@ -173,11 +173,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			o2mwk8JyEF7dUk8Pv8kJ7hiOO9k=
+			jMxjKArP/HZvdHO4HGYjfQC9I3o=
 			</data>
 			<key>hash2</key>
 			<data>
-			065MCCSO6rofsjhNENt3K0QTGIMq51jxAgL6Sg+816k=
+			FJyNSOTQeXGr0WIlL+GHklYP4Mt2NtQ3vGOmVytI5ZI=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

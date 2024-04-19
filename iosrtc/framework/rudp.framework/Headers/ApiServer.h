@@ -1,5 +1,5 @@
-#ifndef HOLISTIC_TRACKING_API_H
-#define HOLISTIC_TRACKING_API_H
+#ifndef API_SERVER_H
+#define API_SERVER_H
 
 #define EXPORT
 
@@ -34,6 +34,7 @@ extern "C" {
 	EXPORT_API int FancyJingMsgSendToPeer(uint32_t dest_id, const char* data, int len);
 	EXPORT_API int FancyJingMsgRegisterRecvCallback(void(*callback)(const char*, int, int));
 	EXPORT_API int FancyJingMsgRegisterConnCallback(void(*callback)(unsigned int, bool));
+	EXPORT_API int FancyJingMsgRegisterConnStatusCallback(void(*callback)(int32_t));
 	//EXPORT_API int FancyJingMsgStatus();
 	EXPORT_API int FancyJingMsgStop();
 	EXPORT_API int FancyJingMsgRelease();
