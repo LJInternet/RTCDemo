@@ -15,7 +15,8 @@ import com.linjing.rtc.demo.agora.AgoraPullActivity;
 import com.linjing.rtc.demo.agora.CustomPlayerActivity;
 import com.linjing.rtc.demo.agora.VoipCallActivity;
 import com.linjing.rtc.demo.cloudgame.CloudGameControlJoinActivity;
-import com.linjing.rtc.demo.rtm.RtmTestActivity;
+import com.linjing.rtc.demo.rtm.MultiRTMActivity;
+import com.linjing.rtc.demo.rtm.P2PRTMActivity;
 import com.linjing.rtc.demo.screen.ScreenCaptureActivity;
 import com.linjing.rtc.demo.MainListAdapter.MainData;
 import java.util.ArrayList;
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         list.add(new MainData("声网API拉流", 1, AgoraPullActivity.class));
         list.add(new MainData("通话模式", 1, VoipCallActivity.class));
         list.add(new MainData("自定义播放器", 1, CustomPlayerActivity.class));
-        list.add(new MainData("rtm测试", 1, RtmTestActivity.class));
+        list.add(new MainData("多人rtm测试", 1, MultiRTMActivity.class));
+        list.add(new MainData("rtm测试", 1, P2PRTMActivity.class));
         list.add(new MainData("云手机控制", 1, CloudGameControlJoinActivity.class));
 //        mHandler = new Handler();
 //        mHandler.postDelayed(new Runnable() {

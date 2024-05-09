@@ -1,7 +1,7 @@
 framework module RtcSDK {
   umbrella header "RtcSDK.h"
-
   export *
+
   module * { export * }
 }
 

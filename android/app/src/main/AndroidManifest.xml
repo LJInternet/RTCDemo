@@ -56,8 +56,8 @@
         </activity>
         <activity android:name="com.linjing.rtc.demo.cloudgame.CloudGameControlJoinActivity" />
 
-        <activity android:name="com.linjing.rtc.demo.rtm.RtmTestActivity" />
-
+        <activity android:name="com.linjing.rtc.demo.rtm.MultiRTMActivity" />
+        <activity android:name="com.linjing.rtc.demo.rtm.P2PRTMActivity" />
         <activity android:name=".agora.AgoraCameraPushActivity" />
         <activity android:name=".agora.AgoraPullActivity" />
         <activity android:name=".agora.VoipCallActivity" />

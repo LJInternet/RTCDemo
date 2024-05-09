@@ -53,6 +53,7 @@ private:
 class RudpChannelInfo {
 public:
     std::string _channel_id;
+    RUDP_MODE _mode;
     std::string _token;
     uint32_t boundLocalIp = 0;  // the local IP that this rudp binds to. in network-byte-order
     bool _auth_failed = false;
@@ -80,13 +81,14 @@ public:
     void destroyRudp(RudpProxy* rudp);
 
     // the 'boundLocalIp' is required to be in network-byte-order
-    void joinChannel(std::string channelID, int64_t appID, std::string uid, std::string token, uint32_t boundLocalIp = 0);
+    void joinChannel(int64_t appID, std::string uid, std::string channelID, RUDP_MODE mode, std::string token, uint32_t boundLocalIp = 0);
 
-    void leaveChannel(RudpGroupInfo& group_info);
+    void leaveChannel(RudpGroupInfo& group_info, RUDP_MODE mode);
 
-    void updateRelay(SignalConnectionInfo* connInfo, std::string channelId, std::vector<RelayInfo>& relays);
+    // rtmReuse: whether rtm uses the same relay(s) as rtc, for backward compatibility
+    void updateRelay(SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode, std::vector<RelayInfo>& relays, bool rtmReuse = false);
 
-    void startNatTraversal(SignalConnectionInfo* connInfo, std::string channelId,
+    void startNatTraversal(SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode,
         struct sockaddr_in signal_addr, uint64_t nat_traversal_id, int is_same_isp, int is_mobile_net_allowed);
     void stopNatTraversal();
 
@@ -101,16 +103,17 @@ private:
     RudpManager() = default;
     ~RudpManager() = default;
 
-    void appendRudp(RudpProxy* rudp, RUDP_MODE realtime_mode);
-
+    void appendRudp(RudpProxy* rudp);
     void doJoin(XMTPClient* xmtpClient, SignalConnectionInfo& connInfo, RudpChannelInfo& channelInfo);
-
-    void tryTransferTransportAddr(XMTPClient* client, SignalConnectionInfo* connInfo, std::string channelId);
+    void tryTransferTransportAddr(XMTPClient* client, SignalConnectionInfo* connInfo, std::string channelId, RUDP_MODE mode);
+    void getRtmRelaybyRtc(const std::vector<RelayInfo>& input, std::vector<RelayInfo>& output);
+    void updateRudpRelay(std::vector<RelayInfo>& relays, std::string& rudpGroupId, RUDP_MODE mode);
 
     std::recursive_mutex _lock;
     //std::vector<RudpProxy*> _rudps;
-    std::map<std::string, std::vector<RudpProxy*>> _rudpMap;
-    std::map<std::string, std::vector<RelayInfo>> _relayMap;
+    //std::map<std::string, std::vector<RudpProxy*>> _rudpMap;  // key: groupId_mode
+    std::map<std::string, RudpProxy*> _rudpMap;               // key: groupId_mode
+    std::map<std::string, std::vector<RelayInfo>> _relayMap;  // key: groupId_mode
     std::map<XMTPClient*, SignalConnectionInfo*> _connMap;
 
     //XMTPClient* _xmtpClient = nullptr;

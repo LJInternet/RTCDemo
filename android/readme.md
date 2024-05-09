@@ -1,6 +1,6 @@
 ## RTC 使用说明
 
-## 一.Android RTC使用说明
+## 一. 1V1 RTC使用说明（1V1 RTC使用需要注意ClientRole的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1）
 
 #### 1.增加权限，在AndroidManifest.xml增新增权限
 ```java
@@ -212,4 +212,119 @@
 #### 8.销毁RTCEngine
 ```java
      mRtcEngine.destroy();
+```
+
+## RTM 使用说明
+
+###### 一.1V1 RTM使用说明：（1V1 RTM使用需要注意joinChannel role的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1）[1V1示例](app/src/main/java/com/linjing/rtc/demo/rtm/P2PRTMActivity.java)
+
+###### 创建RTM实例：
+```java
+    private RudpEngineJni mRudpEngine;
+
+    mRudpEngine = new RudpEngineJni();
+    // 创建的同时设置数据回调以及连接状态相关回调
+    mRudpEngine.create(new RUDPCallback() {
+    @Override
+    public void onDataCallback(long uid, String channelId, byte[] data) {
+
+    }
+
+    /**
+    *
+    * @param uid
+    * @param channelId
+    * @param type RudpEngineConstants，当type == LinkStatus时，result表示：LinkStatusConnected，LinkStatusDisconnected，LinkStatusLost
+    * @param result 0 成功，否则失败
+    * @param msg
+    */
+    @Override
+    public void onEventCallback(long uid, String channelId, int type, int length, String msg) {
+
+    }
+    });
+```
+###### 加入RTM频道：
+```java
+    /**
+     * 当前1V1 RTM与RTC使用相同的ChannelId，因此需要同时使用RTC，才会生效
+     * @param token
+     * @param role 是否是控制端，表示一个是控制端  1，一个是被控制端 0，在两个不同设备时，需要两个端的role不一样
+     * @param isDebug 是否是测试环境
+     * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants
+     * @param uid 用户ID
+     * @param appId 用户Appid
+     * @param channelId 频道ID
+     */
+     mRudpEngine.joinChannel("token", 1/0, true, 0, 2, 1111, channelId);
+```
+
+###### 发送消息：
+```java
+    mRudpEngine.sendMessage(byte);
+```
+
+###### 退出频道：
+```java
+    mRudpEngine.leaveChannel();
+```
+
+###### 销毁：
+```java
+    mRudpEngine.destroy();
+```
+
+###### 二.多人RTM使用[示例](app/src/main/java/com/linjing/rtc/demo/rtm/MultiRTMActivity.java)
+###### 创建RTM实例：
+```java
+    private RudpEngineWrapperJni mRudpEngine;
+
+    mRudpEngine = new RudpEngineWrapperJni();
+    // 创建的同时设置数据回调以及连接状态相关回调
+    mRudpEngine.create(new RUDPCallback() {
+    @Override
+    public void onDataCallback(long uid, String channelId, byte[] data) {
+
+    }
+
+    /**
+    *
+    * @param uid
+    * @param channelId
+    * @param type RudpEngineConstants，当type == LinkStatus时，result表示：LinkStatusConnected，LinkStatusDisconnected，LinkStatusLost
+    * @param result 0 成功，否则失败
+    * @param msg
+    */
+    @Override
+    public void onEventCallback(long uid, String channelId, int type, int length, String msg) {
+
+    }
+    });
+```
+###### 加入RTM频道：
+```java
+    /**
+     * 当前1V1 RTM与RTM使用相同的ChannelId，因此需要同时使用RTC，才会生效
+     * @param token
+     * @param isDebug 是否是测试环境
+     * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants
+     * @param uid 用户ID
+     * @param appId 用户Appid
+     * @param channelId 频道ID
+     */
+     mRudpEngine.joinChannel("token", true, 0, 2, 1111, channelId);
+```
+
+###### 发送消息：
+```java
+    mRudpEngine.sendMessage(uid, chanelId, byte);
+```
+###### 退出频道：
+```java
+    mRudpEngine.leaveChannel();
+```
+
+###### 销毁：
+```java
+    mRudpEngine.destroy();
 ```

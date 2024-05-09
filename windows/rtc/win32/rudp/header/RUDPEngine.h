@@ -8,8 +8,11 @@
 #include "XmtpManager.h"
 #include <map>
 #include <atomic>
+#include <set>
 #include "ConnectionResponse.h"
 #include "ClientConstants.h"
+#include "bundle.h"
+#include "rudp_mgr.h"
 
 
 class RUDP_EXTERN RUDPEngine {
@@ -25,6 +28,7 @@ private:
     int64_t last_disconnect_ts = 0;
     int64_t last_lost_ts = 0;
     std::string _channelId;
+    RudpGroupInfo _rudpGroupInfo;
 public:
     RUDPEngine(RUDPConfig *pConfig);
     ~RUDPEngine();
@@ -37,10 +41,7 @@ public:
     int registerMsgCallback(rudp_msg_callback callback, void *pVoid);
 
     rudp_mode getRudpMode(int mode) {
-        if (mode == RUDP_REALTIME_ULTRA) {
-            return RUDP_REALTIME_ULTRA;
-        }
-        return RUDP_REALTIME_NORMAL;
+        return (RUDP_MODE)mode;
     }
 
     static int client_callback(RUDP_CB_TYPE type, const char* buf, int len, void* aux_param);
@@ -72,6 +73,7 @@ private:
     RUDP_WRAP_CALLBACK _rudpCallback = nullptr;
     void * callbackContext = nullptr;
     std::string _channelId;
+    uint64_t _localUid = 0;
     int _port = 18001;
     std::mutex _eventCallbackLock;
     rudp_evnt_callback_ex mExtEventCallback = nullptr;
@@ -79,14 +81,13 @@ private:
     std::string _token;
     int64_t last_disconnect_ts = 0;
     int64_t last_lost_ts = 0;
+    std::mutex mUserSetLock;
+    std::set<uint64_t> mUserSets;
 public:
     RUDPEngineEx(RUDPConfig *pConfig);
     ~RUDPEngineEx();
     rudp_mode getRudpMode(int mode) {
-        if (mode == RUDP_REALTIME_ULTRA) {
-            return RUDP_REALTIME_ULTRA;
-        }
-        return RUDP_REALTIME_NORMAL;
+        return (RUDP_MODE)mode;
     }
     static int rudp_wrapper_callback(RUDP_CB_TYPE type, int64_t src_uid, std::string& channel_id, const char* buf, int buf_len, void* aux_param);
 
@@ -104,6 +105,10 @@ public:
     int registerExtEventCallback(rudp_evnt_callback_ex eventCallback, void* context);
 
     int joinChannelExWithToken(uint64_t uid, const char *token, const char *channelId);
+
+    void handleAllUserListEvent(LJ::Bundle bundle);
+
+    void callbackRemoteUserStatus(int type, uint64_t user);
 };
 
 

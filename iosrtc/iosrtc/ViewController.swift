@@ -82,20 +82,7 @@ class VideoSettingsViewController: UITableViewController {
     }
 }
 
-class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDelayInfoDelegate {
-    func onVideoDecodeFrame(buf: UnsafeMutableRawPointer, size: Int, width: Int, height: Int, pixelFmt: Int) {
-
-    }
-    
-    func onVideoDecodeFrame(delayInfo: RtcSDK.VideoDelayInfo) {
-        FLog.info(tag: "delayInfo",
-                  logStr: " TDelay:" + String(delayInfo.totalDelay)
-                  + " EDelay:" + String(delayInfo.encodeDelay)
-                  + " DDelay:" + String(delayInfo.decodeDelay)
-                  + " TansDelay:" + String(delayInfo.transDelay)
-                  + " fps:" + String(delayInfo.fps))
-    }
-    
+class ViewController: UIViewController {
     
     @IBOutlet weak var zoomLabel: UILabel!
     
@@ -123,11 +110,12 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
 //    var volumeView : MPVolumeView!
     
     override func viewDidLoad() {
-        print("root viewDidLoad")
+        print("ViewController viewDidLoad")
         super.viewDidLoad()
         
 //        volumeView = MPVolumeView(frame: CGRect(x: 50, y: 50, width: 60, height: 60))
 //        self.view.addSubview(volumeView)
+        
         let folderName = "rtclog" // 自定义文件夹名称
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let folderURL = documentsURL.appendingPathComponent(folderName)
@@ -139,18 +127,22 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
         let engine = rtcEngine!
 //        join(mode: .push)
         engine.setDebug(debug: 1)
-        engine.enableVideo()
+        //engine.enableVideo()
         engine.disableAudio()
         
         previewView.autorotate = true;
         engine.setupLocalVideo(view: previewView)
+        engine.setVideoDecodeType(decodeType : VideoDecodeType.HARD.rawValue, isLowLatency : true);
                 
 //        remoteView.backgroundColor = UIColor(white: 1, alpha: 0.2)
         self.view.insertSubview(remoteView, belowSubview: previewView)
-        engine.setupRemoteVideo(view: remoteView)
-        
-        engine.registerDecodeVideoFrameObserver(delegate:self)
-        engine.registerVideoDelayInfoObserver(delegate:self)
+    }
+    
+    deinit {
+        print("ViewController deinit")
+        rtcEngine?.leaveChannel()
+        LJRtcEngine.destroy()
+        rtcEngine = nil
     }
     
     func join(mode: RTCWorkMode){
@@ -158,10 +150,10 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
             print("----already joined, ignore action")
             return
         }
-        
+
         rtcEngine?.setWorkMode(mode: mode)
         let engine = rtcEngine!
-        
+        engine.setupRemoteVideo(view: remoteView)
         let config = ChannelConfig()
         config.userID = 111
         config.token = "linjing@2023"
@@ -175,14 +167,15 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
+        print("ViewController viewDidAppear")
         super.viewDidAppear(animated)
-        //rtcEngine?.startPreview()
+//        rtcEngine?.startPreview()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        //rtcEngine?.stopPreview()
+        print("ViewController viewDidAppear")
+//        rtcEngine?.stopPreview()
     }
     
     @IBAction func handlePush(_ sender: UIButton) {
@@ -200,14 +193,16 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
     
     var localMuted = false
     @IBAction func muteLocalAudio(_ sender: UIButton) {
-        localMuted = localMuted == true ? false : true
-        rtcEngine?.muteLocalAudioStream(mute: localMuted)
+//        localMuted = localMuted == true ? false : true
+//        rtcEngine?.muteLocalAudioStream(mute: localMuted)
+        rtcEngine?.stopPreview()
     }
     
     var remoteMuted = false
     @IBAction func muteRemoteAudio(_ sender: UIButton) {
-        remoteMuted = remoteMuted == true ? false : true
-        rtcEngine?.muteRemoteAudioStream(mute: remoteMuted)
+//        remoteMuted = remoteMuted == true ? false : true
+//        rtcEngine?.muteRemoteAudioStream(mute: remoteMuted)
+        rtcEngine?.startPreview()
     }
     
     @IBAction func handleCapture(_ sender: UIButton) {
@@ -227,6 +222,13 @@ class ViewController: UIViewController , DecodeVideoFrameDelegate, DecodeVideoDe
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    @IBAction func handleBack(_ sender: UIButton) {
+        rtcEngine?.leaveChannel()
+        LJRtcEngine.destroy()
+        rtcEngine = nil
+        self.dismiss(animated: true)
     }
 }
 

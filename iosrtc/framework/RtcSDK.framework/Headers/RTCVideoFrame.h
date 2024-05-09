@@ -54,8 +54,11 @@ RTC_OBJC_EXPORT
 - (instancetype)initWithBuffer:(char *)frameBuffer
                         width:(int)width
                         height:(int)height
+                          size:(int)size
                       rotation:(RTCVideoRotation)rotation
                    timeStampNs:(int64_t)timeStampNs;
+
+- (void)destroy;
 
 @end
 

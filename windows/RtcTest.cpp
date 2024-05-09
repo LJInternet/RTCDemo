@@ -120,7 +120,7 @@ static void onEventCallback(int type, const char* buf, int size, void* context) 
 
 static void testWindowPush() {
     RTCEngineConfig rtc_config;
-    rtc_config.enableLog = false;
+    rtc_config.enableLog = true;
     std::string rtccfgstr;
     ljtransfer::mediaSox::PacketToString(rtc_config, rtccfgstr);
     media_engine* nginx = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
@@ -129,9 +129,9 @@ static void testWindowPush() {
     MIEUploadConfig c;
     MIETransferConfig config;
     config.appID = 1;
-    config.channelID = "xxxxx";
+    config.channelID = "954523111";
     config.userID = 3443434;
-    config.token = "xxxx";
+    config.token = "linjing@2023";
     config.transferMode = 1;
 
     MIEVideoUploadConfig videoUploadConfig;
@@ -145,49 +145,57 @@ static void testWindowPush() {
 
     std::string cfgstr;
     ljtransfer::mediaSox::PacketToString(c, cfgstr);
-    media_engine_send_event(nginx, JOIN_CHANNEL, (char*)cfgstr.c_str(), cfgstr.length());
+    media_engine_send_event(nginx, 103, (char*)cfgstr.c_str(), cfgstr.length());
 
-    /**
-    * 发送编码后的裸流数据
-    * @param engine
-    * @param frameType @see VideoFrameType
-    * @param codecType @see ENTYPE_H264 or ENTYPE_H265
-    * @param iTsInfos 延时统计数据，应该包含采集开始 采集结束 编码开始 编码结束事件 @see DelayConstants
-    */
-    //media_engine_push_encode_video(struct media_engine* engine, int width, int height, int frameType,
-    //    int pts, int  codecType, uint8_t * buf, int32_t len, std::map<uint64_t, uint64_t> iTsInfos);
+    char devices[1000];
+    media_engine_camera_list(devices, 1000);
+
+    printf("设备列表 %s \n", devices);
+    //media_engine_start_camera_capture(nginx, "C505e HD Webcam", 640, 480, 30);
+    //media_engine_start_camera_capture(nginx, "e2eSoft iVCam", 640, 480, 30);
+    CaptureConfig captureConfig;
+    captureConfig.width = 640;
+    captureConfig.height = 480;
+    captureConfig.fps = 30;
+    captureConfig.oriMode = ORIENTATION_MODE_FIXED_LANDSCAPE;// ORIENTATION_MODE_FIXED_LANDSCAPE;// ORIENTATION_MODE_FIXED_PORTRAIT;
+    captureConfig.fillMode = FIT_XY;// COR_CENTER;// FIT_XY;
+    std::string cfgstr11;
+    ljtransfer::mediaSox::PacketToString(captureConfig, cfgstr11);
+    media_engine_start_camera_capture_with_config(nginx, "Logi C270 HD WebCam", cfgstr11.c_str(), cfgstr11.length());
+    media_engine_subscribe_capture_video(nginx, on_capture_video, nullptr);
+
+    AudioEnableEvent createAudioEvent;
+    createAudioEvent.evtType = AUDIO_CREATE;
+    createAudioEvent.enabled = true;
+    std::string audio_create_data;
+    ljtransfer::mediaSox::PacketToString(createAudioEvent, audio_create_data);
+    media_engine_send_event(nginx, createAudioEvent.evtType, (char*)audio_create_data.c_str(), audio_create_data.length());
+
+    AudioEnableEvent captureEvent;
+    captureEvent.evtType = AUDIO_ENABLE_EVENT;
+    captureEvent.enabled = true;
+    std::string audio_enable_data;
+    ljtransfer::mediaSox::PacketToString(captureEvent, audio_enable_data);
+    media_engine_send_event(nginx, captureEvent.evtType, (char*)audio_enable_data.c_str(), audio_enable_data.length());
+
+    media_engine_subscribe_capture_audio(nginx, on_capture_audio, nullptr);
 
 
-    /**
-     * 发送pcm音频
-     * @param engine
-     * @param pcm
-     * @param frame_num 每个channel的音频采样数
-     * @param sampleRate 采样率
-     * @param channelCount 声道数
-     * @param bytePerSample Int16 2 int8 1 int32 4
-     */
-    //MEDIATRANSFER_EXTERN void media_engine_push_audio(struct media_engine* engine, const int8_t * pcm,
-    //    int frame_num, int sampleRate, int channelCount, int bytePerSample);
+    // 订阅解码视频
+    media_engine_subscribe_video_with_delay(nginx, OnDecodeVideoWithDelayCallback, nginx);
 
+    RUDPEngine* engine = startRtm(config.transferMode, config.userID, config.channelID);
 
-    /**
-     * 注册native事件回调
-     * @param engine
-     * @param cb
-     * @param context
-     */
-    media_engine_register_event_listener(nginx, onEventCallback, nullptr);
+    while (true) {
+        LJ::SystemUtil::sleep(500);
+        std::string msgStr = "test";
+        rudp_engine_send(engine, msgStr.c_str(), msgStr.size());
+    }
+    //rtmp_engine_close();
+    //media_engine_stop_camera_capture(nginx);
 
-
-    LeaveChannelEvent leaveChannelEvent;
-    std::string leaveStr;
-    ljtransfer::mediaSox::PacketToString(leaveChannelEvent, leaveStr);
-    media_engine_send_event(nginx, LEAVE_CHANNEL, (char*)leaveStr.c_str(), leaveStr.length());
-    /**
-     * 销毁RTC engine
-     */
-    media_engine_destroy(nginx);
+    //LJ::SystemUtil::sleep(1000 * 60 * 500);
+    stopRtm(engine);
 }
 
 static uint8_t* yuvData = nullptr;

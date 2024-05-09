@@ -67,3 +67,19 @@ target_link_libraries( RTCPullDemo
     ${LIB_UV}
     ${LIB_BASESTONE}
 )
+
+add_executable(P2PRTMTest ./P2PRTMTest.cpp)
+
+target_link_libraries( P2PRTMTest
+    ${LIB_RUDP}
+    ${LIB_UV}
+    ${LIB_BASESTONE}
+)
+
+add_executable(MultiRTMTest ./MultiRTMTest.cpp)
+
+target_link_libraries( MultiRTMTest
+    ${LIB_RUDP}
+    ${LIB_UV}
+    ${LIB_BASESTONE}
+)

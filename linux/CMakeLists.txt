@@ -53,7 +53,21 @@ link_directories(
 file (GLOB SRC "${CMAKE_SOURCE_DIR}/src/*.cpp")
 
 
-add_executable(RtcLinuxDemo ${SRC})
+add_executable(RtcLinuxDemo "${CMAKE_SOURCE_DIR}/src/main.cpp")
 target_link_libraries(RtcLinuxDemo
         ${LJSDK_LIBS}
+        libpthread.so)
+		
+
+SET(LJSDK_RUDP_INCLUDE_DIR "${LIBS_DIR}/rudp/header")
+include_directories(${LJSDK_RUDP_INCLUDE_DIR})
+SET(LJSDK_RUDP_TEST basestone rudp)	
+add_executable(P2PRTMTest "${CMAKE_SOURCE_DIR}/src/P2PRTMTest.cpp")
+target_link_libraries(P2PRTMTest
+        ${LJSDK_RUDP_TEST}
+        libpthread.so)
+		
+add_executable(MultiRTMTest "${CMAKE_SOURCE_DIR}/src/MultiRTMTest.cpp")
+target_link_libraries(MultiRTMTest
+        ${LJSDK_RUDP_TEST}
         libpthread.so)

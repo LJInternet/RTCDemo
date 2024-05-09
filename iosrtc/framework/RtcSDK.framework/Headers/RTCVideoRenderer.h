@@ -25,7 +25,10 @@ RTC_OBJC_EXPORT
  @note 图像宽度、高度、旋转角度等信息请参考RTCVideoFrame属性
  @note 如果图像大小发生变化，会触发-[RTCVideoRendererDelegate videoView:didChangeVideoSize:]通知
  */
-- (void)displayYUV420pData:(void *)data width:(NSInteger)w height:(NSInteger)h;
+- (void)displayYUV420pData:(void *)data size:(NSInteger)size width:(NSInteger)w height:(NSInteger)h;
+
+
+- (void)setLowLatency:(BOOL)lowLatency;
 
 /**
  视频渲染器是否启用

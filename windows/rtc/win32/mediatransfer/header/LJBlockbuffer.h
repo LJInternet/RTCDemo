@@ -16,7 +16,7 @@ namespace ljtransfer
 namespace mediaSox
 {
 
-// boost::pool min accord
+// ljlog::pool min accord
 template <unsigned BlockSize>
 struct default_block_allocator_malloc_free
 {

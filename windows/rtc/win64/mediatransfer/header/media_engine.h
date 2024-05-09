@@ -347,6 +347,12 @@ struct TransDelayInfoList {
 	 * @param engine
 	 */
 	MEDIATRANSFER_EXTERN void media_engine_stop_screen_capture(struct media_engine* engine);
+
+	/**
+	 * 设置解码配置
+	 * @param engine
+	 */
+	MEDIATRANSFER_EXTERN void media_engine_set_decode_config(struct media_engine* engine, int decodeType, int isLowLatency);
 #ifdef __cplusplus
 }
 #endif

@@ -1,0 +1,11 @@
+framework module RtmSdk {
+  umbrella header "RtmSdk.h"
+  export *
+
+  module * { export * }
+}
+
+module RtmSdk.Swift {
+  header "RtmSdk-Swift.h"
+  requires objc
+}

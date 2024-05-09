@@ -1,6 +1,6 @@
 
-# windows C++层接入说明 （接口定义在media_engine.h）
-### Linux层接入说明 （接口定义在media_engine.h） 接入方法与PC相似，只是没有音视频的采集模块，需使用自定义的音视频采集，进行推送
+# windows C++层接入说明 （接口定义在接口定义在[media_engine.h](rtc/win64/mediatransfer/header/media_engine.h)）
+### Linux层接入说明 （接口定义在[media_engine.h](rtc/win64/mediatransfer/header/media_engine.h)）
 #### 1.初始化RTCEngine
 ```cpp
     RTCEngineConfig rtc_config;
@@ -196,4 +196,162 @@
      * 销毁RTC engine
      */
 	MEDIATRANSFER_EXTERN void media_engine_destroy(struct media_engine*);
+```
+
+# Windows RTM C++层接入说明 (接口定义在[RUDPApi.h](rtc/win64/rudp/header/RudpApi.h))
+
+###### 1V1 RTM使用([P2PRTMTest.cpp](P2PRTMTest.cpp) [ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
+
+###### 创建RTM实例:
+
+```cpp
+    enum SdkMode {
+        RTM,
+        RTC
+    };
+    typedef struct RUDPConfig {
+        const char* token;//正式环境不能为空，测试环境使用默认的token
+        int appId;
+        int mode;// RUDPMode 0 RTM
+        int role;// RUDPRole 0 normal 1 controller
+        bool isDebug;// 测试环境还是正式环境
+        int dataWorkMode;// DataWorkMode
+    }RUDPConfig;
+    /**
+     * 当前1V1 RTM与RTM使用相同的ChannelId，因此需要同时使用RTC，才会生效
+     * @param token
+     * @param isDebug 是否是测试环境
+     * @param dataWorkMode RTM 的工作模式 DataWorkMode
+     * @param uid 用户ID
+     * @param appId 用户Appid
+     * @param channelId 频道ID
+     */
+    RUDPConfig config;
+    config.dataWorkMode = dataWorkMode;
+    config.token = token.c_str();
+    config.role = role;
+    config.isDebug = isDebug;
+    config.appId = (int)appid;
+    config.mode = 0; //SdkMode
+    m_rudp = rudp_engine_create(&config);
+    rudp_engine_join_channel(m_rudp, (uint64_t)uid, channelId.c_str());
+```
+###### 设置回调：
+```cpp
+
+    // content为传递的this
+    static void onRudpMsgCallback(const char* msg, uint32_t len, uint32_t uid, void* content) {
+        if (content == nullptr) {
+            return;
+        }
+
+    }
+    /**
+    * @see ClientConstants.h
+    * @param uid
+    * @param channelId
+    * @param type MsgType，当type == LinkStatus时，result表示：API_STATUS_CONNECTED，API_STATUS_DISCONNECTED，API_STATUS_LOST
+    * @param result 0 成功，否则失败
+    * @param msg
+    */
+    static void onRudpEventCallback(int type, const char* msg, uint32_t len, int result, void* content) {
+        if (content == nullptr) {
+            return;
+        }
+ 
+    }
+
+    rudp_engine_register_msg_callback(m_rudp, onRudpMsgCallback, this);
+    rudp_engine_register_event_callback(m_rudp, onRudpEventCallback, this);
+```
+
+###### 发送消息：
+```cpp
+    rudp_engine_send(m_rudp, char* msg, uint32_t len);
+```
+
+###### 退出频道：
+```cpp
+    rudp_engine_leave_channel(m_rudp);
+```
+
+###### 销毁：
+```cpp
+    rudp_engine_destroy(m_rudp);
+```
+###### 多人 RTM使用([MultiRTMTest.cpp](MultiRTMTest.cpp) [ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
+###### 创建RTM实例：
+```cpp
+    enum SdkMode {
+        RTM,
+        RTC
+    };
+    typedef struct RUDPConfig {
+        const char* token;//正式环境不能为空，测试环境使用默认的token
+        int appId;
+        int mode;// RUDPMode 0 RTM 写死0
+        int role;// RUDPRole 1 controller 写死1
+        bool isDebug;// 测试环境还是正式环境
+        int dataWorkMode;// DataWorkMode 写死0
+    }RUDPConfig;
+    /**
+     * @param token
+     * @param isDebug 是否是测试环境
+     * @param dataWorkMode RTM 的工作模式 DataWorkMode
+     * @param uid 用户ID
+     * @param appId 用户Appid
+     * @param channelId 频道ID
+     */
+    RUDPConfig config;
+    config.dataWorkMode = dataWorkMode;
+    config.token = token.c_str();
+    config.role = role;
+    config.isDebug = isDebug;
+    config.appId = (int)appid;
+    config.mode = 0; //SdkMode
+    m_rudp = rudp_engine_create_ex(&config);
+    rudp_engine_join_channel_ex(m_rudp, (uint64_t)uid, channelId.c_str());
+```
+###### 设置回调：
+```cpp
+
+    // content为传递的this
+    static void onRudpMsgCallback(int type, const char* msg, uint32_t len, uint64_t uid, void* content) {
+        if (content == nullptr) {
+            return;
+        }
+
+    }
+    /**
+    * @see ClientConstants.h
+    * @param uid
+    * @param channelId
+    * @param type MsgType，当type == LinkStatus时，result表示：API_STATUS_CONNECTED，API_STATUS_DISCONNECTED，API_STATUS_LOST
+    * @param result 0 成功，否则失败
+    * @param msg
+    */
+    static void onRudpEventCallback(int type, const char* msg, uint32_t len, int result, void* content) {
+        if (content == nullptr) {
+            return;
+        }
+ 
+    }
+
+    rudp_engine_register_msg_callback_ex(m_rudp, onRudpMsgCallback, this);
+    rudp_engine_register_event_callback_ex(m_rudp, onRudpEventCallback, this);
+```
+
+###### 发送消息：
+```cpp
+    rudp_engine_send_ex(m_rudp, char* msg, uint32_t len);
+```
+
+###### 退出频道：
+```cpp
+    rudp_engine_leave_channel_ex(m_rudp);
+```
+
+###### 销毁：
+```cpp
+    rudp_engine_destroy_ex(m_rudp);
 ```

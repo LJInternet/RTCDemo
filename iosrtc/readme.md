@@ -130,3 +130,144 @@
 ```swift
     engine.destroy()
 ```
+
+## IOS RTM 使用说明
+#### 1.拷贝demo中的famework RTM相关依赖到项目中
+
+#### 2.在项目工程中添加framework依赖
+![rtm_framework.jpg](image%rtm_framework.jpg)
+
+#### 1V1 RTM使用[RTMViewController.swift](iosrtc/RtmViewController.swift)
+
+#### 1.初始化
+
+```swift
+    import RtmSdk
+
+    let config = RTMConfig()
+    config.appId = GlobalConstants.appId // 服务端分配的appId
+    config.localIp = 0
+    config.dataWorkMode = 0
+    config.isDebug = 1
+    config.role = push ? RUDPMode.PUSH.rawValue : RUDPMode.PULL.rawValue // 1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
+    config.token = GlobalConstants.token // 服务端分配的token
+    rtmEngine = RTMEngine(config: config)
+
+    rtmEngine?.setDebugEvn(isTestEvn: true) // 设置是正式环境还是测试环境，默认是正式环境
+```
+
+#### 2.注册链路状态回调以及消息回调实现IRtmMsgDelegate和IRtmEventDelegate
+
+```swift
+        class RTMViewController : UIViewController, IRtmMsgDelegate, IRtmEventDelegate {
+            func onMsgcallbck(buf: UnsafePointer<CChar>?, size: UInt32, uid: UInt64) {
+                let data = Data(bytes: buf!, count: Int(size))
+                let str = String(data: data, encoding: .utf8)!
+                let tempStr = "RTM onMsgcallbck uid \(uid) msg \(str)"
+                showStr(tempStr: tempStr)
+            }
+            //LinkStatus时，status表示：API_STATUS_CONNECTED 1，API_STATUS_DISCONNECTED 2，API_STATUS_LOST 3
+            func onLinkStatus(status: Int32) {
+                showStr(tempStr: "RTM onLinkStatus status \(status)")
+            }
+        }
+
+        rtmEngine?.eventDelegate = self
+        rtmEngine?.subcribeMsgCallback(msgcallback : self)
+```
+
+#### 3.加入频道（指定uid以及channelId）
+
+```swift
+       rtmEngine?.joinChannel(uid: GlobalConstants.uid, channelId: channelTextField.text!)
+```
+
+#### 4.发送消息（支持发送String以及UnsafePointer<CChar>）
+
+```swift
+       rtmEngine?.sendMsg(msg: "test msg")
+       rtmEngine?.sendMsg(msg : UnsafePointer<CChar>, len : Int32)
+```
+
+#### 5.退出频道
+```swift
+        rtmEngine?.leveChannel()
+        rtmEngine = nil
+```
+
+#### 多人 RTM使用[MultiRTMViewController.swift](iosrtc/MultiRTMViewController.swift)
+
+#### 1.初始化
+
+```swift
+    import RtmSdk
+
+    let config = RTMExConfig()
+    config.appId = GlobalConstants.appId // 服务端分配的appId
+    config.localIp = 0
+    config.dataWorkMode = 0
+    config.isDebug = 1
+    config.role // 可以不用填，默认为1
+    config.token = GlobalConstants.token // 服务端分配的token
+    rtmEngine = RTMEngineEx(config: config)
+
+    rtmEngine?.setDebugEvn(isTestEvn: true) // 设置是正式环境还是测试环境，默认是正式环境
+```
+
+#### 2.注册链路状态回调以及消息回调实现IRtmMsgDelegate和IRtmExEventDelegate
+
+```swift
+        class MultiRTMViewController : UIViewController, IRtmMsgDelegate,IRtmExEventDelegate {
+            public func onJoinChannelFail(result: Int32, msg: String) {
+                showStr(tempStr: "RTMEx onJoinChannelFail result \(result) msg \(msg)")
+            }
+            
+            public func onLeveChannelFail(result: Int32, msg: String) {
+                showStr(tempStr: "RTMEx onLeveChannelFail result \(result) msg \(msg)")
+            }
+            
+            public func onUserJoined(userId: UInt64) {
+                showStr(tempStr: "RTMEx onUserJoined userId \(userId)")
+            }
+            
+            public func onUserOffLine(userId: UInt64) {
+                showStr(tempStr: "RTMEx onUserOffLine userId \(userId)")
+            }
+            
+            public func onJoinChannelSuccess() {
+                showStr(tempStr: "RTMEx onJoinChannelSuccess")
+            }
+            
+            public func onLeveChannelSuccess() {
+                showStr(tempStr: "RTMEx onLeveChannelSuccess")
+            }
+            
+            //LinkStatus时，status表示：API_STATUS_CONNECTED 1，API_STATUS_DISCONNECTED 2，API_STATUS_LOST 3
+            func onLinkStatus(status: Int32) {
+            public func onLinkStatus(status : Int32) {
+                showStr(tempStr: "RTMEx onLinkStatus status \(status)")
+            }
+        }
+
+        rtmEngine?.eventDelegate = self
+        rtmEngine?.subcribeMsgCallback(msgcallback : self)
+```
+
+#### 3.加入频道（指定uid以及channelId）
+
+```swift
+       rtmEngine?.joinChannel(uid: GlobalConstants.uid, channelId: channelTextField.text!)
+```
+
+#### 4.发送消息（支持发送String以及UnsafePointer<CChar>）
+
+```swift
+       rtmEngine?.sendMsg(msg: "test msg")
+       rtmEngine?.sendMsg(msg : UnsafePointer<CChar>, len : Int32)
+```
+
+#### 5.退出频道
+```swift
+        rtmEngine?.leveChannel()
+        rtmEngine = nil
+```
