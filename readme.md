@@ -1,7 +1,7 @@
 
 ## 一.Android 使用说明
 
-### [1V1 RTC使用说明](android/readme.md#一-1v1-rtc使用说明1v1-rtc使用需要注意clientrole的设置一般两端必须保持不一致一端为值为0时另外一端必须为1)
+### [1V1 RTC使用说明](android/readme.md#1)
 
 ### [1V1 RTM使用说明](android/readme.md#一1v1-rtm使用说明1v1-rtm使用需要注意joinchannel-role的设置一般两端必须保持不一致一端为值为0时另外一端必须为1-1v1示例p2prtmactivity)
 
