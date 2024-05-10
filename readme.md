@@ -9,19 +9,19 @@
 
 ## 二.IOS 使用说明
 
-### [1V1 RTC使用说明](iosrtc/readme.md#ios-rtc-使用说明)
+### [1V1 RTC使用说明](iosrtc/readme.md#1)
 
-### [1V1 RTM使用说明](iosrtc/readme.md#1v1-rtm使用-rtmviewcontrollerswift)
+### [1V1 RTM使用说明](iosrtc/readme.md#2)
 
-### [多人RTM使用说明](iosrtc/readme.md#多人-rtm使用multirtmviewcontrollerswift)
+### [多人RTM使用说明](iosrtc/readme.md#3)
 
 ## 三.C++ Windows使用说明
 
-### [1V1 RTC使用说明](windows/readme.md#windows-c层接入说明-接口定义在接口定义在media_engineh)
+### [1V1 RTC使用说明](windows/readme.md#1)
 
-### [1V1 RTM使用说明](windows/readme.md#1v1-rtm使用p2prtmtestcpp-clientconstantsh)
+### [1V1 RTM使用说明](windows/readme.md#2)
 
-### [多人RTM使用说明](windows/readme.md#多人-rtm使用multirtmtestcpp-clientconstantsh)
+### [多人RTM使用说明](windows/readme.md#3)
 
 ## 四.C++ Linux使用说明
 

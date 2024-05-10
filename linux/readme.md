@@ -1,5 +1,7 @@
 
-# Linux RTC C++层接入说明 （接口定义在[media_engine.h](libs/mediatransfer/header/media_engine.h)）
+<h2 id="1">Linux RTC C++层接入说明</h2>
+
+## Linux RTC C++层接入说明 （接口定义在[media_engine.h](libs/mediatransfer/header/media_engine.h)）
 ### Linux层接入说明 （接口定义在[media_engine.h](libs/mediatransfer/header/media_engine.h)） 接入方法与PC相似，只是没有音视频的采集模块，需使用自定义的音视频采集，进行推送
 #### 1.初始化RTCEngine
 ```cpp
@@ -198,12 +200,14 @@
 	MEDIATRANSFER_EXTERN void media_engine_destroy(struct media_engine*);
 ```
 
-# Linux RTM C++层接入说明 (接口定义在[RUDPApi.h](libs/rudp/header/RudpApi.h))
+## Linux RTM C++层接入说明 (接口定义在 [RUDPApi.h](libs/rudp/header/RudpApi.h))
 
-## 1V1 RTM使用([P2PRTMTest.cpp](src/P2PRTMTest.cpp) [ClientConstants.h](libs/rudp/header/ClientConstants.h))
+<h2 id="2">1V1 RTM使用</h2>
+
+## 1V1 RTM使用([示例代码P2PRTMTest.cpp](src/P2PRTMTest.cpp) [参数说明ClientConstants.h](libs/rudp/header/ClientConstants.h))
 
 
-#### 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数
+#### 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数，RTM只依赖basestone.so和rudp.so两个库，1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
 
 ###### 创建RTM实例:
 
@@ -282,8 +286,11 @@
 ```cpp
     rudp_engine_destroy(m_rudp);
 ```
+
+<h2 id="3">多人 RTM使用</h2>
+
 ## 多人 RTM使用([MultiRTMTest.cpp](src/MultiRTMTest.cpp)  [ClientConstants.h](libs/rudp/header/ClientConstants.h))
-#### 编译产物可通过channelId=xxx token=xxx uid=xxx appId=xxx 指定参数
+#### 编译产物可通过channelId=xxx token=xxx uid=xxx appId=xxx 指定参数，，无论是那一端RUDPConfig的role写死1，RTM只依赖basestone.so和rudp.so两个库
 ###### 创建RTM实例：
 ```cpp
     enum SdkMode {

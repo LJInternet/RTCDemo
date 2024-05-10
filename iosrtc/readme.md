@@ -1,3 +1,5 @@
+<h2 id="1">1V1 IOS RTC 使用说明</h2>
+
 ## IOS RTC 使用说明
 
 #### 1.拷贝demo中的famework RTC相关依赖到项目中
@@ -137,7 +139,10 @@
 #### 2.在项目工程中添加framework依赖
 ![rtm_framework.jpg](image/rtm_framwork.jpg)
 
-#### 1V1 RTM使用 ([RTMViewController.swift](iosrtc/RtmViewController.swift))
+
+<h2 id="2"> 1V1 RTM使用</h2>
+
+## 1V1 RTM使用 ([示例代码RTMViewController.swift](iosrtc/RtmViewController.swift)) ，1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
 
 #### 1.初始化
 
@@ -195,7 +200,9 @@
         rtmEngine = nil
 ```
 
-#### 多人 RTM使用[MultiRTMViewController.swift](iosrtc/MultiRTMViewController.swift)
+<h2 id="3"> 多人 RTM使用</h2>
+
+## 多人 RTM使用 [示例代码MultiRTMViewController.swift](iosrtc/MultiRTMViewController.swift) 无论是那一端RTMExConfig的role写死1
 
 #### 1.初始化
 

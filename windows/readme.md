@@ -1,5 +1,7 @@
 
-# windows C++层接入说明 （接口定义在接口定义在[media_engine.h](rtc/win64/mediatransfer/header/media_engine.h)）
+<h2 id="1">windows C++层RTC接入说明</h2>
+
+## windows C++层接入说明 （接口定义在接口定义在[media_engine.h](rtc/win64/mediatransfer/header/media_engine.h)）
 #### 1.初始化RTCEngine
 ```cpp
     RTCEngineConfig rtc_config;
@@ -197,11 +199,13 @@
 	MEDIATRANSFER_EXTERN void media_engine_destroy(struct media_engine*);
 ```
 
-# Windows RTM C++层接入说明 (接口定义在[RUDPApi.h](rtc/win64/rudp/header/RudpApi.h))
+## Windows RTM C++层接入说明 (接口定义在[RUDPApi.h](rtc/win64/rudp/header/RudpApi.h))
 
-###### 1V1 RTM使用([P2PRTMTest.cpp](P2PRTMTest.cpp) [ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
+<h2 id="2">1V1 RTM使用</h2>
 
-# 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数
+## 1V1 RTM使用([示例代码P2PRTMTest.cpp](P2PRTMTest.cpp) [参数定义ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
+
+## 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数，1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
 
 ###### 创建RTM实例:
 
@@ -280,9 +284,12 @@
 ```cpp
     rudp_engine_destroy(m_rudp);
 ```
-###### 多人 RTM使用([MultiRTMTest.cpp](MultiRTMTest.cpp) [ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
 
-# 编译产物可通过channelId=xxx token=xxx uid=xxx appId=xxx 指定参数
+<h2 id="3">多人 RTM使用</h2>
+
+## 多人 RTM使用([示例代码MultiRTMTest.cpp](MultiRTMTest.cpp) [参数说明ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
+
+## 编译产物可通过channelId=xxx token=xxx uid=xxx appId=xxx 指定参数，无论是那一端RUDPConfig的role写死1
 
 ###### 创建RTM实例：
 ```cpp
