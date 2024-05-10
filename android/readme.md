@@ -1,6 +1,5 @@
 ## RTC 使用说明
 <h2 id="1">1V1 RTC使用说明</h2>
-## 一. 1V1 RTC使用说明
 
 #### （1V1 RTC使用需要注意ClientRole的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1）
 
@@ -218,7 +217,9 @@
 
 ## RTM 使用说明
 
-## 一.1V1 RTM使用说明：（1V1 RTM使用需要注意joinChannel role的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1） [1V1示例P2PRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/P2PRTMActivity.java)
+<h2 id="2">1V1 RTM使用说明：</h2>
+
+## （1V1 RTM使用需要注意joinChannel role的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1） [1V1示例P2PRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/P2PRTMActivity.java)
 
 ###### 创建RTM实例：
 ```java
@@ -276,7 +277,8 @@
     mRudpEngine.destroy();
 ```
 
-## 二.多人RTM使用
+<h2 id="3">多人RTM使用：</h2>
+
 ###### [示例MultiRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/MultiRTMActivity.java)
 ###### 创建RTM实例：
 ```java

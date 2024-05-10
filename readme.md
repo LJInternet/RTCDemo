@@ -3,9 +3,9 @@
 
 ### [1V1 RTC使用说明](android/readme.md#1)
 
-### [1V1 RTM使用说明](android/readme.md#一1v1-rtm使用说明1v1-rtm使用需要注意joinchannel-role的设置一般两端必须保持不一致一端为值为0时另外一端必须为1-1v1示例p2prtmactivity)
+### [1V1 RTM使用说明](android/readme.md#2)
 
-### [多人RTM使用说明](android/readme.md#二多人rtm使用-示例multirtmactivity)
+### [多人RTM使用说明](android/readme.md#3)
 
 ## 二.IOS 使用说明
 
