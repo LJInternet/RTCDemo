@@ -87,7 +87,8 @@ typedef enum rudp_cb_type{
 
 typedef enum rudp_mode{
     RUDP_REALTIME_ULTRA,
-    RUDP_REALTIME_NORMAL
+    RUDP_REALTIME_NORMAL,
+    RUDP_INVALID_MODE = 255
 }RUDP_MODE;
 
 typedef int (*RUDP_CALLBACK)(RUDP_CB_TYPE type, const char* buf, int buf_len);
@@ -136,13 +137,14 @@ public:
     void* _link_aux_param;
 
     std::string _groupId;
+    bool _rtmReuseRtcRelay = false;
 private:
     RudpProxy() {}
     //struct rudp_instance* create(bool isController, RUDP_MODE realtime_mode);
     struct rudp_instance* create_with_port_range(bool isController, uint32_t local_ip, RUDP_MODE realtime_mode);
     struct rudp_instance* create(bool isController, struct sockaddr_in local_addr, RUDP_MODE realtime_mode);
 
-    struct rudp_instance* _instance;
+    struct rudp_instance* _instance = nullptr;
 };
 
 

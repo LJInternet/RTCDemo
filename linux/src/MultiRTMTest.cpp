@@ -72,6 +72,9 @@ int main(int argc, char** argv) {
      * @param appId 用户Appid
      * @param channelId 频道ID
      */
+
+    set_xmtp_debug(true); // 设置为测试环境，必须在joinchannel前调用，否则会崩溃
+
     RUDPConfig config;
     config.dataWorkMode = 0;
     config.token = token.c_str();

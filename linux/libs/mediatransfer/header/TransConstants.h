@@ -1254,5 +1254,23 @@ namespace LJMediaLibrary {
             pak >> uid >> volume >> channelId;
         }
     };
+
+    struct DefaultEvent : public ljtransfer::mediaSox::Marshallable {
+        uint32_t enable;
+
+
+        DefaultEvent() : enable(0) {
+
+        }
+
+        virtual void marshal(ljtransfer::mediaSox::Pack &pak) const {
+            pak << enable;
+
+        }
+
+        virtual void unmarshal(const ljtransfer::mediaSox::Unpack &pak) {
+            pak >> enable;
+        }
+    };
 }
 #endif //LJSDK_TRANSCONSTANTS_H

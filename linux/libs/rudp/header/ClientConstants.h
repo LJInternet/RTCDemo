@@ -4,12 +4,11 @@
 
 #ifndef LJSDK_CLIENTCONSTANTS_H
 #define LJSDK_CLIENTCONSTANTS_H
-#include <string>
-#include <vector>
-#include <mutex>
 #define RUDP_EXPORT
 
 #include <stdio.h>
+
+#include <stdint.h>
 #ifdef _WIN32
 #ifdef RUDP_EXPORT
 #define RUDP_EXPORT_API __declspec(dllexport)
@@ -59,6 +58,9 @@ typedef struct RUDPConfig {
     int role;// RUDPRole 0 normal 1 controller
     bool isDebug;// 测试环境还是正式环境
     int dataWorkMode;// DataWorkMode
+    uint32_t localIp;  // locally bound IP addr, in network-byte-order
+
+    RUDPConfig() {localIp = 0;}
 }RUDPConfig;
 
 typedef struct ApiRelayInfo {

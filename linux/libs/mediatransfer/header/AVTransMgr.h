@@ -98,6 +98,8 @@ namespace LJMediaLibrary {
 
         void requestRemoteKeyFrame();
 
+        void requestRemoteKeyFrameEx(uint64_t uid);
+
         void
         pushAudioFrameEx(const int8_t *pcm, int frame_num, int sampleRate, int channelCount, int bytePerSample, const char *key);
 

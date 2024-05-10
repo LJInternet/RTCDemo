@@ -12,6 +12,7 @@
 #include "ConnectionResponse.h"
 #include "ClientConstants.h"
 #include "bundle.h"
+#include "rudp_mgr.h"
 
 
 class RUDP_EXTERN RUDPEngine {
@@ -27,6 +28,7 @@ private:
     int64_t last_disconnect_ts = 0;
     int64_t last_lost_ts = 0;
     std::string _channelId;
+    RudpGroupInfo _rudpGroupInfo;
 public:
     RUDPEngine(RUDPConfig *pConfig);
     ~RUDPEngine();
@@ -39,10 +41,7 @@ public:
     int registerMsgCallback(rudp_msg_callback callback, void *pVoid);
 
     rudp_mode getRudpMode(int mode) {
-        if (mode == RUDP_REALTIME_ULTRA) {
-            return RUDP_REALTIME_ULTRA;
-        }
-        return RUDP_REALTIME_NORMAL;
+        return (RUDP_MODE)mode;
     }
 
     static int client_callback(RUDP_CB_TYPE type, const char* buf, int len, void* aux_param);
@@ -88,10 +87,7 @@ public:
     RUDPEngineEx(RUDPConfig *pConfig);
     ~RUDPEngineEx();
     rudp_mode getRudpMode(int mode) {
-        if (mode == RUDP_REALTIME_ULTRA) {
-            return RUDP_REALTIME_ULTRA;
-        }
-        return RUDP_REALTIME_NORMAL;
+        return (RUDP_MODE)mode;
     }
     static int rudp_wrapper_callback(RUDP_CB_TYPE type, int64_t src_uid, std::string& channel_id, const char* buf, int buf_len, void* aux_param);
 

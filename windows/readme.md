@@ -239,6 +239,8 @@
     config.appId = (int)appid;
     config.mode = 0; //SdkMode
     m_rudp = rudp_engine_create(&config);
+    // 通过该方法设置RTM运行的环境，true为测试环境，false为正式环境，正式上线时，应该设置为false
+    set_xmtp_debug(true); // 设置为测试环境，必须在joinchannel前调用，否则会崩溃
     rudp_engine_join_channel(m_rudp, (uint64_t)uid, channelId.c_str());
 ```
 ###### 设置回调：
@@ -321,6 +323,8 @@
     config.appId = (int)appid;
     config.mode = 0; //SdkMode
     m_rudp = rudp_engine_create_ex(&config);
+    // 通过该方法设置RTM运行的环境，true为测试环境，false为正式环境，正式上线时，应该设置为false
+    set_xmtp_debug(true); // 设置为测试环境，必须在joinchannel前调用，否则会崩溃
     rudp_engine_join_channel_ex(m_rudp, (uint64_t)uid, channelId.c_str());
 ```
 ###### 设置回调：
