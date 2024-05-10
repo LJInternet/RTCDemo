@@ -25,11 +25,11 @@
 
 ## 四.C++ Linux使用说明
 
-### [1V1 RTC使用说明](linux/readme.md#linux-rtc-c层接入说明-接口定义在media_engineh)
+### [1V1 RTC使用说明](linux/readme.md#1)
 
-### [1V1 RTM使用说明](linux/readme.md#1v1-rtm使用p2prtmtestcpp-clientconstantsh)
+### [1V1 RTM使用说明](linux/readme.md#2)
 
-### [多人RTM使用说明](linux/readme.md#多人-rtm使用multirtmtestcpp-clientconstantsh)
+### [多人RTM使用说明](linux/readme.md#3)
 
 ## RTC 使用说明
 
