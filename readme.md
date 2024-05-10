@@ -1,3 +1,36 @@
+
+## 一.Android 使用说明
+
+### [1V1 RTC使用说明](android/readme.md#一-1v1-rtc使用说明1v1-rtc使用需要注意clientrole的设置一般两端必须保持不一致一端为值为0时另外一端必须为1)
+
+### [1V1 RTM使用说明](android/readme.md#一1v1-rtm使用说明1v1-rtm使用需要注意joinchannel-role的设置一般两端必须保持不一致一端为值为0时另外一端必须为1-1v1示例p2prtmactivity)
+
+### [多人RTM使用说明](android/readme.md#二多人rtm使用-示例multirtmactivity)
+
+## 二.IOS 使用说明
+
+### [1V1 RTC使用说明](iosrtc/readme.md#ios-rtc-使用说明)
+
+### [1V1 RTM使用说明](iosrtc/readme.md#1v1-rtm使用-rtmviewcontrollerswift)
+
+### [多人RTM使用说明](iosrtc/readme.md#多人-rtm使用multirtmviewcontrollerswift)
+
+## 三.C++ Windows使用说明
+
+### [1V1 RTC使用说明](windows/readme.md#windows-c层接入说明-接口定义在接口定义在media_engineh)
+
+### [1V1 RTM使用说明](windows/readme.md#1v1-rtm使用p2prtmtestcpp-clientconstantsh)
+
+### [多人RTM使用说明](windows/readme.md#多人-rtm使用multirtmtestcpp-clientconstantsh)
+
+## 四.C++ Linux使用说明
+
+### [1V1 RTC使用说明](linux/readme.md#linux-rtc-c层接入说明-接口定义在media_engineh)
+
+### [1V1 RTM使用说明](linux/readme.md#1v1-rtm使用p2prtmtestcpp-clientconstantsh)
+
+### [多人RTM使用说明](linux/readme.md#多人-rtm使用multirtmtestcpp-clientconstantsh)
+
 ## RTC 使用说明
 
 ## 一.Android RTC使用说明

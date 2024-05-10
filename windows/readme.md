@@ -1,6 +1,5 @@
 
 # windows C++层接入说明 （接口定义在接口定义在[media_engine.h](rtc/win64/mediatransfer/header/media_engine.h)）
-### Linux层接入说明 （接口定义在[media_engine.h](rtc/win64/mediatransfer/header/media_engine.h)）
 #### 1.初始化RTCEngine
 ```cpp
     RTCEngineConfig rtc_config;
@@ -199,8 +198,6 @@
 ```
 
 # Windows RTM C++层接入说明 (接口定义在[RUDPApi.h](rtc/win64/rudp/header/RudpApi.h))
-
-
 
 ###### 1V1 RTM使用([P2PRTMTest.cpp](P2PRTMTest.cpp) [ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
 

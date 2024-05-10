@@ -135,9 +135,9 @@
 #### 1.拷贝demo中的famework RTM相关依赖到项目中
 
 #### 2.在项目工程中添加framework依赖
-![rtm_framework.jpg](image%rtm_framework.jpg)
+![rtm_framework.jpg](image/rtm_framwork.jpg)
 
-#### 1V1 RTM使用[RTMViewController.swift](iosrtc/RtmViewController.swift)
+#### 1V1 RTM使用 ([RTMViewController.swift](iosrtc/RtmViewController.swift))
 
 #### 1.初始化
 

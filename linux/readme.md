@@ -200,10 +200,10 @@
 
 # Linux RTM C++层接入说明 (接口定义在[RUDPApi.h](libs/rudp/header/RudpApi.h))
 
-###### 1V1 RTM使用([P2PRTMTest.cpp](src/P2PRTMTest.cpp) [ClientConstants.h](libs/rudp/header/ClientConstants.h))
+## 1V1 RTM使用([P2PRTMTest.cpp](src/P2PRTMTest.cpp) [ClientConstants.h](libs/rudp/header/ClientConstants.h))
 
 
-# 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数
+#### 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数
 
 ###### 创建RTM实例:
 
@@ -282,8 +282,8 @@
 ```cpp
     rudp_engine_destroy(m_rudp);
 ```
-###### 多人 RTM使用([MultiRTMTest.cpp](src/MultiRTMTest.cpp) [ClientConstants.h](libs/rudp/header/ClientConstants.h))
-# 编译产物可通过channelId=xxx token=xxx uid=xxx appId=xxx 指定参数
+## 多人 RTM使用([MultiRTMTest.cpp](src/MultiRTMTest.cpp)  [ClientConstants.h](libs/rudp/header/ClientConstants.h))
+#### 编译产物可通过channelId=xxx token=xxx uid=xxx appId=xxx 指定参数
 ###### 创建RTM实例：
 ```cpp
     enum SdkMode {
