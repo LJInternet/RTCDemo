@@ -1,0 +1,4 @@
+repository "UnityRTCDemo@zcweicheng@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
