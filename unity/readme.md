@@ -1,6 +1,6 @@
 ## Unity SDK 使用说明
 
-## 导入对应的[unitypackege](LJRTC_unity_20240507.unitypackage)
+
 
 ## 多人RTC使用说明请参考[多人RTC使用说明](multichannel.md#1)
 
