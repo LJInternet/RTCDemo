@@ -4,10 +4,6 @@
 
 ## RTM需要包含的plugin有：basestone libuv rudp等三个模块即可
 
-### 示例代码在[RTMEngineTest.cs](UnityRTCDemo/Assets/demo/rtm/RTMEngineTest.cs)中
-
-### 示例场景在[MultiChannelTest1.unity](UnityRTCDemo/Assets/Scenes/RTMTest.unity)中
-
 #### 1V1RTM SDK 的接口代码主要封装在[RTMEngine.cs](UnityRTCDemo/Assets/RTM/RTMEngine.cs)中
 
 #### 多人RTM SDK 的接口代码主要封装在[RTMEngineEx.cs](UnityRTCDemo/Assets/RTM/RTMEngineEx.cs)中
@@ -116,6 +112,10 @@
 
 ### 二、RTM 1V1 使用说明
 
+### 1V1RTM示例代码在[RTMEngineTest.cs](UnityRTCDemo/Assets/demo/rtm/RTMEngineTest.cs)中
+
+### 1V1RTM示例场景在[RTMTest.unity](UnityRTCDemo/Assets/Scenes/RTMTest.unity)中
+
 #### 1.初始化
 
  ```csharp
@@ -153,6 +153,10 @@ if (mRTMEngine != null) {
 <h2 id="3"> 多人RTM使用说明</h2>
 
 ### 三、多人RTM使用说明
+
+### 1V1RTM示例代码在[RTMEngineExTest.cs](UnityRTCDemo/Assets/demo/rtm/RTMEngineExTest.cs)中
+
+### 1V1RTM示例场景在[RTMExTest.unity](UnityRTCDemo/Assets/Scenes/RTMExTest.unity)中
 
 #### 1.初始化多人RTM
 

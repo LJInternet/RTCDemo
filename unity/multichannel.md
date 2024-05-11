@@ -3,7 +3,7 @@
 <h2 id="1"> 多人RTC使用说明</h2>
 
 
-## 因为多人RTC是基于1V1 RTC开发，因此1V1 RTC的接口，在RTCEngineEx中基本都可以使用，请参考[Unity 1V1 RTC 使用说明](readme.md#1)
+## 因为多人RTC是基于1V1 RTC开发，因此1V1 RTC的接口，在RTCEngineEx中基本都可以使用，请参考[Unity 1V1 RTC 使用说明](p2prtc.md#1)
 
 ### 示例代码在[MultiChannelRTCExTest2.cs](UnityRTCDemo/Assets/demo/RTC/MultiChannelRTCExTest.cs)中
 

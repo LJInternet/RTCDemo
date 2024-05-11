@@ -3,7 +3,7 @@
 
 # 日志库需要包含的plugin有：basestone ljlog (IOS 不需要 mars-boots.lib)
 
-```c#
+```csharp
     FXLog fxlog = new FXLog();
      /**
 	 *

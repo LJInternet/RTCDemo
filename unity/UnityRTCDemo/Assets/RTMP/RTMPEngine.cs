@@ -112,6 +112,15 @@ namespace LJ.RTMP
             return null;
         }
 
+        /// <summary>
+        /// 建立连接
+        /// </summary>
+        /// <param name="url">rtmp url</param>
+        /// <param name="width">rtmp 推流的宽</param>
+        /// <param name="height">rtmp 推流的高</param>
+        /// <param name="fps">rtmp 推流的帧率</param>
+        /// <param name="bitrate">rtmp 推流的码率</param>
+        /// <returns></returns>
         public int open(string url, int width, int height, int fps, int bitrate) {
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -134,6 +143,15 @@ namespace LJ.RTMP
             }
         }
 
+        /// <summary>
+        /// 发送视频数据
+        /// </summary>
+        /// <param name="buf">除android平台使用纹理编码外，其他平台这个值 不能为null，而且是有效的视频数据</param>
+        /// <param name="size">视频数据长度</param>
+        /// <param name="msg">CaptureVideoFrame序列化后的数据</param>
+        /// <param name="msgSize">CaptureVideoFrame序列化后的数据长度</param>
+        /// <param name="pixel_fmt">视频数据的格式</param>
+        /// <returns></returns>
         public int WriteVideo(byte[] buf, int size, byte[] msg, int msgSize, int pixel_fmt) {
             if (_status == RTMPStatus.CLOSED)
             {
@@ -154,6 +172,15 @@ namespace LJ.RTMP
             return ret;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buf">PCM 数据</param>
+        /// <param name="frame_num">PCM数据样本数，一般是buf.Length / (bytePerSample * channelCount) </param>
+        /// <param name="sampleRate">采样率</param>
+        /// <param name="channelCount">声道数</param>
+        /// <param name="bytePerSample">每个音频数据暂多少个字节，例如：int16 2 int8 1 int32 4</param>
+        /// <returns></returns>
         public int WriteAudio(byte[] buf, int frame_num, int sampleRate, int channelCount, int bytePerSample) {
             if (_status == RTMPStatus.CLOSED)
             {
