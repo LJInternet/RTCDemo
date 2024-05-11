@@ -4,6 +4,7 @@
 #### （1V1 RTC使用需要注意ClientRole的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1）
 
 #### 1.增加权限，在AndroidManifest.xml增新增权限
+
 ```java
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -16,6 +17,7 @@
 ```
 
 #### 2.初始LJSDK，设置日志、统计上报等基础信息
+
 ```java
     /**
      * 初始化SDK需要填写的配置
@@ -61,6 +63,7 @@
 ```
 
 #### 3.创建RTCEngine
+
 ```java
 // 暂时无用
     public class RtcEngineConfig {
@@ -146,7 +149,9 @@
     // 启动音频模块，在加入频道成功后，则会自动编码推流
     mRtcEngine.enableAudio();
 ```
+
 #### 4.设置本地预览
+
 ```java
 
     public void setupLocalVideo(Context context, FrameLayout group) {
@@ -160,6 +165,7 @@
 ```
 
 #### 5.设置远端用户预览
+
 ```java
 
     public void setupRemoteUi(Context context, FrameLayout group) {
@@ -174,6 +180,7 @@
 ```
 
 #### 6.加入频道
+
 ```java
     public class ChannelConfig {
         public List<UdpInitConfig> configs = new ArrayList<UdpInitConfig>();
@@ -206,11 +213,13 @@
 ```
 
 #### 7.退出频道
+
 ```java
      mRtcEngine.leaveChannel();
 ```
 
 #### 8.销毁RTCEngine
+
 ```java
      mRtcEngine.destroy();
 ```
@@ -221,8 +230,10 @@
 
 ## （1V1 RTM使用需要注意joinChannel role的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1） [1V1示例P2PRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/P2PRTMActivity.java)
 
-###### 创建RTM实例：
+### 创建1v1 RTM实例：
+
 ```java
+
     private RudpEngineJni mRudpEngine;
 
     mRudpEngine = new RudpEngineJni();
@@ -247,7 +258,9 @@
     }
     });
 ```
-###### 加入RTM频道：
+
+### 加入RTM频道：
+
 ```java
     /**
      * 当前1V1 RTM与RTC使用相同的ChannelId，因此需要同时使用RTC，才会生效
@@ -262,25 +275,30 @@
      mRudpEngine.joinChannel("token", 1/0, true, 0, 2, 1111, channelId);
 ```
 
-###### 发送消息：
+### 发送消息：
+
 ```java
     mRudpEngine.sendMessage(byte);
 ```
 
-###### 退出频道：
+### 退出频道：
+
 ```java
     mRudpEngine.leaveChannel();
 ```
 
-###### 销毁：
+### 销毁：
+
 ```java
     mRudpEngine.destroy();
 ```
 
 <h2 id="3">多人RTM使用：</h2>
 
-###### [示例MultiRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/MultiRTMActivity.java)
-###### 创建RTM实例：
+### [示例MultiRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/MultiRTMActivity.java)
+
+### 创建多人RTM实例：
+
 ```java
     private RudpEngineWrapperJni mRudpEngine;
 
@@ -306,7 +324,9 @@
     }
     });
 ```
-###### 加入RTM频道：
+
+### 加入多人RTM频道：
+
 ```java
     /**
      * 当前1V1 RTM与RTM使用相同的ChannelId，因此需要同时使用RTC，才会生效
@@ -320,16 +340,190 @@
      mRudpEngine.joinChannel("token", true, 0, 2, 1111, channelId);
 ```
 
-###### 发送消息：
+### 发送消息：
+
 ```java
     mRudpEngine.sendMessage(uid, chanelId, byte);
 ```
-###### 退出频道：
+
+### 退出多人RTM频道：
+
 ```java
     mRudpEngine.leaveChannel();
 ```
 
-###### 销毁：
+### 销毁多人RTM：
+
 ```java
     mRudpEngine.destroy();
+```
+
+<h2 id="4">日志库使用说明</h2>
+
+### 日志写文件（基本实现代码是从mars的xlog移植过来，进行了一些定制化的修改）
+
+### a.当应用启动时候进行初始化
+
+```java
+    FLog xlog = new FLog();
+    // 设置实例到Log中，方便静态方法打印日志
+    Log.setLogImp(xlog);
+    /**
+     设置是否同时在控制台输出日志，android 是logcat 
+    */
+    Xlog.setConsoleLogOpen(true);
+    mLogPath = logPath;
+    /**
+	 *
+	 * @param level 日志等级
+	 * @param mode 同步或者异步模式
+	 * @param cacheDir 缓存文件夹路径，一般传”“即可
+	 * @param logDir 日志文件夹路径
+	 * @param nameprefix 日志文件的前缀
+	 * @param cacheDays 日志缓存天数
+	 * @param pubkey 传”“即可
+	 */
+    Xlog.appenderOpen(Xlog.LEVEL_DEBUG, Xlog.AppednerModeAsync, "", logPath, "LJLog", 2, "");
+    // 设置每个日志文件的大小
+    Xlog.setMaxFileSize(10 * 1024 * 1024); // 10M
+    // 设置日志缓存时间，秒为单位，以下是3天，每次启动换删除超过该时间的日志文件
+    Xlog.setMaxAliveTime(3 * 24 * 60 * 60);
+    
+    /////////////////////////////////////////////////////////////////
+    
+    /**
+	 *
+	 * @param level 日志等级
+	 * @param mode 同步或者异步模式
+	 * @param cacheDir 缓存文件夹路径，一般传”“即可
+	 * @param logDir 日志文件夹路径
+	 * @param nameprefix 日志文件的前缀
+	 * @param cacheDays 日志缓存天数
+	 * @param pubkey 传”“即可
+	 */
+	public static void open(int level, int mode, String cacheDir, String logDir, String nameprefix, int cacheDays, String pubkey);
+
+	/**
+	 * 销毁日志实例
+	 */
+	public  void appenderClose();
+	/**
+	 * 把缓存的日志刷新到文件中
+	 */
+	public native void appenderFlush(boolean isSync);
+	/**
+	 * 设置是否需要在控制台打印日志
+	 */
+	public void setLogConsoleOpen(boolean isOpen);
+	/**
+	 *  设置每个文件的大小，单位是B， 例如：10 * 1024 * 1024 1M
+	 * @param size
+	 */
+	public void setLogMaxFileSize(long size);
+
+	/**
+	 * 设置日志最大的保存时间，内部会定期清理，单位是秒 例如：24 * 60 * 60 既一天
+	 * @param aliveSeconds
+	 */
+	public void seLogMaxAliveTime(long aliveSeconds);
+
+```
+
+### b.当应用退出时候，进行注销
+
+````java
+    Log.appenderClose();
+````
+
+### c.进行日志打印时，可以直接调用等等
+
+````java
+    Log.d();
+    Log.e();
+    Log.i();
+````
+
+<h2 id="5">反馈使用说明</h2>
+
+```java
+    
+    /**
+     *
+     * @param token 用户登录成功的token，用于请求上传信息时，做校验
+     * @param host 反馈请求的域名SDK内部设置生产环境为"app.fancyjing.com” 测试环境为"testapp.fancyjing.com"
+     * @param port 端口，默认-1，没有则填-1
+     * @param isDebug 是否是测试，用于旋转host
+     */
+     public void init(String token, String host, int port, boolean isDebug);
+     
+     /**
+     * 销毁反馈实例
+     */
+     public void destroy();
+    
+     /**
+     * 反馈日志
+     * @param title 反馈标题
+     * @param content 反馈内容
+     * @param filePath 日志文件夹路径
+     * @param liveId liveId
+     */
+     public void sendFeedback(String title, String content, String filePath, String liveId);
+     
+     /**
+     * 设置公共字段以下三个字段为必须填写
+     * system 系统 adr ios or windows
+     * appver 应用版本号
+     * userId 用户Id
+     */
+    public void setCommonAttrs(Map<String,Object> map);
+    
+    //////////////////////////
+    //初始化
+    FeedBackManager.getInstance().init("", "",  -1, true);
+    FeedBackManager.getInstance().setCommonAttrs(new HashMap<String, Object>());
+    
+    //调用反馈接口，即可完成文件打包和文件上传：
+    FeedBackManager.getInstance().sendFeedback("test", "ssss", JLog.getLogPath(), "");
+    
+    //若需要监听上传结果,则增加监听回调
+    FeedBackManager.getInstance().setFeedbackResultCallback(OnFeedbackResult callback);
+
+    public interface OnFeedbackResult {
+        /**
+         *
+         * @param result 上传结果： 0 成功， 非0 失败
+         * @param msg 描述
+         */
+        void onFeedbackResult(int result, String msg);
+    }
+```
+
+<h2 id="6">统计上报使用说明</h2>
+
+```java
+    private void initReport() {
+        long uid = UserInfo.userId;
+        ReportCenterConfig config = new ReportCenterConfig();
+        config.isTestEv = true;
+        config.collectDuration = 10000;
+        config.appId = config.isTestEv ? 1001 : 1000;
+        config.eventCallback = (result, msg) -> {
+            JLog.info("report : result "+ result + ", msg :" + msg);
+        };
+        boolean result = ReportCenter.instance().initEx(config);
+        ReportCenter.instance().setUserInfo(BuildConfig.token, uid); // 必须设置token，token 是统计上报长连接的校验token
+        // 以下公共字段必须填写
+        Map<String,Object> attrs = new HashMap<>();
+        attrs.put("appid",config.appId);
+        attrs.put("ua","ljsdkdemo&0.0.1&test");
+        attrs.put("userId", String.valueOf(uid));
+        attrs.put("platform", "android");
+        attrs.put("platfromVer",  String.valueOf(Build.VERSION.SDK_INT));
+        attrs.put("monitorVer",  "0.0.1");
+        attrs.put("product",  Build.PRODUCT);
+        attrs.put("rtcMode",  1);
+        attrs.put("liveid", nextID());
+        ReportCenter.instance().setCommonAttrs(attrs);
+    }
 ```

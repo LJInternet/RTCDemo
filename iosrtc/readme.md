@@ -278,3 +278,23 @@
         rtmEngine?.leveChannel()
         rtmEngine = nil
 ```
+
+<h2 id="4"> 日志库使用说明</h2>
+
+### 目前RTC打包，自动带上了日志库，主要依赖（basestone.framework 和 ljlog.framework）
+
+```swift
+      //初始化日志库，目前默认保存日志大小为5M，保存3天，超过5M则分文件，超过3天则删除
+      // 日志等级
+      // 日志保存的文件路径
+      // 日志的文件名前缀
+      // 是否打开控制台输出
+      FLog.initLog(level: LogLeve.LOG_INFO.rawValue, logPath: "xxx", logPreName: "tag", openConsole: true)
+
+      // 初始化后即可使用info等方法打印日志，并保存到文件
+      FLog.info("xxxxxxxxxxxx")
+
+      // 销毁日志
+      FLogFlush(1)
+      FlogDestroy()
+```

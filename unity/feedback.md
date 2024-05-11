@@ -7,7 +7,7 @@
     /**
      *
      * @param token 用户登录成功的token，用于请求上传信息时，做校验
-     * @param host 反馈请求的域名SDK内部设置生产环境为"app.fancyjing.com” 测试环境为"testapp.fancyjing.com"
+     * @param host 反馈请求的域名SDK
      * @param port 端口，默认-1，没有则填-1
      * @param isDebug 是否是测试，用于旋转host
      */

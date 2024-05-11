@@ -7,6 +7,12 @@
 
 ### [多人RTM使用说明](android/readme.md#3)
 
+### [日志库使用说明](android/readme.md#4)
+
+### [反馈库使用说明](android/readme.md#5)
+
+### [统计上报SDK使用说明](android/readme.md#6)
+
 ## 二.IOS 使用说明
 
 ### [1V1 RTC使用说明](iosrtc/readme.md#1)
@@ -14,6 +20,8 @@
 ### [1V1 RTM使用说明](iosrtc/readme.md#2)
 
 ### [多人RTM使用说明](iosrtc/readme.md#3)
+
+### [日志库使用说明](iosrtc/readme.md#4)
 
 ## 三.C++ Windows使用说明
 
@@ -23,6 +31,12 @@
 
 ### [多人RTM使用说明](windows/readme.md#3)
 
+### [日志库使用说明](windows/readme.md#4)
+
+### [反馈日志使用说明](windows/readme.md#5)
+
+### [统计上报SDK使用说明](windows/readme.md#6)
+
 ## 四.C++ Linux使用说明
 
 ### [1V1 RTC使用说明](linux/readme.md#1)
@@ -31,9 +45,11 @@
 
 ### [多人RTM使用说明](linux/readme.md#3)
 
-## 五.Unity使用说明
+### [统计上报SDK使用说明](windows/readme.md#4)
 
-### [1V1 RTC使用说明](unity/readme.md#1)
+## 五.[Unity使用说明](unity/readme.md)
+
+### [1V1 RTC使用说明](unity/p2prtc.md#1)
 
 ### [多人RTC使用说明](unity/multichannel.md#1)
 
