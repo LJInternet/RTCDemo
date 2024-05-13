@@ -5,7 +5,7 @@
 
 ## 因为多人RTC是基于1V1 RTC开发，因此1V1 RTC的接口，在RTCEngineEx中基本都可以使用，请参考[Unity 1V1 RTC 使用说明](p2prtc.md#1)
 
-### 示例代码在[MultiChannelRTCExTest2.cs](UnityRTCDemo/Assets/demo/RTC/MultiChannelRTCExTest.cs)中
+### 示例代码在[MultiChannelRTCExTest2.cs](UnityRTCDemo/Assets/demo/RTC/MultiChannelRTCExTest2.cs)中
 
 ### 示例场景在[MultiChannelTest1.unity](UnityRTCDemo/Assets/Scenes/MultiChannelTest1.unity)中
 
@@ -54,15 +54,47 @@ void Channel1OnUserLeavedHandler(string channelId, UInt64 uid)
 channel.JoinChannel("token",appid, uid, channelMediaOptions);
 ``````
 
-#### 4.设置视频预览的视图
+#### 4.设置对端视频预览的视图
 
 ```csharp
-//调用该方法会默认定义该用户的音频和视频
-channel.SetForMultiChannelUser(rawImage, 频道内其他人的uid, 帧率);// joinchannel后，在其他人加入到频道中时，需要显示视频调用该方法增加远端视频的显示
-//若不需要音频则可以调用一下方法
-channel.MuteRemoteAudioStream(频道内其他人的uid, mute);
-//若不需要视频则可以调用一下方法
-channel.MuteRemoteVideoStream(频道内其他人的uid, mute);
+    void Channel1OnUserJoinedHandler(string channelId, UInt64 uid, int elapsed) {
+        Debug.Log($"Channel1OnUserJoinedHandler {channelId} {uid} {elapsed}");
+        lock (_lock)
+        {
+            if (_remoteViews.ContainsKey(uid)) {
+                return;
+            }
+            RawImage view = _views.Pop();
+            if (view == null) {
+                return;
+            }
+            _channel1.SetForMultiChannelUser(view, (long)uid, 30);
+            _remoteViews.TryAdd(uid, view);
+        }
+        
+    }
+
+    void Channel1OnUserLeavedHandler(string channelId, UInt64 uid)
+    {
+        Debug.Log($"Channel1OnUserJoinedHandler {channelId} {uid}");
+        lock (_lock)
+        {
+            RawImage view;
+            _remoteViews.TryRemove(uid, out view);
+            if (view != null)
+            {
+                _views.Push(view);
+            }
+           
+        }
+    }
+
+    //调用该方法会默认定义该用户的音频和视频
+    channel.SetForMultiChannelUser(rawImage, 频道内其他人的uid, 帧率);// joinchannel后，在其他人加入到频道中时，需要显示视频调用该方法增加远端视频的显示
+    //若不需要音频则可以调用一下方法
+    channel.MuteRemoteAudioStream(频道内其他人的uid, mute);
+    //若不需要视频则可以调用一下方法
+    channel.MuteRemoteVideoStream(频道内其他人的uid, mute);
 ``````
 
 #### 5.离开和释放LJChannel

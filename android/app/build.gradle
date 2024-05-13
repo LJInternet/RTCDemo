@@ -30,11 +30,13 @@ android {
         var channelId = getLocalProperty("channelId");
         var appId = getLocalProperty("appId");
         var userId = getLocalProperty("userId");
+        var multiChannelId = getLocalProperty("multiChannelId")
         debug {
             buildConfigField 'int', 'channelId', channelId == null ? '1212' : channelId
             buildConfigField 'long', 'appId', appId == null ? '1' : appId
             buildConfigField 'long', 'userId', userId == null ? '1222' : userId
             buildConfigField 'String', 'token', token == null ? "\"\"" :  "\"${token}\""
+            buildConfigField 'String', 'multiChannelId', multiChannelId == null ? '\"121211\"' : "\"${multiChannelId}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -43,6 +45,7 @@ android {
             buildConfigField 'long', 'appId', appId == null ? '1' : appId
             buildConfigField 'long', 'userId', userId == null ? '1222' : userId
             buildConfigField 'String', 'token', token == null ? "\"\"" :  "\"${token}\""
+            buildConfigField 'String', 'multiChannelId', multiChannelId == null ? '\"121211\"' : "\"${multiChannelId}\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 

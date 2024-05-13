@@ -1,0 +1,200 @@
+package com.linjing.rtc.demo.multichannel;
+
+import static com.linjing.transfer.upload.api.RTCBaseBean.CHANNEL_PROFILE_TYPE;
+import static com.linjing.transfer.upload.api.RTCBaseBean.CLIENT_ROLE_TYPE;
+import static com.linjing.transfer.upload.api.RTCBaseBean.RTCDataWorkMode;
+
+import com.linjing.transfer.protocal.HPMarshaller;
+
+import java.nio.ByteBuffer;
+
+public class ChannelMediaOptions_ {
+    ///
+/// <summary>
+/// Whether to publish the video captured by the camera:true: (Default) Publish the video captured by the camera.false: Do not publish the video captured by the camera.
+/// </summary>
+///
+    public boolean publishCameraTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the video captured by the second camera:true: Publish the video captured by the second camera.false: (Default) Do not publish the video captured by the second camera.
+/// </summary>
+///
+    public boolean publishSecondaryCameraTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the audio captured by the microphone:true: (Default) Publish the audio captured by the microphone.false: Do not publish the audio captured by the microphone.
+/// </summary>
+///
+    public boolean publishMicrophoneTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the video captured from the screen:true: Publish the video captured from the screen.false: (Default) Do not publish the captured video from the screen.This parameter applies to Android and iOS only.
+/// </summary>
+///
+    public boolean publishScreenCaptureVideo = false;
+
+    ///
+/// <summary>
+/// Whether to publish the audio captured from the screen:true: Publish the audio captured from the screen.false: (Default) Do not publish the audio captured from the screen.This parameter applies to Android and iOS only.
+/// </summary>
+///
+    public boolean publishScreenCaptureAudio = false;
+
+    ///
+/// <summary>
+/// Whether to publish the video captured from the screen:true: Publish the video captured from the screen.false: (Default) Do not publish the captured video from the screen.
+/// </summary>
+///
+    public boolean publishScreenTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the video captured from the second screen:true: Publish the captured video from the second screen.false: (Default) Do not publish the video captured from the second screen.
+/// </summary>
+///
+    public boolean publishSecondaryScreenTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the audio captured from a custom source:true: Publish the captured audio from a custom source.false: (Default) Do not publish the audio captured from the custom source.
+/// </summary>
+///
+    public boolean publishCustomAudioTrack = false;
+
+    ///
+/// <summary>
+/// The ID of the custom audio source to publish. The default value is 0.If you have set the value of sourceNumber greater than 1 in SetExternalAudioSource , the SDK creates the corresponding number of custom audio tracks and assigns an ID to each audio track starting from 0.
+/// </summary>
+///
+    public int publishCustomAudioSourceId = 0;
+
+    ///
+/// <summary>
+/// Whether to enable AEC when publishing the audio captured from a custom source:true: Enable AEC when publishing the captured audio from a custom source.false: (Default) Do not enable AEC when publishing the audio captured from the custom source.
+/// </summary>
+///
+    public boolean publishCustomAudioTrackEnableAec = false;
+
+    ///
+/// @ignore
+///
+    public boolean publishDirectCustomAudioTrack = false;
+
+    ///
+/// @ignore
+///
+    public boolean publishCustomAudioTrackAec = false;
+
+    ///
+/// <summary>
+/// Whether to publish the video captured from a custom source:true: Publish the captured video from a custom source.false: (Default) Do not publish the video captured from the custom source.
+/// </summary>
+///
+    public boolean publishCustomVideoTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the encoded video:true: Publish the encoded video.false: (Default) Do not publish the encoded video.
+/// </summary>
+///
+    public boolean publishEncodedVideoTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the audio from the media player:true: Publish the audio from the media player.false: (Default) Do not publish the audio from the media player.
+/// </summary>
+///
+    public boolean publishMediaPlayerAudioTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the video from the media player:true: Publish the video from the media player.false: (Default) Do not publish the video from the media player.
+/// </summary>
+///
+    public boolean publishMediaPlayerVideoTrack = false;
+
+    ///
+/// <summary>
+/// Whether to publish the local transcoded video:true: Publish the local transcoded video.false: (Default) Do not publish the local transcoded video.
+/// </summary>
+///
+    public boolean publishTrancodedVideoTrack = false;
+
+    ///
+/// <summary>
+/// Whether to automatically subscribe to all remote audio streams when the user joins a channel:true: (Default) Automatically subscribe to all remote audio streams.false: Do not automatically subscribe to any remote audio streams.
+/// </summary>
+///
+    public boolean autoSubscribeAudio = false;
+
+    ///
+/// <summary>
+/// Whether to automatically subscribe to all remote video streams when the user joins the channel:true: (Default) Automatically subscribe to all remote video streams.false: Do not automatically subscribe to any remote video streams.
+/// </summary>
+///
+    public boolean autoSubscribeVideo = false;
+
+    ///
+/// <summary>
+/// Whether to enable audio capturing or playback:true: (Default) Enable audio capturing or playback.false: Do not enable audio capturing or playback.
+/// </summary>
+///
+    public boolean enableAudioRecordingOrPlayout = false;
+
+    ///
+/// <summary>
+/// The ID of the media player to be published. The default value is 0.
+/// </summary>
+///
+    public int publishMediaPlayerId = -1;
+
+    ///
+/// <summary>
+/// The user role. See CLIENT_ROLE_TYPE .
+/// </summary>
+///
+    public int clientRoleType = CLIENT_ROLE_TYPE.CLIENT_ROLE_BROADCASTER;
+
+    ///
+/// <summary>
+/// The channel profile. See CHANNEL_PROFILE_TYPE .
+/// </summary>
+///
+    public int channelProfile = CHANNEL_PROFILE_TYPE.CHANNEL_PROFILE_COMMUNICATION;
+
+
+    public int dataWorkMode = RTCDataWorkMode.SEND_AND_RECV;
+
+    ///
+/// @ignore
+///
+    public boolean enableBuiltInMediaEncryption = false;
+
+    ///
+/// <summary>
+/// Whether to publish the sound of a metronome to remote users:true: (Default) Publish the sound of the metronome. Both the local user and remote users can hear the metronome.false: Do not publish the sound of the metronome. Only the local user can hear the metronome.
+/// </summary>
+///
+    public boolean publishRhythmPlayerTrack = false;
+
+    ///
+/// <summary>
+/// Whether to enable interactive mode:true: Enable interactive mode. Once this mode is enabled and the user role is set as audience, the user can receive remote video streams with low latency.false: (Default) Do not enable interactive mode. If this mode is disabled, the user receives the remote video streams in default settings.This parameter only applies to scenarios involving cohosting across channels. The cohosts need to call the JoinChannelEx method to join the other host's channel as an audience member, and set isInteractiveAudience to true.This parameter takes effect only when the user role is CLIENT_ROLE_AUDIENCE.
+/// </summary>
+///
+    public boolean isInteractiveAudience = false;
+
+    ///
+/// <summary>
+/// Whether the audio stream being published is filtered according to the volume algorithm:true: (Default) The audio stream is filtered. If the audio stream filter is not enabled, this setting does not takes effect.false: The audio stream is not filtered.If you need to enable this function, contact .
+/// </summary>
+///
+    public boolean isAudioFilterable = false;
+
+    public ChannelMediaOptions_() {
+    }
+}

@@ -3,15 +3,17 @@
 
 ### [1V1 RTC使用说明](android/readme.md#1)
 
-### [1V1 RTM使用说明](android/readme.md#2)
+### [多人 RTC使用说明](android/readme.md#2)
 
-### [多人RTM使用说明](android/readme.md#3)
+### [1V1 RTM使用说明](android/readme.md#3)
 
-### [日志库使用说明](android/readme.md#4)
+### [多人RTM使用说明](android/readme.md#4)
 
-### [反馈库使用说明](android/readme.md#5)
+### [日志库使用说明](android/readme.md#5)
 
-### [统计上报SDK使用说明](android/readme.md#6)
+### [反馈库使用说明](android/readme.md#6)
+
+### [统计上报SDK使用说明](android/readme.md#7)
 
 ## 二.IOS 使用说明
 
@@ -22,6 +24,8 @@
 ### [多人RTM使用说明](iosrtc/readme.md#3)
 
 ### [日志库使用说明](iosrtc/readme.md#4)
+
+### [多人 RTC使用说明](iosrtc/readme.md#5)
 
 ## 三.C++ Windows使用说明
 

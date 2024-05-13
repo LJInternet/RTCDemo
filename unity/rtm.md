@@ -73,7 +73,7 @@
         }
 
         /// <summary>
-        /// 加入频道成功
+        /// 加入频道成功，加入频道，只是表示执行加入频道方法成功，并不表示连接连通可用，连接状态请参考OnLinkStatusChange回调
         /// </summary>
         public virtual void OnJoinChannelSuccess()
         {
@@ -96,9 +96,12 @@
             
         }
         /// <summary>
-        ///STATUS_CONNECTED,
-        ///STATUS_DISCONNECTED,
-        ///STATUS_LOST,
+        /// channel的连接状态回调，这个才是链接是否可用的状态,
+        /// 1V1 RTM时，当status == STATUS_CONNECTED时，表示与对端是连通的，可以互发消息
+        /// 多人 RTM时，当status == STATUS_CONNECTED时，表示与服务端是连通的，可以互发消息
+        ///STATUS_CONNECTED, 1
+        ///STATUS_DISCONNECTED, 2
+        ///STATUS_LOST, 3
         /// </summary>
         /// <param name="status">LinkStatus</param>
         public virtual void OnLinkStatusChange(int status)

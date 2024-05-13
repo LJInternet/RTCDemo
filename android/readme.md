@@ -184,7 +184,6 @@
 ```java
     public class ChannelConfig {
         public List<UdpInitConfig> configs = new ArrayList<UdpInitConfig>();
-        public String p2pSignalServer = "61.155.136.209:9988";
 
         /**
          * 服务器分配的Appid， 测试环境，可以自己定义
@@ -224,9 +223,239 @@
      mRtcEngine.destroy();
 ```
 
+<h2 id="2">多人RTC使用：</h2>
+
+## 因为多人RTC是基于1V1 RTC开发，因此1V1 RTC的接口，在RTCEngineEx中基本都可以使用，请参考[1V1 RTC 使用说明](#rtc-使用说明)
+
+## RTC使用demo示例代码[MultiChannelPresenter.java](app/src/main/java/com/linjing/rtc/demo/multichannel/MultiChannelPresenter.java)和[MultiChannelActivity.java](app/src/main/java/com/linjing/rtc/demo/multichannel/MultiChannelActivity.java)中
+
+### sdk的初始化与1V1一致([增加权限，在AndroidManifest.xml增新增权限](#1增加权限在androidmanifestxml增新增权限)和[初始LJSDK，设置日志、统计上报等基础信息](#2初始ljsdk设置日志统计上报等基础信息))
+
+### 1.初始化多人RTCEngine
+
+```java
+     RtcEngineConfig config = new RtcEngineConfig();
+    mRtcEngine = IRtcEngineEx.CreateRtcEngineEx(config);
+    // 设置音频场景，这里会初始化音频的采样率和声道数
+    mRtcEngine.setAudioProfile(RTCEngineConstants.AudioProfile.AUDIO_PROFILE_DEFAULT, 0);
+    /**
+     *
+     * @param width 编码宽高
+     * @param height 编码宽高
+     * @param frameRate 编码帧率
+     * @param bitrate 编码码率
+     * @param orientationMode OrientationMode
+     */
+    VideoEncoderConfiguration encoderConfiguration = new VideoEncoderConfiguration(1920, 1080,
+                    30, 3000, VideoEncoderConfiguration.OrientationMode.ORIENTATION_MODE_FIXED_LANDSCAPE);
+    // 启用视频模块，在加入频道成功后，调用StartPreview，则会自动编码推流，在多人频道不用调用rtcengine的joinchannel
+    mRtcEngine.enableVideo();
+    // 启动音频模块，在加入频道成功后，则会自动编码推流，在多人频道不用调用rtcengine的joinchannel
+    mRtcEngine.enableAudio();
+```
+
+### 2.设置本地预览
+
+```java
+
+    public void setupLocalVideo(Context context, FrameLayout group) {
+        SurfaceView surfaceView = mRtcEngine.CreateRendererView(context);
+        surfaceView.setKeepScreenOn(true);
+        VideoViews views = new VideoViews(surfaceView);
+        mRtcEngine.setupLocalVideo(views);
+        surfaceView.setZOrderMediaOverlay(true);
+        group.addView(surfaceView);
+    }
+```
+
+### 3.创建多人频道加入频道（[ChannelMediaOptions](app/src/main/java/com/linjing/rtc/demo/multichannel/ChannelMediaOptions_.text)）
+
+```java
+    public void startUpload(String channelId) {
+        LJChannel _channel = mRtcEngine.CreateChannel(channelId, _userId);// 创建Channel
+        ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions();// 创建ChannelMediaOptions
+        channelMediaOptions.publishMicrophoneTrack = true;//发送麦克风采集的音频,默认是false
+        channelMediaOptions.publishCameraTrack = true;// 发送相机采集视频，默认false
+        // 其他参数请参考[ChannelMediaOptions](app/src/main/java/com/linjing/rtc/demo/multichannel/ChannelMediaOptions_.text)，该文件只是为了注释，正常使用时，不要使用该类
+        /**
+         *
+         * @param token 服务器分配的token
+         * @param appId 服务器分配的appid
+         * @param uid 用户id
+         * @param options 音视频配置
+         */
+        _channel.JoinChannel(BuildConfig.token, BuildConfig.appId, _userId, channelMediaOptions);
+    }
+```
+
+### 4.设置多人频道事件回调
+
+```java
+    public class ILJChannelEventHandler {
+
+        public static int QUALITY_GOOD = 1; /**< 网络质量好 */
+        public static int QUALITY_COMMON = 2; /**< 网络质量一般 */
+        public static int QUALITY_BAD = 3; /**< 勉强能沟通 */
+        public static int QUALITY_VBAD = 4; /**< 网络质量非常差，基本不能沟通。 */
+        public static int QUALITY_BLOCK = 5; /**< 链路不通 */
+        /**
+         *
+         * @param ljChannel
+         * @param uid 用户的网络状态
+         * @param mLocalQuality 用户本地的网络状态
+         * @param mRemoteQuality  这个值，在多人频道中，无用
+         */
+        public void onNetQuality(LJChannel ljChannel, long uid, int mLocalQuality, int mRemoteQuality) {
+
+        }
+
+        /**
+         * 加入频道，只是表示执行加入频道方法成功，并不表示连接连通可用，连接状态请参考onLinkStatus回调
+         * @param channelId
+         * @param uid
+         * @param elapsed
+         */
+        public void onJoinChannelSuccess(String channelId, long uid, long elapsed) {
+
+        }
+
+        /**
+         * 退出频道，只是表示执行退出频道方法成功，并不表示连接连通状态
+         * @param ljChannel
+         */
+        public void onLeaveChannelSuccess(LJChannel ljChannel) {
+
+        }
+
+        /**
+         * channel的连接状态回调，这个才是链接是否可用的状态
+         * @param ljChannel
+         * @param result STATUS_CONNECTED 1 STATUS_DISCONNECTED 2 STATUS_LOST 3
+         */
+        public void onLinkStatus(LJChannel ljChannel, int result) {
+
+        }
+
+        /**
+         * 频道中有新用户加入
+         * @param ljChannel
+         * @param uid 新用户的Uid
+         * @param elapsed
+         */
+        public void onUserJoined(LJChannel ljChannel, long uid, int elapsed) {
+
+        }
+
+        /**
+         * 频道中有用户退出
+         * @param ljChannel
+         * @param uid 退出的用户Uid
+         */
+        public void onUserOffLine(LJChannel ljChannel, long uid) {
+
+        }
+
+        /**
+         * 频道中，某个用户，第一帧视频数据被解码
+         * @param ljChannel
+         * @param uid 频道内某个用户uid
+         * @param width 解码宽度
+         * @param height 解码高度
+         * @param joinTime
+         */
+        public void onFirstRemoteVideoFrameDecode(LJChannel ljChannel, long uid, int width, int height, int joinTime) {
+
+        }
+
+        /**
+         * 解码视频宽高变化
+         * @param ljChannel
+         * @param uid 视频宽高变化Uid
+         * @param width 新的解码宽度
+         * @param height 新的解码高度
+         */
+        public void onVideoSizeChange(LJChannel ljChannel, long uid, int width, int height) {
+
+        }
+    }
+    // 设置多人频道事件回调
+    _channel.setRtcChannelEventHandler(ILJChannelEventHandler);
+```
+
+### 5.频道内新用户加入或者退出时，更新UI(在ILJChannelEventHandler中的onUserJoined和onUserOffLine)
+
+```java
+    // 有用户新加入频道
+    public void onUserJoined(IRtcEngineEx mRtcEngine, LJChannel ljChannel, long uid, int fps) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // _remoteViews 是一个FrameLayout的一个map，实际应用中，可以使用recycleView或者ListView
+                if (_remoteViews.containsKey(uid)) {
+                    JLog.info("multiChannel", "onUserJoined _remoteViews containsKey " + uid);
+                    return;
+                }
+                FrameLayout frameLayout = _remoteViewsSet.pop();
+                if (frameLayout == null) {
+                    JLog.info("multiChannel", "onUserJoined frameLayout is null ");
+                    return;
+                }
+                // 创建新的渲染UI
+                SurfaceView surfaceView = mRtcEngine.CreateRendererView(MultiChannelActivity.this);
+                surfaceView.setKeepScreenOn(true);
+                VideoViews views = new VideoViews(surfaceView);
+                surfaceView.setZOrderMediaOverlay(true);
+                // 设置UI给多人频道
+                ljChannel.SetForMultiChannelUser(views, uid, fps);
+                frameLayout.addView(surfaceView);
+                _remoteViews.put(uid, frameLayout);
+            }
+        });
+    }
+    // 有人退出频道，销毁UI
+    public void onUserOffLine(IRtcEngineEx mRtcEngine, LJChannel ljChannel, long uid) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout frameLayout = _remoteViews.remove(uid);
+                if (frameLayout != null) {
+                    frameLayout.removeAllViews();
+                    _remoteViewsSet.push(frameLayout);
+                }
+            }
+        });
+    }
+```
+
+### 6.销毁Engine以及退出频道
+
+```java
+    if (_channel != null) {
+        _channel.LeaveChannel();
+        _channel.ReleaseChannel();
+        _channel = null;
+    }
+    if (mRtcEngine != null) {
+        mRtcEngine.leaveChannel();
+        mRtcEngine.destroy();
+        mRtcEngine = null;
+    }
+```
+
+### 7.禁用远端音视频
+
+```java
+
+    //若不需要音频则可以调用一下方法
+    _channel.MuteRemoteAudioStream(频道内其他人的uid, mute);
+    //若不需要视频则可以调用一下方法
+    _channel.MuteRemoteVideoStream(频道内其他人的uid, mute);
+```
+
+
 ## RTM 使用说明
 
-<h2 id="2">1V1 RTM使用说明：</h2>
+<h2 id="3">1V1 RTM使用说明：</h2>
 
 ## （1V1 RTM使用需要注意joinChannel role的设置，一般两端必须保持不一致，一端为值为0时，另外一端必须为1） [1V1示例P2PRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/P2PRTMActivity.java)
 
@@ -248,7 +477,7 @@
     *
     * @param uid
     * @param channelId
-    * @param type RudpEngineConstants，当type == LinkStatus时，result表示：LinkStatusConnected，LinkStatusDisconnected，LinkStatusLost
+    * @param type RudpEngineConstants，当type == LinkStatus时，result表示：LinkStatusConnected，LinkStatusDisconnected，LinkStatusLost，当status == STATUS_CONNECTED时，表示与对端是连通的，可以互发消息
     * @param result 0 成功，否则失败
     * @param msg
     */
@@ -293,7 +522,7 @@
     mRudpEngine.destroy();
 ```
 
-<h2 id="3">多人RTM使用：</h2>
+<h2 id="4">多人RTM使用：</h2>
 
 ### [示例MultiRTMActivity](app/src/main/java/com/linjing/rtc/demo/rtm/MultiRTMActivity.java)
 
@@ -314,7 +543,7 @@
     *
     * @param uid
     * @param channelId
-    * @param type RudpEngineConstants，当type == LinkStatus时，result表示：LinkStatusConnected，LinkStatusDisconnected，LinkStatusLost
+    * @param type RudpEngineConstants，当type == LinkStatus时，result表示：LinkStatusConnected，LinkStatusDisconnected，LinkStatusLost，当status == STATUS_CONNECTED时，表示与服务端是连通的，可以互发消息
     * @param result 0 成功，否则失败
     * @param msg
     */
@@ -329,7 +558,6 @@
 
 ```java
     /**
-     * 当前1V1 RTM与RTM使用相同的ChannelId，因此需要同时使用RTC，才会生效
      * @param token
      * @param isDebug 是否是测试环境
      * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants
@@ -358,7 +586,7 @@
     mRudpEngine.destroy();
 ```
 
-<h2 id="4">日志库使用说明</h2>
+<h2 id="5">日志库使用说明</h2>
 
 ### 日志写文件（基本实现代码是从mars的xlog移植过来，进行了一些定制化的修改）
 
@@ -443,7 +671,7 @@
     Log.i();
 ````
 
-<h2 id="5">反馈使用说明</h2>
+<h2 id="6">反馈使用说明</h2>
 
 ```java
     
@@ -499,7 +727,7 @@
     }
 ```
 
-<h2 id="6">统计上报使用说明</h2>
+<h2 id="7">统计上报使用说明</h2>
 
 ```java
     private void initReport() {

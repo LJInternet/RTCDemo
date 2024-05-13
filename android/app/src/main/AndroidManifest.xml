@@ -46,6 +46,10 @@
             android:name="com.linjing.rtc.demo.screen.ScreenCaptureActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name="com.linjing.rtc.demo.multichannel.MultiChannelActivity"
+            android:exported="true">
+        </activity>
 
         <service android:name="com.linjing.rtc.demo.screen.ScreenCaptureService"/>
 
