@@ -808,7 +808,7 @@
 ```
 
 ### 加入频道（加入频道后，音频会自动解码以及播放，若不需要音频，请参考[设置音频解码以及回调](#设置音频解码以及回调音频会自动解码以及播放若不需要音频请配置如下参数)）
-
+####  ChannelMediaOptions参数请参考（[ChannelMediaOptions](app/src/main/java/com/linjing/rtc/demo/multichannel/ChannelMediaOptions_.text)）
 ```cpp
     // 创建多人RTC的音视频配置
     ChannelMediaOptions option;
