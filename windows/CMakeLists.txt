@@ -68,6 +68,16 @@ target_link_libraries( RTCPullDemo
     ${LIB_BASESTONE}
 )
 
+add_executable(MultiRTCDemo ./MultiRTCTest.cpp)
+
+target_link_libraries( MultiRTCDemo
+	${LIB_MEDIA_TRANSFER}
+    ${LIB_AUDIO_ENGINE}
+    ${LIB_RUDP}
+    ${LIB_UV}
+    ${LIB_BASESTONE}
+)
+
 add_executable(P2PRTMTest ./P2PRTMTest.cpp)
 
 target_link_libraries( P2PRTMTest

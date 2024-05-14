@@ -1,3 +1,4 @@
+# RTC SDK使用说明列表
 
 ## 一.Android 使用说明
 
@@ -41,6 +42,8 @@
 
 ### [统计上报SDK使用说明](windows/readme.md#6)
 
+### [多人RTC使用说明](windows/readme.md#7)
+
 ## 四.C++ Linux使用说明
 
 ### [1V1 RTC使用说明](linux/readme.md#1)
@@ -50,6 +53,8 @@
 ### [多人RTM使用说明](linux/readme.md#3)
 
 ### [统计上报SDK使用说明](windows/readme.md#4)
+
+### [多人RTC使用说明（与windows的一致）](windows/readme.md#7)
 
 ## 五.[Unity使用说明](unity/readme.md)
 

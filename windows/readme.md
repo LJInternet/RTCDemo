@@ -574,3 +574,275 @@
 
      }
 ```
+
+<h2 id="7">多人RTC使用</h2>
+
+### 示例代码[MultiRTCTest.cpp](MultiRTCTest.cpp)
+
+### 项目依赖，请参考demo中的[CMakeLists.txt](CMakeLists.txt)
+
+```cpp
+    #add_definitions(-DWIN32_LEAN_AND_MEAN)
+    if (CMAKE_CL_64)
+    set(SDK_ROOT_PATH ${CMAKE_SOURCE_DIR}/rtc/win64)
+    else()
+    set(SDK_ROOT_PATH ${CMAKE_SOURCE_DIR}/rtc/win32)
+    endif()
+
+    include_directories( ./)
+    include_directories( ..)
+    include_directories( ${SDK_ROOT_PATH}/mediatransfer/header)
+    include_directories( ${SDK_ROOT_PATH}/rudp/header)
+
+    aux_source_directory(. DEMO_SRC)
+
+    find_library(LIB_RUDP rudp ${SDK_ROOT_PATH}/rudp)
+    find_library(LIB_BASESTONE basestone ${SDK_ROOT_PATH}/basestone)
+    find_library(LIB_UV uv ${SDK_ROOT_PATH}/libuv)
+    find_library(LIB_MEDIA_TRANSFER mediatransfer ${SDK_ROOT_PATH}/mediatransfer)
+    find_library(LIB_AUDIO_ENGINE audioengine ${SDK_ROOT_PATH}/audiocapture)
+
+    add_executable(MultiRTCDemo ./MultiRTCTest.cpp)
+
+    target_link_libraries( MultiRTCDemo
+        ${LIB_MEDIA_TRANSFER}
+        ${LIB_AUDIO_ENGINE}
+        ${LIB_RUDP}
+        ${LIB_UV}
+        ${LIB_BASESTONE}
+    )
+```
+
+### 使用步骤
+
+### 初始化RTCEngine
+
+```cpp
+
+    RTCEngineConfig rtc_config;
+    // 是否把日志写入文件，目前日志文件默认存储在项目运行的根目录中，名字叫debug_unity.txt
+    rtc_config.enableLog = false;
+    std::string rtccfgstr;
+    ljtransfer::mediaSox::PacketToString(rtc_config, rtccfgstr);
+    // 创建RTCEngine
+    media_engine* nginx = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
+```
+
+### 设置正式或者测试环境
+
+```cpp
+    // 设置为运行在测试环境
+    media_engine_set_debug_env(true);
+```
+
+### 设置视频编码参数
+
+```cpp
+
+    MIEUploadConfig c;
+    // 设置推流视频宽高和码率
+    MIEVideoUploadConfig videoUploadConfig;
+    videoUploadConfig.encodeWidth = 640;
+    videoUploadConfig.encodeHeight = 480;
+    videoUploadConfig.maxVideoBitrateInbps = 800000;
+    videoUploadConfig.minVideoBitrateInbps = 700000;
+    videoUploadConfig.realVideoBitrateInbps = 800000;
+    c.videoUploadConfig = videoUploadConfig;
+    // 若自己编码音频或者采集音频裸数据，则需要设置音频的采样率和声道数等参数
+    // 此时不能启动音频模块
+    MIEAudioUploadConfig audioconfig;
+    audioconfig.sampleRate = 48000;
+    audioconfig.channels = 2;
+    audioconfig.bitsPerSample = 2; // 目前sdk 内部只支持Int16
+    audioconfig.audioBitrateInbps = 80000; // 80K
+    audioconfig.audioType = 1;// 目前只能写死1，sdk内部只支持opus
+    std::string cfgstr;
+    ljtransfer::mediaSox::PacketToString(c, cfgstr);
+    // 更新推流参数
+    media_engine_send_event(nginx, MIET_UPDATE_UPLOAD_CONFIG, (char*)cfgstr.c_str(), cfgstr.length());
+```
+
+### 启动音频模块（若需要使用sdk内部采集音频并推流音频）
+
+```cpp
+    AudioEnableEvent createAudioEvent;
+    createAudioEvent.evtType = AUDIO_CREATE;
+    createAudioEvent.enabled = true;
+    std::string audio_create_data;
+    ljtransfer::mediaSox::PacketToString(createAudioEvent, audio_create_data);
+    media_engine_send_event(nginx, createAudioEvent.evtType, (char*)audio_create_data.c_str(), audio_create_data.length());
+
+    AudioEnableEvent captureEvent;
+    captureEvent.evtType = AUDIO_ENABLE_EVENT;
+    captureEvent.enabled = true;
+    std::string audio_enable_data;
+    ljtransfer::mediaSox::PacketToString(captureEvent, audio_enable_data);
+    media_engine_send_event(nginx, captureEvent.evtType, (char*)audio_enable_data.c_str(), audio_enable_data.length());
+```
+
+### 注册事件回调
+
+```cpp
+
+    // 设置推流视频宽高和码率
+    media_engine_send_event(nginx, MIET_UPDATE_UPLOAD_CONFIG, (char*)cfgstr.c_str(), cfgstr.length());
+    // 注册基础的RTC事件回调，主要处理RUDP_CB_TYPE_REQUEST_I_FRAME和RUDP_CB_TYPE_LINK_OK
+    media_engine_register_event_listener(nginx, onEventCallback, nginx);
+    // 注册多人RTC特有的事件回调，主要处理有用户加入或者退出频道，自己RTC链接的状态
+    media_engine_register_event_ex_listener(nginx, onChannelExEventCallback, nginx);
+    // 注册解码后YUV数据
+    media_engine_subscribe_video_ex(nginx, onChannelExDecodeVideo, nginx);
+
+    static void onChannelExEventCallback(int type, const char* buf, int size,
+        uint8_t* channelId, int channelIdLen, uint64_t localUid, void* context) {
+        //首次建连成功或者中途断开重连成功，这个时候需要发一个I帧
+        std::string bufStr(buf, size);
+        // 用户加入频道状态，该回调只表示加入频道是否成功，并不表示连接是否可用，连接状态，请参考CB_LINK_STATUS
+        if (CB_JOIN_CHANNEL == type || CB_LEAVE_CHANNEL == type) {
+            MultiChannelEventResult joinResult;
+            ljtransfer::mediaSox::Unpack up(bufStr.data(), size);
+            joinResult.unmarshal(up);
+            if (CB_JOIN_CHANNEL == type) {
+                if (joinResult.result == 0) {
+                    printf("joinchannel success\n");
+                }
+                else {
+                    printf("joinchannel fail\n");
+                }
+            }
+            else {
+                if (joinResult.result == 0) {
+                    printf("leaveChannel success\n");
+                }
+                else {
+                    printf("leaveChannel fail\n");
+                }
+            }
+        }
+        else if (CB_LINK_STATUS == type) {
+            /**
+             * channel的连接状态回调，这个才是链接是否可用的状态
+             * @param ljChannel
+             * @param result STATUS_CONNECTED 1 STATUS_DISCONNECTED 2 STATUS_LOST 3
+             */
+            LinkStatusEvent linstatus;
+            ljtransfer::mediaSox::Unpack up(bufStr.data(), size);
+            linstatus.unmarshal(up);
+            printf("LinkStatusEvent %d\n", linstatus.result);
+            
+        }
+        else if (MUTI_CHANNEL_REMOTE_JOIN == type) {
+            /**
+             * 频道中有新用户加入
+             * @param uid 新用户的Uid
+             */
+            MultiChannelEventResult remoteEvent;
+            ljtransfer::mediaSox::Unpack up(bufStr.data(), size);
+            remoteEvent.unmarshal(up);
+            std::string channelIdStr((char*)channelId, channelIdLen);
+            printf("MUTI_CHANNEL_REMOTE_JOIN %llu %s\n", remoteEvent.uid, channelIdStr.c_str());
+        }
+        else if (MUTI_CHANNEL_REMOTE_LEAVE == type) {
+            /**
+             * 频道中有用户退出
+             * @param uid 新用户的Uid
+             */
+            MultiChannelEventResult remoteEvent;
+            ljtransfer::mediaSox::Unpack up(bufStr.data(), size);
+            remoteEvent.unmarshal(up);
+            std::string channelIdStr((char*)channelId, channelIdLen);
+            printf("MUTI_CHANNEL_REMOTE_LEAVE %llu %s\n", remoteEvent.uid, channelIdStr.c_str());
+        }
+        else if (RUDP_CB_TYPE_NET_REPORT == type) {
+            /**
+             * 频道中有用户自己的网络状态m_localQuality，m_remoteQuality暂时无用
+             * public static int QUALITY_GOOD = 1;  网络质量好 
+             * public static int QUALITY_COMMON = 2; /**< 网络质量一般 
+             * public static int QUALITY_BAD = 3; /**< 勉强能沟通 
+             * public static int QUALITY_VBAD = 4; /**< 网络质量非常差，基本不能沟通。 
+             * public static int QUALITY_BLOCK = 5; /**< 链路不通 
+            */
+            NetworkQuality netQuality;
+            ljtransfer::mediaSox::Unpack up(bufStr.data(), size);
+            netQuality.unmarshal(up);
+            printf("RUDP_CB_TYPE_NET_REPORT %d %d\n", netQuality.m_localQuality, netQuality.m_remoteQuality);
+        }
+        else if (RUDP_CB_TYPE_REQUEST_I_FRAME == type) {
+            //首次建连成功或者中途断开重连成功，这个时候需要发一个I帧
+            printf("RUDP_CB_TYPE_REQUEST_I_FRAME\n");
+        }
+    }
+
+    static void onEventCallback(int type, const char* buf, int size, void* context) {
+        //首次建连成功或者中途断开重连成功，这个时候需要发一个I帧
+        if (type == RUDP_CB_TYPE_REQUEST_I_FRAME || type == RUDP_CB_TYPE_LINK_OK) {
+            printf("onEventCallback RUDP_CB_TYPE_REQUEST_I_FRAME or RUDP_CB_TYPE_LINK_OK \n");
+        }
+    }
+
+    static void onChannelExDecodeVideo(uint8_t* buf, int32_t len, int32_t width,
+        int32_t height, int pixel_fmt, uint8_t* channelId, int channelIdLen, uint64_t uid, uint64_t localUid, void* context) {
+        //printf("onChannelExDecodeVideo channelId %s localUid %llu uid %llu WH %dX%d pixel_fmt %d\n",
+        //    channelId, localUid, uid, width, height, pixel_fmt);
+    }
+
+```
+
+
+### 设置音频解码以及回调（音频会自动解码以及播放，若不需要音频，请配置如下参数）
+
+```cpp
+    //bool callbackDecodeData = false; ///**< 是否需要回调音频数据。*/
+    //bool renderAudioData = false; ///**< 数据是否需要播放，false 则直接静音。*/
+    //bool directDecode = false; ///**< 收到远端音频直接解码，不需要经过JitterBuffer。*/
+    //bool directCallback = false; ///**< rudp收到数据包啥也不做，直接返回未解码数据，回调IAudioProcessor。*/
+    AudioPlayerEvent audioPlayerEvent;
+    audioPlayerEvent.callbackDecodeData = false;
+    audioPlayerEvent.renderAudioData = false;
+    audioPlayerEvent.directDecode = false;
+    audioPlayerEvent.directCallback = false;
+    std::string audioEvent;
+    ljtransfer::mediaSox::PacketToString(audioPlayerEvent, audioEvent);
+    media_engine_send_event(nginx, AUDIO_PLAYER_EVENT, (char*)joinExStr.c_str(), joinExStr.length());
+
+```
+
+### 加入频道（加入频道后，音频会自动解码以及播放，若不需要音频，请参考[设置音频解码以及回调](#设置音频解码以及回调音频会自动解码以及播放若不需要音频请配置如下参数)）
+
+```cpp
+    // 创建多人RTC的音视频配置
+    ChannelMediaOptions option;
+    option.autoSubscribeAudio = true;
+    // 创建多人RTC加入频道所需参数，其中key是channelId+uid的string
+    JoinChannelExConfig channelExConfig;
+    channelExConfig.appId = appId; // 服务器分配的appid
+    channelExConfig.isDebug = true; // 是否是测试环境，true 是， false 否
+    channelExConfig.channelId = channelId; // 频道Id
+    channelExConfig.key = std::string(channelId.c_str()).append(std::to_string(uid));
+    channelExConfig.uid = uid; // 用户Id
+    channelExConfig._option = option; // 音视频配置
+    channelExConfig._token = token; // 服务器分配的临时令牌
+
+    std::string joinExStr;
+    ljtransfer::mediaSox::PacketToString(channelExConfig, joinExStr);
+    media_engine_send_event(nginx, JOIN_CHANNEL_EX, (char*)joinExStr.c_str(), joinExStr.length());
+
+```
+
+### 退出频道
+
+```cpp
+    // 离开多人RTC频道
+    MultiChannelEvent multiChannelEvent;
+    std::string leaveExStr;
+    ljtransfer::mediaSox::PacketToString(multiChannelEvent, leaveExStr);
+    media_engine_send_event(nginx, LEAVE_CHANNEL_EX, (char*)leaveExStr.c_str(), leaveExStr.length());
+
+```
+
+### 销毁RTCEengine
+
+```cpp
+    // 销毁多人RTC频道
+    media_engine_destroy(nginx);
+```
