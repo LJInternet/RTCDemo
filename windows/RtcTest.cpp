@@ -44,6 +44,14 @@ static void on_capture_video(uint8_t* buf, int32_t len, int32_t width, int32_t h
     //rtmp_engine_write_raw_video((const char*)buf, len, data.c_str(), data.length(), pixel_fmt);
 }
 
+static FILE* encodedFile = nullptr;
+static void on_encode_video(uint8_t* buf, int32_t len, int32_t width, int32_t heigcdht, int pixel_fmt, void* context) {
+    //if (encodedFile == nullptr) {
+    //    encodedFile = fopen("encode_video.h264", "wb");
+    //}
+    //fwrite(buf, 1, len, encodedFile);
+}
+
 static bool on_capture_audio(void* audioData, int size, uint64_t pts, int sampleRate, int channelCount, void* context) {
 
     //printf("on_capture_audio\n");
@@ -120,7 +128,7 @@ static void onEventCallback(int type, const char* buf, int size, void* context) 
 
 static void testWindowPush() {
     RTCEngineConfig rtc_config;
-    rtc_config.enableLog = true;
+    rtc_config.enableLog = false;
     std::string rtccfgstr;
     ljtransfer::mediaSox::PacketToString(rtc_config, rtccfgstr);
     media_engine* nginx = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
@@ -131,7 +139,7 @@ static void testWindowPush() {
     config.appID = 1;
     config.channelID = "954523111";
     config.userID = 3443434;
-    config.token = "linjing@2023";
+    config.token = "token";
     config.transferMode = 1;
 
     MIEVideoUploadConfig videoUploadConfig;
@@ -164,6 +172,8 @@ static void testWindowPush() {
     media_engine_start_camera_capture_with_config(nginx, "Logi C270 HD WebCam", cfgstr11.c_str(), cfgstr11.length());
     media_engine_subscribe_capture_video(nginx, on_capture_video, nullptr);
 
+    media_engine_subscribe_encoded_video(nginx, on_encode_video, nullptr);
+
     AudioEnableEvent createAudioEvent;
     createAudioEvent.evtType = AUDIO_CREATE;
     createAudioEvent.enabled = true;
@@ -184,18 +194,18 @@ static void testWindowPush() {
     // 订阅解码视频
     media_engine_subscribe_video_with_delay(nginx, OnDecodeVideoWithDelayCallback, nginx);
 
-    RUDPEngine* engine = startRtm(config.transferMode, config.userID, config.channelID);
+    //RUDPEngine* engine = startRtm(config.transferMode, config.userID, config.channelID);
 
-    while (true) {
-        LJ::SystemUtil::sleep(500);
-        std::string msgStr = "test";
-        rudp_engine_send(engine, msgStr.c_str(), msgStr.size());
-    }
+   //while (true) {
+   //    LJ::SystemUtil::sleep(500);
+   //    std::string msgStr = "test";
+   //    rudp_engine_send(engine, msgStr.c_str(), msgStr.size());
+   //}
     //rtmp_engine_close();
     //media_engine_stop_camera_capture(nginx);
 
-    //LJ::SystemUtil::sleep(1000 * 60 * 500);
-    stopRtm(engine);
+    LJ::SystemUtil::sleep(1000 * 60 * 500);
+   // stopRtm(engine);
 }
 
 static uint8_t* yuvData = nullptr;
