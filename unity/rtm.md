@@ -124,8 +124,86 @@
  ```csharp
 class RTMEngineEventHandler : IRTMEngineEventHandler
 {
-
     // todo 实现回调逻辑
+            /// <summary>
+        /// 1V1 RTM 接收对端消息回调
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="uid"></param>
+        /// <param name="channelId"></param>
+        public virtual void OnRecvMessage(byte[] message, long uid, string channelId)
+        {
+            //UnityEngine.Debug.Log("OnRecvMessage:" + System.Text.Encoding.UTF8.GetString(message));
+        }
+
+        /// <summary>
+        /// 多人RTM 接收对端消息回调
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="uid"></param>
+        /// <param name="channelId"></param>
+        public virtual void OnRecvExtMessage(byte[] message, long uid, string channelId)
+        {
+            //UnityEngine.Debug.Log("OnRecvExtMessage:" + System.Text.Encoding.UTF8.GetString(message));
+        }
+
+        /// <summary>
+        /// 加入频道失败
+        /// </summary>
+        public virtual void OnJoinChannelFail()
+        {
+        }
+
+        /// <summary>
+        /// 加入频道成功
+        /// </summary>
+        public virtual void OnJoinChannelSuccess()
+        {
+           
+        }
+
+        /// <summary>
+        /// 离开频道成功
+        /// </summary>
+        public virtual void OnLeaveChannelSuccess()
+        {
+            
+        }
+
+        /// <summary>
+        /// 离开频道失败
+        /// </summary>
+        public virtual void OnLeaveChannelFail()
+        {
+            
+        }
+        /// <summary>
+        ///STATUS_CONNECTED, 1
+        ///STATUS_DISCONNECTED, 2
+        ///STATUS_LOST, 3
+        ///STATUS_CLOSE 4
+        /// </summary>
+        /// <param name="status">LinkStatus</param>
+        public virtual void OnLinkStatusChange(int status)
+        {
+
+        }
+        /// <summary>
+        /// 远端用户加入频道
+        /// </summary>
+        /// <param name="userId"></param>
+        public virtual void OnRemoteUserJoined(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserJoined:" + userId);
+        }
+        /// <summary>
+        /// 远端用户退出频道
+        /// </summary>
+        /// <param name="userId"></param>
+        public virtual void OnRemoteUserOffLine(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserOffLine:" + userId);
+        }
 }
 
 // 实现回调处理
@@ -167,8 +245,86 @@ if (mRTMEngine != null) {
 
 class RTMEngineEventExtHandler : IRTMEngineEventHandler
 {
-
     // todo 实现回调逻辑
+            /// <summary>
+        /// 1V1 RTM 接收对端消息回调
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="uid"></param>
+        /// <param name="channelId"></param>
+        public virtual void OnRecvMessage(byte[] message, long uid, string channelId)
+        {
+            //UnityEngine.Debug.Log("OnRecvMessage:" + System.Text.Encoding.UTF8.GetString(message));
+        }
+
+        /// <summary>
+        /// 多人RTM 接收对端消息回调
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="uid"></param>
+        /// <param name="channelId"></param>
+        public virtual void OnRecvExtMessage(byte[] message, long uid, string channelId)
+        {
+            //UnityEngine.Debug.Log("OnRecvExtMessage:" + System.Text.Encoding.UTF8.GetString(message));
+        }
+
+        /// <summary>
+        /// 加入频道失败
+        /// </summary>
+        public virtual void OnJoinChannelFail()
+        {
+        }
+
+        /// <summary>
+        /// 加入频道成功
+        /// </summary>
+        public virtual void OnJoinChannelSuccess()
+        {
+           
+        }
+
+        /// <summary>
+        /// 离开频道成功
+        /// </summary>
+        public virtual void OnLeaveChannelSuccess()
+        {
+            
+        }
+
+        /// <summary>
+        /// 离开频道失败
+        /// </summary>
+        public virtual void OnLeaveChannelFail()
+        {
+            
+        }
+        /// <summary>
+        ///STATUS_CONNECTED, 1
+        ///STATUS_DISCONNECTED, 2
+        ///STATUS_LOST, 3
+        ///STATUS_CLOSE 4
+        /// </summary>
+        /// <param name="status">LinkStatus</param>
+        public virtual void OnLinkStatusChange(int status)
+        {
+
+        }
+        /// <summary>
+        /// 远端用户加入频道
+        /// </summary>
+        /// <param name="userId"></param>
+        public virtual void OnRemoteUserJoined(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserJoined:" + userId);
+        }
+        /// <summary>
+        /// 远端用户退出频道
+        /// </summary>
+        /// <param name="userId"></param>
+        public virtual void OnRemoteUserOffLine(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserOffLine:" + userId);
+        }
 }
 
 // 实现回调处理
