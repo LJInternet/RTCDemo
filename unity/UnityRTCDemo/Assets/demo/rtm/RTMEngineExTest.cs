@@ -19,7 +19,7 @@ public class RTMEngineExTest : MonoBehaviour
     public void Start()
     {
         InitHelper.InitLog(Application.temporaryCachePath + "/log", "Fancy", 3);
-        _RTMEngineEx = new RTMEngineEx(InitHelper._token, 3032155965, true);
+        _RTMEngineEx = new RTMEngineEx(InitHelper._token, 3032155965, false);
         _IRTMEngineEventHandler1 = new IRTMEngineEventHandlerEx(1111);
         _IRTMEngineEventHandler2 = new IRTMEngineEventHandlerEx(2222);
         _IRTMEngineEventHandler3 = new IRTMEngineEventHandlerEx(3333);
@@ -118,6 +118,16 @@ public class RTMEngineExTest : MonoBehaviour
         public override void OnLeaveChannelFail()
         {
             FLog.Info("OnLeaveChannelFail: localUid " + localUid);
+        }
+
+        public override void OnRemoteUserJoined(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserJoined1:" + userId);
+        }
+
+        public override void OnRemoteUserOffLine(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserOffLine1:" + userId);
         }
     }
 

@@ -108,6 +108,22 @@
         {
 
         }
+        /// <summary>
+        /// 远端用户加入频道
+        /// </summary>
+        /// <param name="userId"></param>
+        public virtual void OnRemoteUserJoined(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserJoined:" + userId);
+        }
+        /// <summary>
+        /// 远端用户退出频道
+        /// </summary>
+        /// <param name="userId"></param>
+        public virtual void OnRemoteUserOffLine(UInt64 userId)
+        {
+            UnityEngine.Debug.Log("OnRemoteUserOffLine:" + userId);
+        }
     }
 ````````
 
