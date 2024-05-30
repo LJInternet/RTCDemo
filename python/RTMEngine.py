@@ -75,11 +75,11 @@ set_xmtp_debug.argtypes = [ctypes.c_bool]
 set_xmtp_debug.restype = None
 
 def rtm_event_callback(type, buf, size, result, context):
-    # print(context)
+    print(f"context {context} size {size} result {result}")
     # 处理事件回调
     buf_bytes = bytearray(buf[:size])
     obj = ctypes.cast(context, ctypes.py_object).value
-    # print(obj)
+    print(obj)
     obj.handle_rtm_event_callback(type, buf_bytes, result)
 
 class IRTMEventHandler:

@@ -169,6 +169,7 @@ class IRTCEventHandler:
 class LJRTCEngine:
     def __init__(self):
         self.mMediaEngine = None
+        self.uploadConfig = RTCEngineBean.MIEUploadConfig()
 
     def create(self):
         if self.mMediaEngine:
@@ -304,6 +305,13 @@ class LJRTCEngine:
     #channels 频道号 uid 用户Id token 加入频道的token mode RTC的模式，0 是server 1是client
     def join_channel(self, channels, uid, token, mode):
         if self.mMediaEngine:
+            # self.uploadConfig.transferConfig.appID = 1
+            # self.uploadConfig.transferConfig.channelID = channels
+            # self.uploadConfig.transferConfig.userID = uid
+            # self.uploadConfig.transferConfig.token = token
+            # self.uploadConfig.transferConfig.transferMode = mode
+            # configStr, length = marshall_to_char_ptr(self.uploadConfig)
+            # media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.JOIN_CHANNEL, configStr, length)
             c = RTCEngineBean.MIEUploadConfig()
             config = RTCEngineBean.MIETransferConfig()
             config.appID = 1
@@ -316,6 +324,24 @@ class LJRTCEngine:
             media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.JOIN_CHANNEL, configStr, length)
         else:
             print("join_channel self.mMediaEngine is null")
+
+    def update_video_config(self, width, height, biteRate, minBiteRate, fps):
+        self.uploadConfig.videoUploadConfig.encodeHeight = height
+        self.uploadConfig.videoUploadConfig.encodeWidth = width
+        self.uploadConfig.videoUploadConfig.maxVideoBitrateInbps = biteRate
+        self.uploadConfig.videoUploadConfig.minVideoBitrateInbps = minBiteRate
+        self.uploadConfig.videoUploadConfig.realVideoBitrateInbps = biteRate
+        self.uploadConfig.videoUploadConfig.fps = fps
+        self.uploadConfig.videoUploadConfig.keyFrameInterval = 3
+        configStr, length = marshall_to_char_ptr(self.uploadConfig)
+        media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.MIET_UPDATE_UPLOAD_CONFIG, configStr, length)
+
+    def update_audio_Config(self, sample_rate, channels, biteRate):
+        self.uploadConfig.audioUploadConfig.audioBitrateInbps = biteRate
+        self.uploadConfig.audioUploadConfig.sampleRate = sample_rate
+        self.uploadConfig.audioUploadConfig.channels = channels
+        configStr, length = marshall_to_char_ptr(self.uploadConfig)
+        media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.MIET_UPDATE_UPLOAD_CONFIG, configStr, length) 
 
     #离开频道
     def leave_channel(self):
