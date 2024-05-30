@@ -27,24 +27,30 @@ using namespace LJMediaLibrary::WAV;
 #pragma execution_character_set("UTF-8")
 
 static std::string channels = "954523112";
-static std::string token = "token";
+static std::string token = "请替换为自己的 token";
 static uint64_t uid = LJ::DateTime::currentTimeMillis();
 static media_engine* mMediaEngine = nullptr;
 
-
+static FILE* captureYuvFile = nullptr;
 static void on_capture_video(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, void* context) {
-    //printf("on_capture_video\n");
-    CaptureVideoFrame frame;
-    frame.stride = width;
-    frame.width = width;
-    frame.height = height;
-    frame.rotation = 0;
-    frame.type = VIDEO_BUFFER_RAW_DATA;
-    frame.format = VIDEO_PIXEL_RGBA;
-    frame.timestamp = 0;
-    frame.mirror = 0;
-    std::string data;
-    ljtransfer::mediaSox::PacketToString(frame, data);
+    printf("on_capture_video %d %d %d\n", pixel_fmt, width, height);
+
+    // if (captureYuvFile == nullptr) {
+    //     captureYuvFile = fopen("640X480.yuv", "wb");
+    //     fwrite(buf, 1, len, captureYuvFile);
+    // }
+    //fwrite(buf, 1, len, encodedFile);
+    //CaptureVideoFrame frame;
+    //frame.stride = width;
+    //frame.width = width;
+    //frame.height = height;
+    //frame.rotation = 0;
+    //frame.type = VIDEO_BUFFER_RAW_DATA;
+    //frame.format = VIDEO_PIXEL_RGBA;
+    //frame.timestamp = 0;
+    //frame.mirror = 0;
+    //std::string data;
+    //ljtransfer::mediaSox::PacketToString(frame, data);
 
     //rtmp_engine_write_raw_video((const char*)buf, len, data.c_str(), data.length(), pixel_fmt);
 }
@@ -74,7 +80,11 @@ static void onEvnCallback(int type, const char* msg, uint32_t len, int result, v
 
 static FILE* file = nullptr;
 static void OnDecodeVideoCallback(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, void* context) {
-    //printf("OnDecodeVideoCallback %d X %d pixel_fmt %d \n", width, height, pixel_fmt);
+    printf("OnDecodeVideoCallback %d X %d pixel_fmt %d \n", width, height, pixel_fmt);
+    // if (captureYuvFile == nullptr) {
+    //     captureYuvFile = fopen("640X480.yuv", "wb");
+    //     fwrite(buf, 1, len, captureYuvFile);
+    // }
 
 }
 
@@ -219,7 +229,7 @@ static void testWindowPull() {
     rtc_config.enableLog = false;
     std::string rtccfgstr;
     ljtransfer::mediaSox::PacketToString(rtc_config, rtccfgstr);
-    mMediaEngine = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
+    media_engine* mMediaEngine = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
     media_engine_set_debug_env(true);
     // 订阅解码视频
     media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
@@ -238,39 +248,8 @@ static void testWindowPull() {
     media_engine_send_event(mMediaEngine, JOIN_CHANNEL, (char*)cfgstr.c_str(), cfgstr.length());
 
 
-    CaptureVideoFrame frame;
-    frame.stride = 640;
-    frame.width = 640;
-    frame.height = 480;
-    frame.rotation = 0;
-    frame.type = VIDEO_BUFFER_RAW_DATA;
-    frame.format = VIDEO_PIXEL_I420;
-    frame.timestamp = LJ::DateTime::currentTimeMillis();
-    frame.mirror = 0;
-    std::string data;
-    ljtransfer::mediaSox::PacketToString(frame, data);
-    int size = 0;
-    while (true) {
-        LJ::SystemUtil::sleep(100);
-        if (yuvData == nullptr) {
-            std::ifstream yuvFileStream("640X480.yuv");
-            std::string content((std::istreambuf_iterator<char>(yuvFileStream)),
-                                (std::istreambuf_iterator<char>()));
-            yuvFileStream.close();
-            size = content.length();
-            yuvData = new uint8_t[size];
-            memcpy(yuvData, content.c_str(), size);
-        }
-        if (yuvData != nullptr && size != 0) {
-        }
-        media_engine_push_video(mMediaEngine, (const char*)yuvData, size, data.c_str(), data.length(), 2);
-    }
-
     LJ::SystemUtil::sleep(1000 * 60 * 500);
-    if (yuvData != nullptr) {
-        delete[] yuvData;
-        yuvData = nullptr;
-    }
+
     media_engine_destroy(mMediaEngine);
 }
 
@@ -280,7 +259,7 @@ static uint32_t audioChannels = 0;
 static uint32_t audioSampleRate = 0;
 static bool onDecodeAudioData(void* audioData, int size, uint64_t pts,
     int sampleRate, int channelCont, void* context) {
-    //printf("onDecodeAudioData sampleRate %d channelCont %d %d \n", sampleRate, channelCont, sizeof(WavPCMHeader));
+    printf("onDecodeAudioData sampleRate %d channelCont %d %d \n", sampleRate, channelCont, sizeof(WavPCMHeader));
     if (testWavFile == nullptr) {
         testWavFile = fopen("decode_audio.wav", "wb");
         fseek(testWavFile, sizeof(WavPCMHeader), SEEK_SET);
