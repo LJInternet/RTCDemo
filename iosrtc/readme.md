@@ -162,7 +162,7 @@
 
 <h2 id="2"> 1V1 RTM使用</h2>
 
-## 1V1 RTM使用 ([示例代码RTMViewController.swift](iosrtc/RtmViewController.swift)) ，1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
+## 1V1 RTM使用 ([示例代码RTMViewController.swift](iosrtc/RtmViewController.swift)) ，1V1设置模式，双方使用的模式(RTMConfig.role)必须不一样，一端为0 另外一端必须为1
 
 #### 1.初始化
 
@@ -172,7 +172,7 @@
     let config = RTMConfig()
     config.appId = GlobalConstants.appId // 服务端分配的appId
     config.localIp = 0
-    config.dataWorkMode = 0
+    config.dataWorkMode = 0 //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     config.isDebug = 1
     config.role = push ? RUDPMode.PUSH.rawValue : RUDPMode.PULL.rawValue // 1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
     config.token = GlobalConstants.token // 服务端分配的token
@@ -233,7 +233,7 @@
     let config = RTMExConfig()
     config.appId = GlobalConstants.appId // 服务端分配的appId
     config.localIp = 0
-    config.dataWorkMode = 0
+    config.dataWorkMode = 0 //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     config.isDebug = 1
     config.role // 可以不用填，默认为1
     config.token = GlobalConstants.token // 服务端分配的token

@@ -22,21 +22,31 @@ class RTMEventHandler(RTMEngine.IRTMEventHandler):
         print("onLeaveChannelFail")
 
 def main():
+    #创建实例
     rtmEngine = RTMEngine.LJRTMEngine()
+    #设置发测试环境，默认正式环境
     rtmEngine.set_debug(True)
+    #RTM初始化参数
     config = RTMEngine.RUDPConfig()
-    config.token = ctypes.c_char_p(b"linjing@2023")  # 使用b前缀表示字节字符串
+    #token
+    config.token = ctypes.c_char_p(b"token")  # 使用b前缀表示字节字符串,请替换为自己的 token
+    #服务端分配的appId
     config.appId = ctypes.c_uint64(1)
+    #RTM还是RTC，RTM默认都是0
     config.mode = ctypes.c_int(0)
+    #是server端还是client端 1是client端 0是server端
     config.role = ctypes.c_int(0)
+    #暂时没有用，测试环境可用先设置为true，正式则设置为false
     config.isDebug = ctypes.c_bool(True)
     config.dataWorkMode = ctypes.c_int(0)
     config.localIp = ctypes.c_uint32(0)
     rtmEngine.create(config)
+    #要注册RTM的事件回调可用通过继承RTMEngine.IRTMEventHandler方法，重写父类的默认回调
     handler = RTMEventHandler()
     rtmEngine.subscribe_event_callback(handler, rtmEngine)
+    #注册RTM的消息回调
     rtmEngine.subscribe_msg_callback(rudp_msg_callback, rtmEngine)
-
+    #加入频道12362 是用户ID， 121212是频道号
     rtmEngine.joinChannel(12362, "121212")
     bytes_data = b'hello bytes data'
     bytes_data1 = b'hello bytes array data'
@@ -45,15 +55,18 @@ def main():
     while index < 10000:
         index = index + 1
         if index % 2 == 0:
+            #发送RTM消息，直接发送bytes类型
             rtmEngine.sendMsg(bytes_data)
         else:
+            #发送RTM消息，直接发送bytearray类型
             rtmEngine.sendMsg(bytes_array)
         time.sleep(1)
         
 
     time.sleep(20)
-
+    #离开RTM频道
     rtmEngine.leaveChannel()
+    #销毁RTM实例
     rtmEngine.destroy()
     
 

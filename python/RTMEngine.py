@@ -98,14 +98,21 @@ class IRTMEventHandler:
 class LJRTMEngine:
     def __init__(self):
         self.mRudpEngine = None
-
+    #创建RTM实例 config RUDPConfig
+        #token 服务端分配的令牌
+        #appId 服务端分配的appId
+        #mode 请写死0
+        #role 0 是server端 1是client端
+        #isDebug 测试环境为true
+        #dataWorkMode数据发送模式，0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     def create(self, config):
         self.mRudpEngine = rudp_engine_create(ctypes.byref(config))
-
+    #销毁RTM实例
     def destroy(self):
         if self.mRudpEngine:
             rudp_engine_destroy(self.mRudpEngine)
-    
+            self.mRudpEngine = None
+    #加入RTM实例 uid 用户ID， channelId 频道号
     def joinChannel(self, uid, channnelId):
         if self.mRudpEngine:
             char_p_value = ctypes.c_char_p(channnelId.encode('utf-8'))

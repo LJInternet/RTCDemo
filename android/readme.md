@@ -496,7 +496,7 @@
      * @param token
      * @param role 是否是控制端，表示一个是控制端  1，一个是被控制端 0，在两个不同设备时，需要两个端的role不一样
      * @param isDebug 是否是测试环境
-     * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants
+     * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
      * @param uid 用户ID
      * @param appId 用户Appid
      * @param channelId 频道ID
@@ -560,7 +560,7 @@
     /**
      * @param token
      * @param isDebug 是否是测试环境
-     * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants
+     * @param dataWorkMode RTM 的工作模式 @see RudpEngineConstants //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
      * @param uid 用户ID
      * @param appId 用户Appid
      * @param channelId 频道ID

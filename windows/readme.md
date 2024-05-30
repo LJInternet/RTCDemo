@@ -221,7 +221,7 @@
 
 ## 1V1 RTM使用([示例代码P2PRTMTest.cpp](P2PRTMTest.cpp) [参数定义ClientConstants.h](rtc/win64/rudp/header/ClientConstants.h))
 
-## 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数，1V1设置模式，双方使用的模式必须不一样，一端为0 另外一端必须为1
+## 1V1编译产物可通过channelId=xxx role=xxx token=xxx uid=xxx appId=xxx 指定参数，1V1设置模式，双方使用的模式（RUDPConfig.role）必须不一样，一端为0 另外一端必须为1
 
 ###### 创建RTM实例:
 
@@ -236,19 +236,19 @@
         int mode;// RUDPMode 0 RTM
         int role;// RUDPRole 0 normal 1 controller
         bool isDebug;// 测试环境还是正式环境
-        int dataWorkMode;// DataWorkMode
+        int dataWorkMode;// DataWorkMode //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     }RUDPConfig;
     /**
      * 当前1V1 RTM与RTM使用相同的ChannelId，因此需要同时使用RTC，才会生效
      * @param token
      * @param isDebug 是否是测试环境
-     * @param dataWorkMode RTM 的工作模式 DataWorkMode
+     * @param dataWorkMode RTM 的工作模式 DataWorkMode //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
      * @param uid 用户ID
      * @param appId 用户Appid
      * @param channelId 频道ID
      */
     RUDPConfig config;
-    config.dataWorkMode = dataWorkMode;
+    config.dataWorkMode = dataWorkMode; //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     config.token = token.c_str();
     config.role = role;
     config.isDebug = isDebug;
@@ -325,20 +325,20 @@
         const char* token;//正式环境不能为空，测试环境使用默认的token
         int appId;
         int mode;// RUDPMode 0 RTM 写死0
-        int role;// RUDPRole 1 controller 写死1
+        int role;// 多人RTM RUDPRole  写死1，因为服务端suf是0
         bool isDebug;// 测试环境还是正式环境
-        int dataWorkMode;// DataWorkMode 写死0
+        int dataWorkMode;// DataWorkMode 写死0 //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     }RUDPConfig;
     /**
      * @param token
      * @param isDebug 是否是测试环境
-     * @param dataWorkMode RTM 的工作模式 DataWorkMode
+     * @param dataWorkMode RTM 的工作模式 DataWorkMode //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
      * @param uid 用户ID
      * @param appId 用户Appid
      * @param channelId 频道ID
      */
     RUDPConfig config;
-    config.dataWorkMode = dataWorkMode;
+    config.dataWorkMode = dataWorkMode; //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     config.token = token.c_str();
     config.role = role;
     config.isDebug = isDebug;

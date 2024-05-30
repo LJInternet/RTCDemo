@@ -227,8 +227,8 @@ RTMEngineEventHandler handler = new RTMEngineEventHandler();
 //初始化RTM配置
 RUDPConfig config = new RUDPConfig();
 config.isDebug = true;
-config.role = (int)RUDPRole.RUDP_CONTROLLER;
-config.dataWorkMode = (int)DataWorkMode.SEND_AND_RECV;
+config.role = (int)RUDPRole.RUDP_CONTROLLER; // 1V1RTM在使用时，两端的role必须不一样，一端是0 则另外一端是1，假如有一端是服务端
+config.dataWorkMode = (int)DataWorkMode.SEND_AND_RECV;//0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
 config.appId = 1;
 config.token = "token";
 //初始化RTM实例
