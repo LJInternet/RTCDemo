@@ -38,6 +38,7 @@ def main():
     config.role = ctypes.c_int(0)
     #暂时没有用，测试环境可用先设置为true，正式则设置为false
     config.isDebug = ctypes.c_bool(True)
+    #0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
     config.dataWorkMode = ctypes.c_int(0)
     config.localIp = ctypes.c_uint32(0)
     rtmEngine.create(config)
@@ -47,7 +48,7 @@ def main():
     #注册RTM的消息回调
     rtmEngine.subscribe_msg_callback(rudp_msg_callback, rtmEngine)
     #加入频道12362 是用户ID， 121212是频道号
-    rtmEngine.joinChannel(12362, "121212")
+    rtmEngine.joinChannel(123621, "1212121")
     bytes_data = b'hello bytes data'
     bytes_data1 = b'hello bytes array data'
     bytes_array = bytearray(bytes_data1)

@@ -52,7 +52,7 @@ media_engine_set_debug_env = rtcEngineLib.lib().media_engine_set_debug_env
 #* @param pixel_fmt 像素格式
 #*/
 media_engine_push_video = rtcEngineLib.lib().media_engine_push_video
-media_engine_push_video.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_int]
+media_engine_push_video.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_int]
 media_engine_push_video.restype = None
 
 #/**

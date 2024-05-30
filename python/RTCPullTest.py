@@ -10,6 +10,10 @@ def audio_data_callback(audioData, size, pts, sampleRate, channelCount, context)
         obj.handle_audio_callback(audioData, size, pts, sampleRate, channelCount)
    
 
+def video_data_callback(data, len, width, height, pixel_fmt, context):
+    obj = RTCEngine.void_ptr_to_py_object(context)
+    print(f"len {len} width {width} height {height} pixel_fmt {pixel_fmt} obj {obj}")
+
 class RTCEventHandler(RTCEngine.IRTCEventHandler):
     def onLinkStatus(self, status):
         print("onLInkStatus {0}".format(status))
@@ -39,6 +43,8 @@ def main():
     rtcEngine.subscribe_rtc_event_callback(rtcEventHandler)
     #订阅音频回调
     rtcEngine.subscribe_audio_callback(audio_data_callback, rtcEngine)
+    #订阅远端视频解码回调
+    rtcEngine.subscribe_video_callback(video_data_callback, rtcEngine)
     #设音频回调模式 
     #self.callbackDecodeData: bool = False #是否需要回调音频数据
     #self.renderAudioData: bool = False #数据是否需要播放，false 则直接静音
@@ -49,7 +55,7 @@ def main():
     event.directDecode = True
     rtcEngine.set_audio_play_event(event)
     #channels 频道号 uid 用户Id token 加入频道的token mode RTC的模式，0 是server 1是client
-    rtcEngine.join_channel("954523112", 3121212, "请替换为自己的 token", 1)
+    rtcEngine.join_channel("954523133", 31212121, "token", 0)
 
     yuvFilePath = os.path.abspath('./windows/bin/win64/640X480.yuv')
     yuvFile = open(yuvFilePath, 'rb')
@@ -83,6 +89,8 @@ def main():
             time.sleep(0.01)
     finally:
         pcm_file.close()
+
+    time.sleep(200)
 
     rtcEngine.leave_channel()
     rtcEngine.destroy()
