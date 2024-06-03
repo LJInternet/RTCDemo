@@ -102,6 +102,7 @@
         ///STATUS_CONNECTED, 1
         ///STATUS_DISCONNECTED, 2
         ///STATUS_LOST, 3
+        ///STATUS_CLOSE 4
         /// </summary>
         /// <param name="status">LinkStatus</param>
         public virtual void OnLinkStatusChange(int status)

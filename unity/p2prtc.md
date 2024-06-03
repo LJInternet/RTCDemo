@@ -389,8 +389,18 @@
     //or
     //string[] deviceNames = mRtcEngine.GetCameraDeviceNames();
 
-    // 指定使用相机名
+    // 指定使用相机名，设置相机ID后，需要调用RTC的StopPreview方法，先关闭当前设备，然后调用StartPreview，重新打开设备
     mRtcEngine.StartCameraDevice(string cameraDeviceName);
+
+     manager = mRtcEngine.GetVideoDeviceManager();
+    FLog.Info("onValueChanged:" + data.text);
+    if (manager.SetDevice(data.text) == 0)
+    {
+        mRtcEngine.StopPreview();
+        mRtcEngine.StartPreview();
+    }
+
+
  ```
 
 #### 12.切换横竖屏（需要先StopPreview停止相机采集，然后重新设置编码参数，再调用StartPreview启动采集，因为切换横竖屏会使相机旋转角度发生变化，需要重新初始化）
@@ -616,3 +626,48 @@
         }
     };
 ```csharp
+
+#### 21.获取音频的采集和播放设备列表
+
+```csharp
+    IAudioDeviceManager manager = mRtcEngine.GetAudioDeviceManager();
+    if (manager != null) {
+        captureDevices = manager.EnumerateRecordingDevices();
+    }
+    // 设置采集设备,设置设备ID后，需要先mRtcEngine.EnableAudio(false)关闭当前设备，然后调用mRtcEngine.EnableAudio(true)再次打开设备
+    String deviceId = "";
+    foreach (DeviceInfo deviceInfo in captureDevices)
+    {
+        if (deviceInfo.deviceName == data.text)
+        {
+            deviceId = deviceInfo.deviceId;
+            break;
+        }
+    }
+    if (manager.SetRecordingDevice(deviceId) == 0)
+    {
+        mRtcEngine.EnableAudio(false);
+        mRtcEngine.EnableAudio(true);
+    }
+
+     IAudioDeviceManager manager = mRtcEngine.GetAudioDeviceManager();
+    if (manager != null)
+    {
+        renderDevices = manager.EnumeratePlaybackDevices();
+    }
+    // 设置播放设备，设置设备ID后，需要先mRtcEngine.EnableAudio(false)关闭当前设备，然后调用mRtcEngine.EnableAudio(true)再次打开设备
+    foreach (DeviceInfo deviceInfo in renderDevices)
+    {
+        if (deviceInfo.deviceName == data.text)
+        {
+            deviceId = deviceInfo.deviceId;
+            break;
+        }
+    }
+    if (manager.SetPlaybackDevice(deviceId) == 0)
+    {
+        mRtcEngine.EnableAudio(false);
+        mRtcEngine.EnableAudio(true);
+    }
+
+`````

@@ -15,7 +15,12 @@ def video_data_callback(data, len, width, height, pixel_fmt, context):
     print(f"len {len} width {width} height {height} pixel_fmt {pixel_fmt} obj {obj}")
 
 class RTCEventHandler(RTCEngine.IRTCEventHandler):
+    def __init__(self) -> None:
+        super().__init__()
+        self.isLinkOk = False
+
     def onLinkStatus(self, status):
+        self.isLinkOk = True
         print("onLInkStatus {0}".format(status))
 
     def onNetworkQuality(self, uid, localQuality, remoteQuality):
@@ -57,7 +62,7 @@ def main():
     rtcEngine.update_audio_Config(48000, 1, 80000)
     rtcEngine.set_audio_play_event(event)
     #channels 频道号 uid 用户Id token 加入频道的token mode RTC的模式，0 是server 1是client
-    rtcEngine.join_channel("954523133", 31212121, "token", 0)
+    rtcEngine.join_channel("954523133", 31212121, "linjing@2023", 0)
 
     yuvFilePath = os.path.abspath('./windows/bin/win64/640X480.yuv')
     yuvFile = open(yuvFilePath, 'rb')
@@ -69,9 +74,18 @@ def main():
     sampleCount = 480
     pcm_file = open(pcmfilePath, 'rb')
     index = 0
+    while  True:
+        if rtcEventHandler.isLinkOk:
+            break
+
     try:
         while True:
             index = index + 1
+            if index % 3 == 0:
+                if index % 6 == 0:
+                    rtcEngine.push_raw_video_frame(yuvByteArray, 640, 480, 0, 0, 2)
+                else:
+                    rtcEngine.push_raw_video_frame(yuvData, 640, 480, 0, 0, 2)
             chunk = pcm_file.read(sampleCount * 2)
             if not chunk:
                 break
@@ -83,11 +97,7 @@ def main():
             # else:
             #     rtcEngine.push_audio_pcm_frame(chunk, 48000, 1, 2)
             
-            if index % 3 == 0:
-                if index % 6 == 0:
-                    rtcEngine.push_raw_video_frame(yuvByteArray, 640, 480, 0, 0, 2)
-                else:
-                    rtcEngine.push_raw_video_frame(yuvData, 640, 480, 0, 0, 2)
+            
             time.sleep(0.01)
     finally:
         pcm_file.close()

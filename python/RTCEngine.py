@@ -13,8 +13,8 @@ class RTCEngineLib:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
             if sys.platform == 'win32':
-                cls._lib = ctypes.CDLL(os.path.abspath('./windows/bin/win64/mediatransfer.dll'))
                 print("This is Windows " + os.path.abspath('./windows/bin/win64/mediatransfer.dll'))
+                cls._lib = ctypes.CDLL(os.path.abspath('./windows/bin/win64/mediatransfer.dll'))
             elif sys.platform == 'linux':
                 # Linux平台下的代码
                 cls._lib = ctypes.CDLL('libmediatransfer.so')

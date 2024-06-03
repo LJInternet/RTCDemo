@@ -27,6 +27,9 @@ public class MultiChannelRTCExTest2 : MonoBehaviour
     private long _defualtUserId = TimeHelper.GetCurrenTime();
     public Dropdown _Dropdown;
 
+    public Dropdown _audioCaptureDevices;
+    public Dropdown _audioRenderDevices;
+
     private Stack<RawImage> _views = new Stack<RawImage>();
     private ConcurrentDictionary<UInt64, RawImage> _remoteViews = new ConcurrentDictionary<UInt64, RawImage>();
     private static readonly object _lock = new object();
@@ -41,6 +44,8 @@ public class MultiChannelRTCExTest2 : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         canvas.AddComponent<LJVideoSurface>();
         SetDrowOption();
+        initAudioCaptureDevices();
+        initAudioRenderDevices();
         lock (_lock) {
             _views.Push(_channel3Render);
             _views.Push(_channel2Render);
@@ -108,6 +113,95 @@ public class MultiChannelRTCExTest2 : MonoBehaviour
            
         }
     }
+
+    private DeviceInfo[] captureDevices;
+    void initAudioCaptureDevices() {
+    
+        IAudioDeviceManager manager = mRtcEngine.GetAudioDeviceManager();
+        List<Dropdown.OptionData> list = new List<Dropdown.OptionData>();
+        if (manager != null) {
+            captureDevices = manager.EnumerateRecordingDevices();
+            foreach (DeviceInfo deviceInfo in captureDevices)
+            {
+                list.Add(new Dropdown.OptionData(deviceInfo.deviceName));
+            }
+            _audioCaptureDevices.ClearOptions();
+            _audioCaptureDevices.AddOptions(list);
+        }
+        _audioCaptureDevices.onValueChanged.AddListener((value) => {
+            if (_Dropdown == null)
+            {
+                return;
+
+            }
+            Dropdown.OptionData data = _Dropdown.options[value];
+            if (mRtcEngine != null)
+            {
+                manager = mRtcEngine.GetAudioDeviceManager();
+                FLog.Info("onValueChanged:" + data.text);
+                String deviceId = "";
+                foreach (DeviceInfo deviceInfo in captureDevices)
+                {
+                    if (deviceInfo.deviceName == data.text) {
+                        deviceId = deviceInfo.deviceId;
+                        break;
+                    }   
+                }
+                if (manager.SetRecordingDevice(deviceId) == 0)
+                {
+                    mRtcEngine.EnableAudio(false);
+                    mRtcEngine.EnableAudio(true);
+                }
+            }
+        });
+    }
+
+    private DeviceInfo[] renderDevices;
+    void initAudioRenderDevices()
+    {
+
+        IAudioDeviceManager manager = mRtcEngine.GetAudioDeviceManager();
+        List<Dropdown.OptionData> list = new List<Dropdown.OptionData>();
+        if (manager != null)
+        {
+            renderDevices = manager.EnumeratePlaybackDevices();
+            foreach (DeviceInfo deviceInfo in renderDevices)
+            {
+                list.Add(new Dropdown.OptionData(deviceInfo.deviceName));
+            }
+            _audioRenderDevices.ClearOptions();
+            _audioRenderDevices.AddOptions(list);
+        }
+        _audioRenderDevices.onValueChanged.AddListener((value) => {
+            if (_Dropdown == null)
+            {
+                return;
+
+            }
+            Dropdown.OptionData data = _Dropdown.options[value];
+            if (mRtcEngine != null)
+            {
+                manager = mRtcEngine.GetAudioDeviceManager();
+                FLog.Info("onValueChanged:" + data.text);
+                String deviceId = "";
+                foreach (DeviceInfo deviceInfo in renderDevices)
+                {
+                    if (deviceInfo.deviceName == data.text)
+                    {
+                        deviceId = deviceInfo.deviceId;
+                        break;
+                    }
+                }
+                if (manager.SetPlaybackDevice(deviceId) == 0)
+                {
+                    mRtcEngine.EnableAudio(false);
+                    mRtcEngine.EnableAudio(true);
+                }
+            }
+        });
+    }
+
+
     void SetDrowOption()
     {
         IVideoDeviceManager manager = mRtcEngine.GetVideoDeviceManager();

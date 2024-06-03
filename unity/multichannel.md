@@ -18,7 +18,7 @@ config.isTestEv = true; // 是否是测试环境
 config.mJLog = ILog; // 实现LJ.RTC.Common.ILog
 IRtcEngineEx mRtcEngine = IRtcEngine.CreateRtcEngineEx(config); // 创建RTCEngine
 mRtcEngine.EnableAudio(true); // 开启音频模块
-mRtcEngine.EnableVideo(true); // 开启视频模块
+mRtcEngine.EnableVideo(true); // 开启视频模块,不需要视频，则设置为false
 GameObject canvas = GameObject.Find("Canvas");
 canvas.AddComponent<LJVideoSurface>(); // 使用非原生相机时，需要添加该控件驱动相机采集
 ``````
@@ -29,12 +29,21 @@ canvas.AddComponent<LJVideoSurface>(); // 使用非原生相机时，需要添�
 LJChannel channel = mRtcEngine.CreateChannel("channelId", uid); // 创建Channel
 ChannelMediaOptions channelMediaOptions = new ChannelMediaOptions(); // 创建ChannelMediaOptions
 channelMediaOptions.publishMicrophoneTrack = true; //发送麦克风采集的音频
-channelMediaOptions.publishCameraTrack = true; // 发送相机采集视频
+channelMediaOptions.publishCameraTrack = true; // 发送相机采集视频，不需要发送相机视频则设置为false
 
 channel.ChannelOnUserJoined = Channel1OnUserJoinedHandler; // 用户加入频道回调， SetForMultiChannelUser在该回调时调用
 channel.ChannelOnUserOffLine = Channel1OnUserLeavedHandler; // 用户退出频道回调
 // todo 增加其他需要的回调
-
+//LJChannel ChannelOnJoinChannelSuccessHandler ChannelOnJoinChannelSuccess;
+//LJChannel ChannelOnErrorHandler ChannelOnError;
+//LJChannel ChannelOnLeaveChannelHandler ChannelOnLeaveChannelSuccess;
+//LJChannel ChannelOnLeaveChannelErrorHandler ChannelOnLeaveChannelError;
+//LJChannel ChannelOnUserJoinedHandler ChannelOnUserJoined;
+//LJChannel ChannelOnUserOffLineHandler ChannelOnUserOffLine;
+//LJChannel ChannelOnNetworkQualityHandler ChannelOnNetworkQuality;
+//LJChannel ChannelOnVideoSizeChangedHandler ChannelOnVideoSizeChanged;
+//LJChannel ChannelOnConnectionStateChangedHandler ChannelOnConnectionStateChanged;
+//LJChannel ChannelOnFirstRemoteVideoFrameHandler ChannelOnFirstRemoteVideoFrame;
 void Channel1OnUserJoinedHandler(string channelId, UInt64 uid, int elapsed) {
     Debug.Log($"Channel1OnUserJoinedHandler {channelId} {uid} {elapsed}");
 }
@@ -102,3 +111,48 @@ channel.LeaveChannel();
 channel.ReleaseChannel();
 channel = null;
 ``````
+
+#### 6.获取音频的采集和播放设备列表
+
+```csharp
+    IAudioDeviceManager manager = mRtcEngine.GetAudioDeviceManager();
+    if (manager != null) {
+        captureDevices = manager.EnumerateRecordingDevices();
+    }
+    // 设置采集设备,设置设备ID后，需要先mRtcEngine.EnableAudio(false)关闭当前设备，然后调用mRtcEngine.EnableAudio(true)再次打开设备
+    String deviceId = "";
+    foreach (DeviceInfo deviceInfo in captureDevices)
+    {
+        if (deviceInfo.deviceName == data.text)
+        {
+            deviceId = deviceInfo.deviceId;
+            break;
+        }
+    }
+    if (manager.SetRecordingDevice(deviceId) == 0)
+    {
+        mRtcEngine.EnableAudio(false);
+        mRtcEngine.EnableAudio(true);
+    }
+
+     IAudioDeviceManager manager = mRtcEngine.GetAudioDeviceManager();
+    if (manager != null)
+    {
+        renderDevices = manager.EnumeratePlaybackDevices();
+    }
+    // 设置播放设备，设置设备ID后，需要先mRtcEngine.EnableAudio(false)关闭当前设备，然后调用mRtcEngine.EnableAudio(true)再次打开设备
+    foreach (DeviceInfo deviceInfo in renderDevices)
+    {
+        if (deviceInfo.deviceName == data.text)
+        {
+            deviceId = deviceInfo.deviceId;
+            break;
+        }
+    }
+    if (manager.SetPlaybackDevice(deviceId) == 0)
+    {
+        mRtcEngine.EnableAudio(false);
+        mRtcEngine.EnableAudio(true);
+    }
+
+`````
