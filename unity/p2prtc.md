@@ -399,8 +399,6 @@
         mRtcEngine.StopPreview();
         mRtcEngine.StartPreview();
     }
-
-
  ```
 
 #### 12.切换横竖屏（需要先StopPreview停止相机采集，然后重新设置编码参数，再调用StartPreview启动采集，因为切换横竖屏会使相机旋转角度发生变化，需要重新初始化）

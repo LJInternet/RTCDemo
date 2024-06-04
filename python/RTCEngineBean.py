@@ -51,6 +51,8 @@ class Marshallable:
         else:
             self.buf = buffer
             self.mv = memoryview(self.buf)
+    def clear(self):
+        self.buf.clear()
 
     def pushBool(self, val):
         packed_value = struct.pack('?', val)  # 将布尔值打包成一个字节

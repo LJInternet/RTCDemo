@@ -305,23 +305,24 @@ class LJRTCEngine:
     #channels 频道号 uid 用户Id token 加入频道的token mode RTC的模式，0 是server 1是client
     def join_channel(self, channels, uid, token, mode):
         if self.mMediaEngine:
-            # self.uploadConfig.transferConfig.appID = 1
-            # self.uploadConfig.transferConfig.channelID = channels
-            # self.uploadConfig.transferConfig.userID = uid
-            # self.uploadConfig.transferConfig.token = token
-            # self.uploadConfig.transferConfig.transferMode = mode
-            # configStr, length = marshall_to_char_ptr(self.uploadConfig)
-            # media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.JOIN_CHANNEL, configStr, length)
-            c = RTCEngineBean.MIEUploadConfig()
-            config = RTCEngineBean.MIETransferConfig()
-            config.appID = 1
-            config.channelID = channels
-            config.userID = uid
-            config.token = token
-            config.transferMode = mode
-            c.transferConfig = config
-            configStr, length = marshall_to_char_ptr(c)
+            self.uploadConfig.transferConfig.appID = 1
+            self.uploadConfig.transferConfig.channelID = channels
+            self.uploadConfig.transferConfig.userID = uid
+            self.uploadConfig.transferConfig.token = token
+            self.uploadConfig.transferConfig.transferMode = mode
+            self.uploadConfig.clear()
+            configStr, length = marshall_to_char_ptr(self.uploadConfig)
             media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.JOIN_CHANNEL, configStr, length)
+            #c = RTCEngineBean.MIEUploadConfig()
+            #config = RTCEngineBean.MIETransferConfig()
+            #config.appID = 1
+            #config.channelID = channels
+            #config.userID = uid
+            #config.token = token
+            #config.transferMode = mode
+            #c.transferConfig = config
+            #configStr, length = marshall_to_char_ptr(c)
+            #media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.JOIN_CHANNEL, configStr, length)
         else:
             print("join_channel self.mMediaEngine is null")
 
@@ -333,6 +334,7 @@ class LJRTCEngine:
         self.uploadConfig.videoUploadConfig.realVideoBitrateInbps = biteRate
         self.uploadConfig.videoUploadConfig.fps = fps
         self.uploadConfig.videoUploadConfig.keyFrameInterval = 3
+        self.uploadConfig.clear()
         configStr, length = marshall_to_char_ptr(self.uploadConfig)
         media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.MIET_UPDATE_UPLOAD_CONFIG, configStr, length)
 
@@ -340,6 +342,7 @@ class LJRTCEngine:
         self.uploadConfig.audioUploadConfig.audioBitrateInbps = biteRate
         self.uploadConfig.audioUploadConfig.sampleRate = sample_rate
         self.uploadConfig.audioUploadConfig.channels = channels
+        self.uploadConfig.clear()
         configStr, length = marshall_to_char_ptr(self.uploadConfig)
         media_engine_send_event(self.mMediaEngine, MediaInvokeEvent.MediaInvokeEventType.MIET_UPDATE_UPLOAD_CONFIG, configStr, length) 
 
