@@ -62,7 +62,7 @@ def main():
     rtcEngine.update_audio_Config(48000, 1, 80000)
     rtcEngine.set_audio_play_event(event)
     #channels 频道号 uid 用户Id token 加入频道的token mode RTC的模式，0 是server 1是client
-    rtcEngine.join_channel("954523133", 31212121, "linjing@2023", 0)
+    rtcEngine.join_channel("954523133", 31212121, "token", 0)
 
     yuvFilePath = os.path.abspath('./windows/bin/win64/640X480.yuv')
     yuvFile = open(yuvFilePath, 'rb')
