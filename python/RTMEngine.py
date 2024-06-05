@@ -96,9 +96,9 @@ class IRTMEventHandler:
     def onLeaveChannelFail(self):
         print("onLeaveChannelFail")
     def onUserJoin(self, userId):
-        print(f"onUserJoin {userId}")
+        print("onUserJoin")
     def onUserLeave(self, userId):
-        print(f"onUserLeave {userId}")
+        print("onUserLeave")
 
 def rtm_event_callback(type, buf, size, result, context):
     #print(f"context {context} size {size} result {result}")

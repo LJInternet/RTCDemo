@@ -58,7 +58,9 @@ def main():
     event = RTCEngineBean.AudioPlayerEvent()
     event.callbackDecodeData = True
     event.directDecode = True
+    # 设置视频编码才是 640 宽 480 高 1000000 最大码率和目标码率 800000最小码率 30 编码帧率
     rtcEngine.update_video_config(640, 480, 1000000, 800000, 30)
+    # 设置音频编码参数 48000 采样率 1 声道数（单声道） 80000 （编码码率）
     rtcEngine.update_audio_Config(48000, 1, 80000)
     rtcEngine.set_audio_play_event(event)
     #channels 频道号 uid 用户Id token 加入频道的token mode RTC的模式，0 是server 1是client
@@ -83,12 +85,14 @@ def main():
             index = index + 1
             if index % 3 == 0:
                 if index % 6 == 0:
+                    #发送yuv数据到RTC中编码640 宽 480 高 0 旋转方向 0 时间戳 2 数据格式 2 是YUVI420
                     rtcEngine.push_raw_video_frame(yuvByteArray, 640, 480, 0, 0, 2)
                 else:
                     rtcEngine.push_raw_video_frame(yuvData, 640, 480, 0, 0, 2)
             chunk = pcm_file.read(sampleCount * 2)
             if not chunk:
                 break
+            # 发送音频数据 48000采样率 1 声道数（单声道） 2 位深（每个sample包含多少个byte例如：int16 则为2 int8 1 int32 4）
             rtcEngine.push_audio_pcm_frame(chunk, 48000, 1, 2)
             # if index % 2 == 0:
             #     pcm_bytearray = bytearray()
