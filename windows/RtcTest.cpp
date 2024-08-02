@@ -21,6 +21,7 @@
 #include "date_time.h"
 #include "system_util.h"
 #include "WavPCMHeader.h"
+#include <functional>
 //FILE* yuvFiles = nullptr;
 using namespace LJMediaLibrary;
 using namespace LJMediaLibrary::WAV;
@@ -30,6 +31,94 @@ static std::string channels = "954523112";
 static std::string token = "请替换为自己的 token";
 static uint64_t uid = LJ::DateTime::currentTimeMillis();
 static media_engine* mMediaEngine = nullptr;
+
+
+class RTMEngine {
+public:
+    RTMEngine(uint64_t appid, const char* token, bool isDebug) {
+        config_.appId = appid;
+        config_.isDebug = isDebug;
+        config_.token = token;
+        config_.dataWorkMode = 0;
+        config_.role = 0;
+        config_.mode = 0;
+        rtmEngine_ = rudp_engine_create(&config_);
+    }
+
+
+    ~RTMEngine() {
+        if (rtmEngine_) {
+            rudp_engine_leave_channel(rtmEngine_);
+            rudp_engine_destroy(rtmEngine_);
+            rtmEngine_ = nullptr;
+        }
+    }
+
+    static void onMsgCallback(const char* msg, uint32_t len, uint64_t uid, void* content) {
+        printf("onMsgCallback %s \n", std::string(msg, len));
+        if (content == nullptr) {
+            return;
+        }
+        RTMEngine* engine = (RTMEngine*)content;
+        engine->callbackMsg(msg, len, uid);
+
+    }
+
+    static void onEvnCallback(int type, const char* msg, uint32_t len, int result, void* content) {
+        printf("onEvnCallback %d %d \n", type, result);
+        if (content == nullptr) {
+            return;
+        }
+        RTMEngine* engine = (RTMEngine*)content;
+        if (type == 3) {
+            engine->callbackLinkStatus(result);
+        }
+    }
+
+    void joinChannel(uint64_t uid, const char* channelId) {
+        if (rtmEngine_) {
+            rudp_engine_join_channel(rtmEngine_, uid, channelId);
+        }
+    }
+
+    void leaveChannel() {
+        if (rtmEngine_) {
+            rudp_engine_leave_channel(rtmEngine_);
+        }
+    }
+
+    void registerMsgCallback(std::function<void(const char* msg, uint32_t len, uint64_t uid)> callback) {
+        msgCallback_ = callback;
+        if (rtmEngine_) {
+            rudp_engine_register_msg_callback(rtmEngine_, onMsgCallback, this);
+        }
+    }
+
+    void registerLinkStatusCallback(std::function<void(int status)> callback) {
+        statusCallback_ = callback;
+        if (rtmEngine_) {
+            rudp_engine_register_event_callback(rtmEngine_, onEvnCallback, this);
+        }
+    }
+
+private:
+    RUDPEngine* rtmEngine_;
+    RUDPConfig config_;
+    std::function<void(const char* msg, uint32_t len, uint64_t uid)> msgCallback_;
+    std::function<void(int status)> statusCallback_;
+
+    void callbackMsg(const char* msg, uint32_t len, uint64_t uid) {
+        if (msgCallback_) {
+            msgCallback_(msg, len, uid);
+        }
+    }
+
+    void callbackLinkStatus(int status) {
+        if (statusCallback_) {
+            statusCallback_(status);
+        }
+    }
+};
 
 static FILE* captureYuvFile = nullptr;
 static void on_capture_video(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, void* context) {

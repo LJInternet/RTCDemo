@@ -94,6 +94,10 @@ media_engine_push_audio = rtcEngineLib.lib().media_engine_push_audio
 media_engine_push_audio.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_int8), ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int]
 media_engine_push_audio.restype = None
 
+media_engine_push_audio_with_timestamp = rtcEngineLib.lib().media_engine_push_audio_with_timestamp
+media_engine_push_audio_with_timestamp.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_int8), ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_uint64]
+media_engine_push_audio_with_timestamp.restype = None
+
 # 转换函数指针类型
 #bool (*audio_data_cb)(void *audioData, int size, uint64_t pts,int sampleRate, int channelCont, void* context);
 audio_data_cb = ctypes.CFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_uint64, ctypes.c_int, ctypes.c_int, ctypes.c_void_p)
@@ -111,6 +115,10 @@ media_engine_send_remote_bm.restype = None
 media_engine_request_remote_I_frame = rtcEngineLib.lib().media_engine_request_remote_I_frame
 media_engine_request_remote_I_frame.argtypes = [ctypes.c_void_p]
 media_engine_request_remote_I_frame.restype = None
+
+request_local_I_Frame = rtcEngineLib.lib().request_local_I_Frame
+request_local_I_Frame.argtypes = [ctypes.c_void_p]
+request_local_I_Frame.restype = None
 
 # 定义回调函数类型
 EventCallback = ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.POINTER(ctypes.c_char), ctypes.c_int, ctypes.c_void_p)
@@ -241,7 +249,13 @@ class LJRTCEngine:
         #请求远端发送一个关键帧
     def request_remote_I_frame(self):
         if self.mMediaEngine:
-            media_engine_request_remote_I_frame()
+            media_engine_request_remote_I_frame(self.mMediaEngine)
+        else:
+            print("request_remote_I_frame self.mMediaEngine is null")
+
+    def request_local_I_frame(self):
+        if self.mMediaEngine:
+            request_local_I_Frame(self.mMediaEngine)
         else:
             print("request_remote_I_frame self.mMediaEngine is null")
 
@@ -264,6 +278,20 @@ class LJRTCEngine:
             elif isinstance(audioByteArray, bytearray):
                 audioPtr = (ctypes.c_int8 * length).from_buffer(audioByteArray)
                 media_engine_push_audio(self.mMediaEngine, audioPtr, frame_num, sample_rate, channel_count, bytePerSample)
+        else:
+            print("push_audio_pcm_frame self.mMediaEngine is null")
+
+    def push_audio_pcm_frame_with_timestamp(self, audioByteArray, sample_rate, channel_count, bytePerSample, timestamp):
+        if self.mMediaEngine:
+            length = len(audioByteArray)
+            frame_num = int(length / (channel_count * bytePerSample))
+            timestamp_ctypes = ctypes.c_uint64(timestamp)
+            if isinstance(audioByteArray, bytes):
+                int_ptr = ctypes.cast(audioByteArray, ctypes.POINTER(ctypes.c_int8))
+                media_engine_push_audio_with_timestamp(self.mMediaEngine, int_ptr, frame_num, sample_rate, channel_count, bytePerSample, timestamp_ctypes)
+            elif isinstance(audioByteArray, bytearray):
+                audioPtr = (ctypes.c_int8 * length).from_buffer(audioByteArray)
+                media_engine_push_audio_with_timestamp(self.mMediaEngine, audioPtr, frame_num, sample_rate, channel_count, bytePerSample, timestamp_ctypes)
         else:
             print("push_audio_pcm_frame self.mMediaEngine is null")
 
