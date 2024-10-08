@@ -105,7 +105,11 @@ MEDIATRANSFER_EXTERN struct media_engine;
 
     MEDIATRANSFER_EXTERN typedef void (*event_cb)(int type, const char *buf, int size, void* context);
 
-    MEDIATRANSFER_EXTERN typedef void (*video_delay_callback)(int totalDelay, int decodeDelay, int encodeDelay, int reciveDelay, int transDelay, int fps, void * context);
+    /**
+     * @brief Callback for receiving video delay information.
+     */
+    MEDIATRANSFER_EXTERN typedef void (*video_delay_callback)(int totalDelay, int decodeDelay, int encodeDelay,
+                                                          int reciveDelay, int transDelay, int cacheCount, int fps, void * context);
 
     /**
      * 设置xmtp是正式环境还是测试环境

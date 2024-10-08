@@ -6,7 +6,8 @@
 #define LJSDK_WAVPCMHEADER_H
 
 #include <stdint.h>
-
+#include <stdio.h>
+#include<string>
 namespace LJMediaLibrary {
     namespace WAV {
         /**
@@ -76,6 +77,7 @@ namespace LJMediaLibrary {
         //
         class WavPCMHeader {
         public:
+            WavPCMHeader() {};
             WavPCMHeader(uint16_t channels, uint32_t sampleRate, uint16_t bitsPerSample, uint32_t dataSize) {
                 m_riff.fileLength = 36 + dataSize;
                 m_format.channels = channels;
@@ -92,6 +94,20 @@ namespace LJMediaLibrary {
             RIFF m_riff;
             Format m_format;
             DataChunk m_dataChunk;
+        };
+
+        class WavPCMFileHelper {
+        public:
+            WavPCMFileHelper();
+            ~WavPCMFileHelper();
+
+            void createWavFile(std::string& filename, uint16_t channels, uint32_t sampleRate, uint16_t bitsPerSample);
+            void writeWavFile(uint8_t* data, uint32_t dataSize);
+            void closeWavFile();
+        private:
+            Format m_format;
+            FILE* m_file = nullptr;
+            uint32_t m_totalSize = 0;
         };
     }
 }

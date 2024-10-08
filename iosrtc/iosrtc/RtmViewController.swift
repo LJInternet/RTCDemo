@@ -95,7 +95,7 @@ class RTMViewController : UIViewController, IRtmMsgDelegate, IRtmEventDelegate {
         config.role = push ? RUDPMode.PUSH.rawValue : RUDPMode.PULL.rawValue
         config.token = GlobalConstants.token
         rtmEngine = RTMEngine(config: config)
-		rtmEngine?.setDebugEvn(isTestEvn: true)
+        rtmEngine?.setDebugEvn(isTestEvn: true)
         joined = true
 
         rtmEngine?.eventDelegate = RtmEventDelegate()

@@ -2,7 +2,7 @@
 // Created by Administrator on 2023/6/7.
 //
 
-#ifndef LJSDK_LJ_RTMP_COMMON_H
+#ifndef LJSDK_TRANSFER_COMMON_H
 #define LJSDK_TRANSFER_COMMON_H
 
 #ifdef _WIN32

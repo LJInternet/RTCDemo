@@ -25,6 +25,7 @@ namespace LJMediaLibrary {
     class VideoEncodeEngine;
     class AudioEncodeEngine;
     class MultiChannelMgr;
+    class FrameRateController;
 
     /**
      * @brief Enumerates the transfer mode.
@@ -42,7 +43,7 @@ namespace LJMediaLibrary {
     public:
         /**
          * @brief Constructor for AVTransMgr.
-         * 
+         *
          * @param videoProcessor Pointer to the video processor.
          * @param audioProcessor Pointer to the audio processor.
          */
@@ -55,7 +56,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Starts the media transfer.
-         * 
+         *
          * @param config Configuration for the media transfer.
          * @return True if the operation is successful, false otherwise.
          */
@@ -63,14 +64,14 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Stops the media transfer.
-         * 
+         *
          * @return True if the operation is successful, false otherwise.
          */
         bool Stop();
 
         /**
          * @brief Pushes YUV video data for processing.
-         * 
+         *
          * @param buf Buffer containing YUV video data.
          * @param size Size of the YUV video data buffer.
          * @param width Width of the video frame.
@@ -84,7 +85,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Pushes YUV video data for processing with additional message.
-         * 
+         *
          * @param buf Buffer containing YUV video data.
          * @param size Size of the YUV video data buffer.
          * @param msg Additional message to be processed.
@@ -96,7 +97,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Pushes PCM audio data for processing.
-         * 
+         *
          * @param pcm Pointer to the PCM audio data.
          * @param frame_num Number of audio frames.
          * @param sampleRate Sample rate of the audio data.
@@ -104,11 +105,11 @@ namespace LJMediaLibrary {
          * @param bytePerSample Number of bytes per audio sample.
          * @return Result code indicating success or failure.
          */
-        int pushPCMData(const int8_t* pcm, int frame_num, int sampleRate, int channelCount, int bytePerSample);
+        int pushPCMData(const int8_t *pcm, int frame_num, int sampleRate, int channelCount, int bytePerSample, uint64_t timestamp);
 
         /**
          * @brief Pushes encoded video data for processing.
-         * 
+         *
          * @param encodedVideoData Encoded video data to be processed.
          * @return Result code indicating success or failure.
          */
@@ -116,7 +117,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Pushes encoded H.264 video data for processing.
-         * 
+         *
          * @param buf Buffer containing encoded H.264 video data.
          * @param len Length of the encoded H.264 video data buffer.
          * @return Result code indicating success or failure.
@@ -125,7 +126,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Handles events related to software decoding.
-         * 
+         *
          * @param eventType Type of the decode event.
          * @param dataStr Data associated with the decode event.
          * @param pJobject Pointer to the Java object.
@@ -135,7 +136,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Pushes encoded audio data for processing.
-         * 
+         *
          * @param data Encoded audio data to be processed.
          * @return Result code indicating success or failure.
          */
@@ -143,35 +144,35 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Sets the upload configuration.
-         * 
+         *
          * @param config Upload configuration to be set.
          */
         void setUploadConfig(const MIEUploadConfig& config);
 
         /**
          * @brief Mutes media event.
-         * 
+         *
          * @param event Media event to be muted.
          */
         void muteMediaEvent(const MIEMuteMediaEvent& event);
 
         /**
          * @brief Handles WebSocket messages.
-         * 
+         *
          * @param message WebSocket message to be handled.
          */
         void handleWebMessage(const WebSocketMessage& message);
 
         /**
          * @brief Handles audio player events.
-         * 
+         *
          * @param event Audio player event to be handled.
          */
         void handleAudioPlayerEvent(const AudioPlayerEvent& event) override;
 
         /**
          * @brief Handles audio media event.
-         * 
+         *
          * @param event_type Type of the audio media event.
          * @param strData Data associated with the audio media event.
          * @param len Length of the data.
@@ -181,14 +182,14 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Updates the audio configuration.
-         * 
+         *
          * @param config New audio configuration to be applied.
          */
         void updateAudioConfig(AudioConfig config) override;
 
         /**
          * @brief Starts video capture.
-         * 
+         *
          * @param deviceCode Code of the video capture device.
          * @param width Width of the video frame.
          * @param height Height of the video frame.
@@ -198,7 +199,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief Starts video capture with configuration.
-         * 
+         *
          * @param deviceCode Code of the video capture device.
          * @param captureConfig Configuration for video capture.
          * @param length Length of the configuration data.
@@ -211,21 +212,21 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 启用保存编码的H.264数据。
-         * 
+         *
          * @param saveH264 是否保存H.264数据。
          */
         void enableSaveEncodeH264(bool saveH264);
 
         /**
          * @brief 保存H.264文件。
-         * 
+         *
          * @param data 指向MIEPushEncodedVideoData的指针。
          */
         void saveH264File(MIEPushEncodedVideoData* data);
 
         /**
          * @brief 处理音频媒体获取事件。
-         * 
+         *
          * @param eventType 事件类型。
          * @param mediaData 媒体数据。
          * @param len 数据长度。
@@ -236,7 +237,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 处理解码统计信息。
-         * 
+         *
          * @param delayData 延迟数据映射。
          */
         void handlerDecodeStatistics(std::map<uint16_t, uint16_t> delayData);
@@ -254,7 +255,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 初始化音频JNIEnv。
-         * 
+         *
          * @param context 上下文。
          * @param enable 是否启用。
          */
@@ -263,7 +264,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 发送视频纹理。
-         * 
+         *
          * @param textureId 纹理ID。
          * @param width 视频宽度。
          * @param height 视频高度。
@@ -275,14 +276,14 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 请求关键帧。
-         * 
+         *
          * @param reason 请求关键帧的原因。
          */
         void requestKeyFrame(int reason) override;
 
         /**
          * @brief 发送远端的可用单宽。
-         * 
+         *
          * @param bm 可用单宽。
          */
         void sendRemoteBm(int bm);
@@ -294,14 +295,14 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 请求远程关键帧（扩展）。
-         * 
+         *
          * @param uid 用户ID。
          */
         void requestRemoteKeyFrameEx(uint64_t uid);
 
         /**
          * @brief 推送音频帧（扩展）。
-         * 
+         *
          * @param pcm PCM音频数据。
          * @param frame_num 帧数。
          * @param sampleRate 采样率。
@@ -314,7 +315,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 处理多通道事件。
-         * 
+         *
          * @param event_type 事件类型。
          * @param mediaData 媒体数据。
          * @param len 数据长度。
@@ -324,7 +325,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 订阅音视频流。
-         * 
+         *
          * @param channelId 频道ID。
          * @param localUid 本地用户ID。
          * @param subscriberUid 订阅者ID。
@@ -334,7 +335,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 取消订阅音视频流。
-         * 
+         *
          * @param channelId 频道ID。
          * @param localUid 本地用户ID。
          * @param subscriberUid 订阅者ID。
@@ -344,7 +345,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 推送视频帧（扩展）。
-         * 
+         *
          * @param buf 视频帧缓冲区。
          * @param size 缓冲区大小。
          * @param msg 附加消息。
@@ -357,7 +358,7 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 推送编码数据。
-         * 
+         *
          * @param width 视频宽度。
          * @param height 视频高度。
          * @param frameType 帧类型。
@@ -372,10 +373,12 @@ namespace LJMediaLibrary {
 
         /**
          * @brief 推送EVD到多通道。
-         * 
+         *
          * @param data MIEPushEncodedVideoData数据。
          */
         void pushEVD2MultiChannel(MIEPushEncodedVideoData& data);
+
+        void cacheDecodeStatistic(std::map<uint16_t, uint16_t> statisticMap);
     private:
 
         MIEUploadConfig* m_uploadConfig = nullptr;
@@ -395,9 +398,11 @@ namespace LJMediaLibrary {
         std::atomic<bool> m_connected = { false };
         std::atomic<bool> m_setRudpConnected = { false };
 
-        int m_lastTargetFrameRate = 0;
+        FrameRateController* m_frameRateController = nullptr;
 
         IMp4Muxer *m_mp4Muxer = nullptr;
+
+        std::atomic<bool> m_started = { false };
 
         void adjustVideoBitrate(int bitrate) override;
         void adjustAudioBitrate(int bitrate) override;
@@ -407,6 +412,7 @@ namespace LJMediaLibrary {
         void onCommonStatistics(CommonStatistic statistic) override;
 
         void onNewFrame(unsigned char* data, int len, int width, int height, int rotation, uint64_t timeStamp, int pixel_fmt) override;
+        void startVideoEncoderIfNeed();
     };
 }
 

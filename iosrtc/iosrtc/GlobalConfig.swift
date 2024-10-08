@@ -12,5 +12,5 @@ struct GlobalConstants {
     static var appId : UInt64 = 1
     static var defaultChannel : String = "954523111"
     static var defaultRTMMultiChannel : String = "121212"
-    static var token = "token"
+    static var token = "xxxxx"
 }

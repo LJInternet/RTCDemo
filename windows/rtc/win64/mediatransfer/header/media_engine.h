@@ -159,7 +159,7 @@ extern "C" {
      * @brief Callback for receiving video delay information.
      */
     MEDIATRANSFER_EXTERN typedef void (*video_delay_callback)(int totalDelay, int decodeDelay, int encodeDelay,
-                                                              int reciveDelay, int transDelay, int fps, void * context);
+                                                              int reciveDelay, int transDelay, int cacheCount, int fps, void * context);
 
     /**
      * @brief Set whether to use the debug environment for XMTP.
@@ -190,6 +190,9 @@ extern "C" {
      */
     MEDIATRANSFER_EXTERN void media_engine_push_video(struct media_engine* engine, const char *buf,
                                                       int size, const char *msg, int msgSize, int pixel_fmt);
+
+    MEDIATRANSFER_EXTERN void media_engine_push_raw_video(struct media_engine* engine, const char *buf,
+            int size, int width, int height, int rotation, uint64_t timeStamp, int pixel_fmt);
 
     /**
      * @brief 获取相机列表
@@ -245,6 +248,8 @@ extern "C" {
      */
     MEDIATRANSFER_EXTERN void media_engine_push_audio(struct media_engine* engine, const int8_t *pcm,
                                                       int frame_num, int sampleRate, int channelCount, int bytePerSample);
+
+    MEDIATRANSFER_EXTERN void media_engine_push_audio_with_timestamp(struct media_engine* engine, const int8_t *pcm, int frame_num, int sampleRate, int channelCount, int bytePerSample, uint64_t timestamp);
 
     /**
      * @brief 订阅视频解码数据
@@ -484,6 +489,10 @@ extern "C" {
      * @param isLowLatency 是否低延迟
      */
     MEDIATRANSFER_EXTERN void media_engine_set_decode_config(struct media_engine* engine, int decodeType, int isLowLatency);
+
+    MEDIATRANSFER_EXTERN uint64_t media_engine_get_media_base_time();
+
+    MEDIATRANSFER_EXTERN void request_local_I_Frame(struct media_engine* engine);
 #ifdef __cplusplus
 }
 #endif

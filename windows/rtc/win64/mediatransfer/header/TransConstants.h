@@ -30,6 +30,7 @@ namespace LJMediaLibrary {
         CB_LEAVE_CHANNEL = 11, ///**< 离开频道结果回调 */
         CB_LINK_STATUS = 12, ///**< RUDP连接状态 */
         CB_TRANS_STOP = 13, ///**< 调用了C++层的LeaveChannel */
+        CB_DECODE_VIDEO_LAG = 14, ///**< 解码出现在过去一分钟内出现了卡顿 */
         MUTI_CHANNEL_REMOTE_JOIN = 1000, ///**< 多人RTC远端有人加入 */
         MUTI_CHANNEL_REMOTE_LEAVE = 1001, ///**< 多人RTC远端有人退出 */
     };
@@ -120,6 +121,10 @@ namespace LJMediaLibrary {
         */
         KEY_START_ENCODE_TIME = 16,
 
+        /**
+        * @brief 解码缓存个数。
+        */
+        KEY_VIDEO_DECODE_CACHE_COUNT = 17,
         /**
         * @brief 解码切换线程队列，开始回调和结束回调的时间。
         */
@@ -227,8 +232,8 @@ namespace LJMediaLibrary {
      */
     struct MIEPushEncodedVideoData : ljtransfer::mediaSox::Marshallable {
         uint32_t iFrameType;
-        uint32_t iEncodeType; 
-        uint32_t iPts; 
+        uint32_t iEncodeType;
+        uint32_t iPts;
         uint32_t iDts;
         uint64_t iStreamId;
         uint32_t width;
@@ -236,11 +241,11 @@ namespace LJMediaLibrary {
         std::string iData;
         std::string iMetaDta;
         std::string iExtraData;
-        std::map<uint64_t, uint64_t> iTsInfos; 
+        std::map<uint64_t, uint64_t> iTsInfos;
 
         MIEPushEncodedVideoData()
-            : iFrameType(0), iEncodeType(0), iPts(0), iDts(0), iStreamId(0), width(0),
-            height(0) {
+                : iFrameType(0), iEncodeType(0), iPts(0), iDts(0), iStreamId(0), width(0),
+                  height(0) {
         }
 
         /**
@@ -279,7 +284,7 @@ namespace LJMediaLibrary {
 //        std::string iData;
 
         MIEPushVideoRawData()
-            : width(0), height(0) {
+                : width(0), height(0) {
         }
 
         /**
@@ -325,22 +330,22 @@ namespace LJMediaLibrary {
         uint32_t corpType; ///**< 裁剪类型。*/
 
         CaptureVideoFrame() : type(0),
-            format(0),
-            stride(0),
-            width(0),
-            height(0),
-            rotation(0),
-            eglType(0),
-            textureId(0),
-            timestamp(0),
-            mirror(0),
-            corpLeft(0),
-            cropRight(0),
-            cropTop(0),
-            cropBottom(0),
-            ProgramType(0),
-            corpType(0),
-            metadata_size(0) {
+                              format(0),
+                              stride(0),
+                              width(0),
+                              height(0),
+                              rotation(0),
+                              eglType(0),
+                              textureId(0),
+                              timestamp(0),
+                              mirror(0),
+                              corpLeft(0),
+                              cropRight(0),
+                              cropTop(0),
+                              cropBottom(0),
+                              ProgramType(0),
+                              corpType(0),
+                              metadata_size(0) {
 
         }
 
@@ -383,8 +388,8 @@ namespace LJMediaLibrary {
         std::map<uint64_t, uint64_t> delayData; ///**< 延迟数据映射。*/
 
         VideoDecodedData()
-            : width(0), height(0), widthY(0), heightY(0), widthUV(0), heightUV(0), offsetY(0),
-            offsetU(0), offsetV(0), frameId(0), len(0) {
+                : width(0), height(0), widthY(0), heightY(0), widthUV(0), heightUV(0), offsetY(0),
+                  offsetU(0), offsetV(0), frameId(0), len(0) {
             for (int i = 0; i < 8; i++) {
                 data[i] = NULL;
             }
@@ -435,7 +440,7 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         MIEVideoCaptureConfig()
-            : width(0), height(0), fps(0) {
+                : width(0), height(0), fps(0) {
         }
 
         /**
@@ -469,7 +474,7 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         CacheVideoDecodedData() :
-            mDelayList(nullptr), extraData(nullptr), iExtraDataSize(0) {
+                mDelayList(nullptr), extraData(nullptr), iExtraDataSize(0) {
         }
     };
 
@@ -486,7 +491,7 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         MIEPushEncodedAudioData()
-            : iPts(0), isHead(0), audioType(0) {
+                : iPts(0), isHead(0), audioType(0) {
         }
 
         /**
@@ -564,8 +569,8 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         VideoHead()
-            : iFrameType(0), iEncodeType(0), iPts(0), iDts(0), iFrameId(0), iMetaDataLen(0),
-            iExtraDataLen(0), width(720), height(1280) {
+                : iFrameType(0), iEncodeType(0), iPts(0), iDts(0), iFrameId(0), iMetaDataLen(0),
+                  iExtraDataLen(0), width(720), height(1280) {
         }
 
         /**
@@ -615,11 +620,11 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         UDPConfig()
-            : remoteIP("61.155.136.210"),
-            relayId(122222),
-            remotePort(30001),
-            remoteSessionId(10089),
-            netType(2) {
+                : remoteIP("61.155.136.210"),
+                  relayId(122222),
+                  remotePort(30001),
+                  remoteSessionId(10089),
+                  netType(2) {
         }
 
         /**
@@ -656,13 +661,13 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         MIETransferConfig()
-            : transferMode(1),
-            p2pSignalServer("61.155.136.209:9988"),
-            appID(0),
-            userID(0),
-            channelID(""),
-            token(""),
-            localIp(0) {
+                : transferMode(1),
+                  p2pSignalServer("61.155.136.209:9988"),
+                  appID(0),
+                  userID(0),
+                  channelID(""),
+                  token(""),
+                  localIp(0) {
         }
 
         /**
@@ -697,7 +702,7 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         MIEMuteMediaEvent()
-            : mediaType(0), mute(false) {
+                : mediaType(0), mute(false) {
         }
 
         /**
@@ -731,7 +736,7 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         MIEAudioUploadConfig()
-            : sampleRate(0), channels(0), bitsPerSample(0), audioBitrateInbps(0), audioType(0) {
+                : sampleRate(0), channels(0), bitsPerSample(0), audioBitrateInbps(0), audioType(0) {
         }
 
         /**
@@ -770,8 +775,8 @@ namespace LJMediaLibrary {
          * @brief 默认构造函数。
          */
         MIEVideoUploadConfig()
-            : encodeWidth(0), encodeHeight(0), minVideoBitrateInbps(0), maxVideoBitrateInbps(0),
-            realVideoBitrateInbps(0), codecType(0), fps(0), mirror(0), keyFrameInterval(3), mode(2) {
+                : encodeWidth(0), encodeHeight(0), minVideoBitrateInbps(0), maxVideoBitrateInbps(0),
+                  realVideoBitrateInbps(0), codecType(0), fps(0), mirror(0), keyFrameInterval(3), mode(2) {
 
         }
 
@@ -781,7 +786,7 @@ namespace LJMediaLibrary {
          */
         void marshal(ljtransfer::mediaSox::Pack& pk) const {
             pk << encodeWidth << encodeHeight << minVideoBitrateInbps << maxVideoBitrateInbps
-                << realVideoBitrateInbps << codecType << fps << mirror << keyFrameInterval << mode;
+               << realVideoBitrateInbps << codecType << fps << mirror << keyFrameInterval << mode;
         }
 
         /**
@@ -790,7 +795,7 @@ namespace LJMediaLibrary {
          */
         void unmarshal(const ljtransfer::mediaSox::Unpack& up) {
             up >> encodeWidth >> encodeHeight >> minVideoBitrateInbps >> maxVideoBitrateInbps
-                >> realVideoBitrateInbps >> codecType >> fps >> mirror >> keyFrameInterval >> mode;
+               >> realVideoBitrateInbps >> codecType >> fps >> mirror >> keyFrameInterval >> mode;
         }
 
         /**
@@ -800,10 +805,10 @@ namespace LJMediaLibrary {
         std::string toString() {
             std::stringstream stream;
             stream << "VideoUploadConfig encodeWidth " << encodeWidth << " encodeHeight " << encodeHeight
-                << " minVideoBitrateInbps " << minVideoBitrateInbps << " maxVideoBitrateInbps " << maxVideoBitrateInbps
-                << " realVideoBitrateInbps " << realVideoBitrateInbps << " codecType " << codecType
-                << " fps " << fps << " mirror " << mirror << " keyFrameInterval " << keyFrameInterval << " mode " << mode
-                << std::endl;
+                   << " minVideoBitrateInbps " << minVideoBitrateInbps << " maxVideoBitrateInbps " << maxVideoBitrateInbps
+                   << " realVideoBitrateInbps " << realVideoBitrateInbps << " codecType " << codecType
+                   << " fps " << fps << " mirror " << mirror << " keyFrameInterval " << keyFrameInterval << " mode " << mode
+                   << std::endl;
             return stream.str();
         }
     };
@@ -812,14 +817,14 @@ namespace LJMediaLibrary {
      * @brief 用于配置RTC引擎的结构体。
      */
     struct RTCEngineConfig
-        : public ljtransfer::mediaSox::Marshallable {
+            : public ljtransfer::mediaSox::Marshallable {
         bool enableLog; ///**< 是否启用日志。*/
 
         /**
          * @brief 默认构造函数。
          */
         RTCEngineConfig()
-            : enableLog(true) {
+                : enableLog(true) {
         }
 
         /**
@@ -882,12 +887,12 @@ namespace LJMediaLibrary {
 
         void marshal(ljtransfer::mediaSox::Pack& pk) const {
             pk << enableAudio << enableVideo << audioUploadConfig << videoUploadConfig
-                << transferConfig;
+               << transferConfig;
         }
 
         void unmarshal(const ljtransfer::mediaSox::Unpack& up) {
             up >> enableAudio >> enableVideo >> audioUploadConfig >> videoUploadConfig
-                >> transferConfig;
+               >> transferConfig;
         }
 
     };
@@ -941,7 +946,7 @@ namespace LJMediaLibrary {
         }
     };
 
- 
+
 
     /**
      * @brief MIE软件解码器事件结构体，用于传输软件解码器相关的事件信息。
@@ -950,7 +955,7 @@ namespace LJMediaLibrary {
         uint32_t evtType; ///**< 事件类型。*/
         uint32_t subEvtType; ///**< 子事件类型。*/
         MIESoftDecodeEvent()
-            : evtType(100), subEvtType(START_SOFT_DECODE_EVENT) {
+                : evtType(100), subEvtType(START_SOFT_DECODE_EVENT) {
 
         }
 
@@ -973,8 +978,8 @@ namespace LJMediaLibrary {
         bool remove; ///**< 是否移除表面。*/
 
         MIESurfaceChange()
-            : evtType(100), subEvtType(ON_SOFT_DECODE_SURFACE_CHANGE), width(16), height(16),
-            remove(false) {
+                : evtType(100), subEvtType(ON_SOFT_DECODE_SURFACE_CHANGE), width(16), height(16),
+                  remove(false) {
 
         }
 
@@ -1634,6 +1639,20 @@ namespace LJMediaLibrary {
          */
         virtual void unmarshal(const ljtransfer::mediaSox::Unpack& pak) {
             pak >> enable;
+        }
+    };
+
+    /**
+     * @brief 视频硬解码信息
+     */
+    struct DecodeStatisticInfo : public ljtransfer::mediaSox::Marshallable {
+        std::map<uint16_t, uint16_t> info;
+        void marshal(ljtransfer::mediaSox::Pack& pak) const {
+            marshal_container(pak, info);
+        }
+
+        void unmarshal(const ljtransfer::mediaSox::Unpack& pak) {
+            unmarshal_container(pak, inserter(info, info.begin()));
         }
     };
 }

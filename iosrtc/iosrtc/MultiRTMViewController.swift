@@ -114,7 +114,7 @@ class MultiRTMViewController : UIViewController, IRtmMsgDelegate,IRtmExEventDele
         config.isDebug = 1
         config.token = GlobalConstants.token
         rtmEngine = RTMEngineEx(config: config)
-		rtmEngine?.setDebugEvn(isTestEvn: true)
+        rtmEngine?.setDebugEvn(isTestEvn: true)
         joined = true
 
         rtmEngine?.eventDelegate = self

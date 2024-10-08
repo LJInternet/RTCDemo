@@ -664,6 +664,12 @@ SWIFT_CLASS("_TtC6RtcSDK21LJChannelEventHandler")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+typedef SWIFT_ENUM(int32_t, LJOrientationMode, closed) {
+  LJOrientationModeAdaptive = 0,
+  LJOrientationModeLandscape = 1,
+  LJOrientationModePortrait = 2,
+};
+
 @class LJVideoCapture;
 @class NSCoder;
 
@@ -696,6 +702,7 @@ SWIFT_CLASS("_TtC6RtcSDK15LJRtcConnection")
 @end
 
 @class RtcEngineConfig;
+@protocol RTCEventHandler;
 enum RTCWorkMode : int32_t;
 @class VideoEncoderConfiguration;
 
@@ -703,6 +710,7 @@ SWIFT_CLASS("_TtC6RtcSDK11LJRtcEngine")
 @interface LJRtcEngine : NSObject
 + (LJRtcEngine * _Nonnull)sharedEngineWithC:(RtcEngineConfig * _Nonnull)c SWIFT_WARN_UNUSED_RESULT;
 + (void)destroy;
+- (void)setRTCEventHandlerWithHandler:(id <RTCEventHandler> _Nonnull)handler;
 - (void)setWorkModeWithMode:(enum RTCWorkMode)mode;
 - (void)setVideoEncoderConfigurationWithConfig:(VideoEncoderConfiguration * _Nonnull)config;
 - (void)enableVideo;
@@ -750,6 +758,16 @@ SWIFT_CLASS("_TtC6RtcSDK14LJVideoCapture")
 - (void)captureOutput:(AVCaptureOutput * _Nonnull)captureOutput didOutputSampleBuffer:(CMSampleBufferRef _Nonnull)sampleBuffer fromConnection:(AVCaptureConnection * _Nonnull)connection;
 @end
 
+typedef SWIFT_ENUM(int32_t, LJVideoCodecType, closed) {
+  LJVideoCodecTypeH264 = 1,
+};
+
+typedef SWIFT_ENUM(int32_t, LJVideoMirrorMode, closed) {
+  LJVideoMirrorModeAuto = 0,
+  LJVideoMirrorModeEnable = 1,
+  LJVideoMirrorModeDisable = 2,
+};
+
 
 SWIFT_CLASS("_TtC6RtcSDK15LinkStatusEvent")
 @interface LinkStatusEvent : Marshallable
@@ -758,6 +776,14 @@ SWIFT_CLASS("_TtC6RtcSDK15LinkStatusEvent")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+typedef SWIFT_ENUM(int32_t, LogLevel, closed) {
+  LogLevelLOG_CLOSE = -1,
+  LogLevelLOG_ERROR = 0,
+  LogLevelLOG_WARN = 1,
+  LogLevelLOG_INFO = 2,
+  LogLevelLOG_DEBUG = 3,
+};
+
 
 SWIFT_CLASS("_TtC6RtcSDK18MIESoftDecodeEvent")
 @interface MIESoftDecodeEvent : Marshallable
@@ -765,6 +791,64 @@ SWIFT_CLASS("_TtC6RtcSDK18MIESoftDecodeEvent")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
+typedef SWIFT_ENUM(int32_t, MediaInvokeEventType, closed) {
+  MediaInvokeEventTypeMIET_INVALID = 0,
+  MediaInvokeEventTypeMIET_CREATE = 1,
+  MediaInvokeEventTypeMIET_RELEASE = 2,
+  MediaInvokeEventTypeMIET_WEB_MSG_EVENT = 10,
+  MediaInvokeEventTypeAUDIO_PLAYER_EVENT = 11,
+  MediaInvokeEventTypeMIET_MUTE_MEDIA_EVENT = 80,
+  MediaInvokeEventTypeMIET_UPDATE_UPLOAD_CONFIG = 90,
+  MediaInvokeEventTypeMIET_SOFT_DECODE = 100,
+  MediaInvokeEventTypeMIET_SOFT_DECODE_SURFACE = 101,
+  MediaInvokeEventTypeSET_CLIENT_ROLE = 102,
+  MediaInvokeEventTypeJOIN_CHANNEL = 103,
+  MediaInvokeEventTypeLEAVE_CHANNEL = 104,
+  MediaInvokeEventTypeAUDIO_CREATE = 105,
+  MediaInvokeEventTypeAUDIO_DESTROY = 106,
+  MediaInvokeEventTypeSUBSCRIBE_CAPTURE_AUDIO = 107,
+  MediaInvokeEventTypeJOIN_CHANNEL_EX = 200,
+  MediaInvokeEventTypeLEAVE_CHANNEL_EX = 201,
+  MediaInvokeEventTypeMUTE_LOCAL_VIDEO_STREAM_EX = 202,
+  MediaInvokeEventTypeMUTE_LOCAL_AUDIO_STREAM_EX = 203,
+  MediaInvokeEventTypeMUTE_ALL_REMOTE_VIDEO_STREAM_EX = 204,
+  MediaInvokeEventTypeMUTE_ALL_REMOTE_AUDIO_STREAM_EX = 205,
+  MediaInvokeEventTypeSUBSCRIBE_AUDIO_STREAM_EX = 206,
+  MediaInvokeEventTypeUNSUBSCRIBE_AUDIO_STREAM_EX = 207,
+  MediaInvokeEventTypeSUBSCRIBE_VIDEO_STREAM_EX = 208,
+  MediaInvokeEventTypeUNSUBSCRIBE_VIDEO_STREAM_EX = 209,
+  MediaInvokeEventTypeMULTI_CHANNEL_EVENT_END = 299,
+  MediaInvokeEventTypeAUDIO_DEFAULT_EVENT = 1000,
+  MediaInvokeEventTypeAUDIO_CAPTURE_EVENT = 1001,
+  MediaInvokeEventTypeAUDIO_RENDER_EVENT = 1002,
+  MediaInvokeEventTypeAUDIO_ENCODE_EVENT = 1003,
+  MediaInvokeEventTypeAUDIO_VOLUME_INDICATION_EVENT = 1004,
+  MediaInvokeEventTypeAUDIO_SUBMIX_EVENT = 1005,
+  MediaInvokeEventTypeAUDIO_ADJUST_MIC_VOLUME_EVENT = 1006,
+  MediaInvokeEventTypeAUDIO_ADJUST_ENCODE_BITRATE = 1007,
+  MediaInvokeEventTypeAUDIO_UPDATE_CONFIG_EVENT = 1008,
+  MediaInvokeEventTypeAUDIO_SET_PROFILE_EVENT = 1011,
+  MediaInvokeEventTypeAUDIO_ENABLE_EVENT = 1012,
+  MediaInvokeEventTypeAUDIO_ADJUST_SUBMIX_VOLUME_EVENT = 1013,
+  MediaInvokeEventTypeAUDIO_ENUMERATE_DEVICES_EVENT = 1101,
+  MediaInvokeEventTypeAUDIO_GET_SUBMIX_DEVICE_EVENT = 1102,
+  MediaInvokeEventTypeAUDIO_GET_DEFAULT_OUT_DEVICE_EVENT = 1103,
+  MediaInvokeEventTypeAUDIO_GET_OUT_DEVICE_EVENT = 1104,
+  MediaInvokeEventTypeAUDIO_GET_INPUT_DEVICE_EVENT = 1105,
+  MediaInvokeEventTypeAUDIO_SET_DEVICE_EVENT = 1106,
+  MediaInvokeEventTypeAUDIO_MUTE_DEVICE_EVENT = 1107,
+  MediaInvokeEventTypeAUDIO_GET_DEVICE_MUTE_STATE_EVENT = 1108,
+  MediaInvokeEventTypeAUDIO_GET_DEFAULT_INPUT_DEVICE_EVENT = 1109,
+  MediaInvokeEventTypeAUDIO_DEVICE_SET_VOLUME = 1110,
+  MediaInvokeEventTypeAUDIO_DEVICE_GET_VOLUME = 1111,
+  MediaInvokeEventTypeAUDIO_MUTE_LOCAL_STREAM_EVENT = 1112,
+  MediaInvokeEventTypeAUDIO_MIXING_EVENT = 1200,
+  MediaInvokeEventTypeAUDIO_DEBUG_SAVE_CALLBACK_FILE = 1950,
+  MediaInvokeEventTypeAUDIO_EVENT_MAX = 1999,
+  MediaInvokeEventTypeVIDEO_CAMERA_BUSY_INFO = 2101,
+  MediaInvokeEventTypeTEST_SAVE_VIDEO_FILE = 10001,
+};
 
 
 SWIFT_CLASS("_TtC6RtcSDK14MediaMuteEvent")
@@ -829,6 +913,16 @@ typedef SWIFT_ENUM(int32_t, RTCDataWorkMode, closed) {
   RTCDataWorkModeLOCK_STEP_SEND_RECV = 3,
 };
 
+
+SWIFT_PROTOCOL("_TtP6RtcSDK15RTCEventHandler_")
+@protocol RTCEventHandler
+- (void)onVideoDecodeLagWithMsg:(NSString * _Nonnull)msg;
+- (void)onFrameControlWithFrameRate:(int32_t)frameRate;
+- (void)onAvailableBansWithVideoBans:(int32_t)videoBans audioBans:(int32_t)audioBans;
+- (void)onLinkStatusWithStatus:(int32_t)status;
+- (void)onNetReportWithLocalQuality:(int32_t)localQuality remoteQuality:(int32_t)remoteQuality;
+@end
+
 typedef SWIFT_ENUM(int32_t, RTCWorkMode, closed) {
   RTCWorkModePull = 0,
   RTCWorkModePush = 1,
@@ -855,6 +949,11 @@ SWIFT_CLASS("_TtC6RtcSDK21SubscriberStreamEvent")
 - (nonnull instancetype)initWithConnection:(LJRtcConnection * _Nonnull)connection SWIFT_UNAVAILABLE;
 @end
 
+typedef SWIFT_ENUM(int32_t, TAppenderMode, closed) {
+  TAppenderModeKAppednerAsync = 0,
+  TAppenderModeKAppednerSync = 1,
+};
+
 
 SWIFT_CLASS("_TtC6RtcSDK14TransferConfig")
 @interface TransferConfig : Marshallable
@@ -876,6 +975,25 @@ SWIFT_CLASS("_TtC6RtcSDK11TransferMsg")
 - (NSArray<NSNumber *> * _Nonnull)marshall SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
+
+typedef SWIFT_ENUM(int32_t, UDPCallbackType, closed) {
+  UDPCallbackTypeDECODE_DATA = 1,
+  UDPCallbackTypeAVAILABLE_BW = 2,
+  UDPCallbackTypeREQUEST_I_FRAME = 3,
+  UDPCallbackTypeLINK_OK = 4,
+  UDPCallbackTypeLINK_FAILURE = 5,
+  UDPCallbackTypeLINK_REPORT = 6,
+  UDPCallbackTypeNET_REPORT = 7,
+  UDPCallbackTypeVIDEO_FRAME_RATE_CONTROL = 8,
+  UDPCallbackTypeAUDIO_CAPTURE_VOLUME = 9,
+  UDPCallbackTypeCB_JOIN_CHANNEL = 10,
+  UDPCallbackTypeCB_LEAVE_CHANNEL = 11,
+  UDPCallbackTypeCB_LINK_STATUS = 12,
+  UDPCallbackTypeCB_TRANS_STOP = 13,
+  UDPCallbackTypeCB_DECODE_VIDEO_LAG = 14,
+  UDPCallbackTypeMUTI_CHANNEL_REMOTE_JOIN = 1000,
+  UDPCallbackTypeMUTI_CHANNEL_REMOTE_LEAVE = 1001,
+};
 
 
 SWIFT_CLASS("_TtC6RtcSDK13UdpInitConfig")
@@ -915,6 +1033,11 @@ SWIFT_CLASS("_TtC6RtcSDK17VideoDecodeConfig")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+typedef SWIFT_ENUM(int32_t, VideoDecodeType, closed) {
+  VideoDecodeTypeHARD = 1,
+  VideoDecodeTypeSOFT = 2,
+};
+
 
 SWIFT_CLASS("_TtC6RtcSDK14VideoDelayInfo")
 @interface VideoDelayInfo : NSObject
@@ -924,6 +1047,7 @@ SWIFT_CLASS("_TtC6RtcSDK14VideoDelayInfo")
 @property (nonatomic) NSInteger transDelay;
 @property (nonatomic) NSInteger reciveDealy;
 @property (nonatomic) NSInteger fps;
+@property (nonatomic) NSInteger cacheCount;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 

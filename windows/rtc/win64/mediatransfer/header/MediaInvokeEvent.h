@@ -66,10 +66,10 @@ enum MediaInvokeEventType
     VIDEO_CAMERA_BUSY_INFO = 2101, // 获取设备信息
     VIDEO_REQUEST_REMOTE_I_FRAME = 2001, // 请求远端的发送一个I帧
     RESTART_VIDEO_DECODE = 2002, // 重启编码器
+    VIDEO_DECODE_INFO = 2003, // 设置硬解码信息
     ///////////////////////video Events End //////////////////////
     //////////////////////testEvent/////////////////////////////
     TEST_SAVE_VIDEO_FILE = 10001, //
     //////////////////////testEvent/////////////////////////////
-
 };
 } // namespace LJMediaLibrary
