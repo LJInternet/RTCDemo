@@ -39,6 +39,7 @@ RUDP_EXPORT_API typedef void (*rudp_evnt_callback_ex)(int type, const char* msg,
 #define API_STATUS_DISCONNECTED 2
 #define API_STATUS_LOST 		3
 #define API_STATUS_CLOSE		4
+
 //0 即收又发 1是只发送 2 只接收消息 3 既收又发同时会收到自己的同步消息
 enum DataWorkMode
 {

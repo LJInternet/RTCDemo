@@ -386,10 +386,12 @@ namespace LJMediaLibrary {
         uint8_t* data[8]; ///**< 数据数组。*/
         std::string iExtraData; ///**< 额外数据。*/
         std::map<uint64_t, uint64_t> delayData; ///**< 延迟数据映射。*/
+        uint32_t iPts;
+        uint32_t iDts;
 
         VideoDecodedData()
                 : width(0), height(0), widthY(0), heightY(0), widthUV(0), heightUV(0), offsetY(0),
-                  offsetU(0), offsetV(0), frameId(0), len(0) {
+                  offsetU(0), offsetV(0), frameId(0), len(0), iPts(0), iDts() {
             for (int i = 0; i < 8; i++) {
                 data[i] = NULL;
             }

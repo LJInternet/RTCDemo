@@ -116,6 +116,12 @@ extern "C" {
                                                        int32_t height, int pixel_fmt, void* context);
 
     /**
+    * @brief Callback for receiving video data.
+    */
+    MEDIATRANSFER_EXTERN typedef void (*video_cb_with_pts)(uint8_t* buf, int32_t len, int32_t width,
+                                                       int32_t height, int pixel_fmt, uint32_t pts, void* context);
+
+    /**
      * @brief Callback for receiving audio data.
      */
     MEDIATRANSFER_EXTERN typedef bool (*audio_data_cb)(void *audioData, int size, uint64_t pts,
@@ -258,6 +264,8 @@ extern "C" {
      * @param context 上下文指针
      */
     MEDIATRANSFER_EXTERN void media_engine_subscribe_video(struct media_engine* engine, video_data_cb cb, void* context);
+
+    MEDIATRANSFER_EXTERN void media_engine_subscribe_video_with_pts(struct media_engine* engine, video_cb_with_pts cb, void* context);
 
     /**
      * @brief 订阅视频解码数据（带延迟）

@@ -13,7 +13,8 @@
 #include <string>   // C风格字符串函数
 #include <wchar.h>    // 宽字符字符串函数
 #include <tchar.h>
-
+#include <locale>
+#include <codecvt>
 #include "TransConstants.h"
 #include "rudp_proxy.h"
 #include "VideoMediaEvent.h"
@@ -27,8 +28,8 @@ using namespace LJMediaLibrary;
 using namespace LJMediaLibrary::WAV;
 #pragma execution_character_set("UTF-8")
 
-static std::string channels = "954523112";
-static std::string token = "请替换为自己的 token";
+static std::string channels = "954523133";
+static std::string token = "token";
 static uint64_t uid = LJ::DateTime::currentTimeMillis();
 static media_engine* mMediaEngine = nullptr;
 
@@ -152,6 +153,24 @@ static void on_encode_video(uint8_t* buf, int32_t len, int32_t width, int32_t he
     //fwrite(buf, 1, len, encodedFile);
 }
 
+static FILE* testWavFile = nullptr;
+static uint32_t totalAudioCount = 0;
+static uint32_t audioChannels = 0;
+static uint32_t audioSampleRate = 0;
+static bool onDecodeAudioData(void* audioData, int size, uint64_t pts,
+    int sampleRate, int channelCont, void* context) {
+    printf("onDecodeAudioData sampleRate %d channelCont %d %d %lu\n", sampleRate, channelCont, sizeof(WavPCMHeader), pts);
+    //if (testWavFile == nullptr) {
+    //    testWavFile = fopen("decode_audio.wav", "wb");
+    //    fseek(testWavFile, sizeof(WavPCMHeader), SEEK_SET);
+    //}
+    //fwrite(audioData, 1, size, testWavFile);
+    //totalAudioCount = totalAudioCount + size;
+    //audioChannels = channelCont;
+    //audioSampleRate = sampleRate;
+    return false;
+}
+
 static bool on_capture_audio(void* audioData, int size, uint64_t pts, int sampleRate, int channelCount, void* context) {
 
     //printf("on_capture_audio\n");
@@ -170,6 +189,14 @@ static void onEvnCallback(int type, const char* msg, uint32_t len, int result, v
 static FILE* file = nullptr;
 static void OnDecodeVideoCallback(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, void* context) {
     printf("OnDecodeVideoCallback %d X %d pixel_fmt %d \n", width, height, pixel_fmt);
+    // if (captureYuvFile == nullptr) {
+    //     captureYuvFile = fopen("640X480.yuv", "wb");
+    //     fwrite(buf, 1, len, captureYuvFile);
+    // }
+
+}
+static void OnDecodeVideoCallbackWithPts(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, uint32_t pts, void* context) {
+    printf("OnDecodeVideoCallback %d X %d pixel_fmt %d pts %d\n", width, height, pixel_fmt, pts);
     // if (captureYuvFile == nullptr) {
     //     captureYuvFile = fopen("640X480.yuv", "wb");
     //     fwrite(buf, 1, len, captureYuvFile);
@@ -313,16 +340,78 @@ static void testWindowPush() {
 }
 
 static uint8_t* yuvData = nullptr;
+
+enum AUDIO_DEVICE_TYPE {
+    RECORD = 0,
+    PLAY_RENDER = 1,
+    SUBMIX_LOOPBACK = 2,
+};
 static void testWindowPull() {
+    SetConsoleOutputCP(CP_UTF8);
     RTCEngineConfig rtc_config;
     rtc_config.enableLog = false;
     std::string rtccfgstr;
     ljtransfer::mediaSox::PacketToString(rtc_config, rtccfgstr);
     media_engine* mMediaEngine = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
     media_engine_set_debug_env(true);
-    // 订阅解码视频
-    media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
 
+    AudioEnableEvent createAudioEvent;
+    createAudioEvent.evtType = AUDIO_CREATE;
+    createAudioEvent.enabled = true;
+    std::string audio_create_data;
+    ljtransfer::mediaSox::PacketToString(createAudioEvent, audio_create_data);
+    media_engine_send_event(mMediaEngine, createAudioEvent.evtType, (char*)audio_create_data.c_str(), audio_create_data.length());
+    // 获取电脑的所有音频播放设备列表
+    EnumerateAudioDevicesEvent audioDeviceEvent;
+    audioDeviceEvent.type = 1;
+    std::string audioDeviceStr;
+    ljtransfer::mediaSox::PacketToString(audioDeviceEvent, audioDeviceStr);
+    int retLen = 0;
+    char * retChar = media_engine_get_event(mMediaEngine, AUDIO_ENUMERATE_DEVICES_EVENT, (char*)audioDeviceStr.c_str(), audioDeviceStr.length(), &retLen);
+    std::string retStr(retChar, retLen);
+    printf("retLen %d, retChar %s , retStr %s \n", retLen, retChar, retStr.c_str());
+    AudioDevicesEvent retDeviceEvent;
+    ljtransfer::mediaSox::Unpack up(retChar, retLen);
+    retDeviceEvent.unmarshal(up);
+    for (AudioDevice palyDevice : retDeviceEvent.devices) {
+        printf("palyDevice id = %d name = %s \n", palyDevice.id, palyDevice.name.c_str());
+    }
+
+    // 获取电脑的默认播放设备
+    char* retChar1 = media_engine_get_event(mMediaEngine, AUDIO_GET_DEFAULT_OUT_DEVICE_EVENT, "", 0, &retLen);
+    AudioDevice audioDevice;
+    ljtransfer::mediaSox::Unpack up1(retChar1, retLen);
+    audioDevice.unmarshal(up1);
+    printf("default audioDevice %s \n", audioDevice.name.c_str());
+
+    // 获取当前播放设备id
+    char* retChar2 = media_engine_get_event(mMediaEngine, AUDIO_GET_OUT_DEVICE_EVENT, "", 0, &retLen);
+    AudioDevice audioDevice2;
+    ljtransfer::mediaSox::Unpack up2(retChar2, retLen);
+    audioDevice2.unmarshal(up2);
+    printf("current audioDevice %s \n", audioDevice2.name.c_str());
+    // 设置播放设备
+    SetDeviceInfoEvent setDeviceInfo;
+    AudioDevice setDevice;
+    setDevice.id = audioDevice.id;
+    setDevice.name = audioDevice.name;
+    setDeviceInfo.audioDevice = setDevice;
+    setDeviceInfo.type = 1;
+    std::string setdeviceInfoStr;
+    ljtransfer::mediaSox::PacketToString(setDeviceInfo, setdeviceInfoStr);
+    media_engine_send_event(mMediaEngine, AUDIO_SET_DEVICE_EVENT, (char*)setdeviceInfoStr.c_str(), setdeviceInfoStr.length());
+
+    // 订阅解码视频
+    //media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
+    media_engine_subscribe_video_with_pts(mMediaEngine, OnDecodeVideoCallbackWithPts, mMediaEngine);
+    AudioPlayerEvent audioPlayerEvent;
+    audioPlayerEvent.directDecode = false;
+    audioPlayerEvent.callbackDecodeData = false;
+    audioPlayerEvent.renderAudioData = true;
+    std::string audio_enable_data;
+    ljtransfer::mediaSox::PacketToString(audioPlayerEvent, audio_enable_data);
+    media_engine_send_event(mMediaEngine, AUDIO_PLAYER_EVENT, (char*)audio_enable_data.c_str(), audio_enable_data.length());
+    //media_engine_subscribe_audio(mMediaEngine, onDecodeAudioData, nullptr);
     // 加入频道
     MIEUploadConfig c;
     MIETransferConfig config;
@@ -342,23 +431,7 @@ static void testWindowPull() {
     media_engine_destroy(mMediaEngine);
 }
 
-static FILE* testWavFile = nullptr;
-static uint32_t totalAudioCount = 0;
-static uint32_t audioChannels = 0;
-static uint32_t audioSampleRate = 0;
-static bool onDecodeAudioData(void* audioData, int size, uint64_t pts,
-    int sampleRate, int channelCont, void* context) {
-    printf("onDecodeAudioData sampleRate %d channelCont %d %d \n", sampleRate, channelCont, sizeof(WavPCMHeader));
-    if (testWavFile == nullptr) {
-        testWavFile = fopen("decode_audio.wav", "wb");
-        fseek(testWavFile, sizeof(WavPCMHeader), SEEK_SET);
-    }
-    fwrite(audioData, 1, size, testWavFile);
-    totalAudioCount = totalAudioCount + size;
-    audioChannels = channelCont;
-    audioSampleRate = sampleRate;
-    return false;
-}
+
 
 static void testSavePCMToWav() {
     // 创建RTC实例
@@ -394,7 +467,7 @@ static void testSavePCMToWav() {
     ljtransfer::mediaSox::PacketToString(c, cfgstr);
     media_engine_send_event(mMediaEngine, JOIN_CHANNEL, (char*)cfgstr.c_str(), cfgstr.length());
 
-    LJ::SystemUtil::sleep(1000 * 10);
+    LJ::SystemUtil::sleep(1000 * 5);
 
     media_engine_destroy(mMediaEngine);
 

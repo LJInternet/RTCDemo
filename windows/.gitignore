@@ -3,3 +3,4 @@
 /.vs
 /CMakeSettings.json
 *.*.bak
+/rtc/*/*/*.pdb
