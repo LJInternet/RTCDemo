@@ -29,7 +29,7 @@ using namespace LJMediaLibrary::WAV;
 #pragma execution_character_set("UTF-8")
 
 static std::string channels = "954523133";
-static std::string token = "token";
+static std::string token = "linjing@2023";
 static uint64_t uid = LJ::DateTime::currentTimeMillis();
 static media_engine* mMediaEngine = nullptr;
 
@@ -196,7 +196,7 @@ static void OnDecodeVideoCallback(uint8_t* buf, int32_t len, int32_t width, int3
 
 }
 static void OnDecodeVideoCallbackWithPts(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, uint32_t pts, void* context) {
-    printf("OnDecodeVideoCallback %d X %d pixel_fmt %d pts %d\n", width, height, pixel_fmt, pts);
+    //printf("OnDecodeVideoCallback %d X %d pixel_fmt %d pts %d\n", width, height, pixel_fmt, pts);
     // if (captureYuvFile == nullptr) {
     //     captureYuvFile = fopen("640X480.yuv", "wb");
     //     fwrite(buf, 1, len, captureYuvFile);
@@ -361,6 +361,7 @@ static void testWindowPull() {
     std::string audio_create_data;
     ljtransfer::mediaSox::PacketToString(createAudioEvent, audio_create_data);
     media_engine_send_event(mMediaEngine, createAudioEvent.evtType, (char*)audio_create_data.c_str(), audio_create_data.length());
+
     // 获取电脑的所有音频播放设备列表
     EnumerateAudioDevicesEvent audioDeviceEvent;
     audioDeviceEvent.type = 1;
@@ -382,24 +383,24 @@ static void testWindowPull() {
     AudioDevice audioDevice;
     ljtransfer::mediaSox::Unpack up1(retChar1, retLen);
     audioDevice.unmarshal(up1);
-    printf("default audioDevice %s \n", audioDevice.name.c_str());
+    printf("default audioDevice %s id %d \n", audioDevice.name.c_str(), audioDevice.id);
 
     // 获取当前播放设备id
     char* retChar2 = media_engine_get_event(mMediaEngine, AUDIO_GET_OUT_DEVICE_EVENT, "", 0, &retLen);
     AudioDevice audioDevice2;
     ljtransfer::mediaSox::Unpack up2(retChar2, retLen);
     audioDevice2.unmarshal(up2);
-    printf("current audioDevice %s \n", audioDevice2.name.c_str());
+    printf("current audioDevice %s id %d \n", audioDevice2.name.c_str(), audioDevice2.id);
     // 设置播放设备
-    SetDeviceInfoEvent setDeviceInfo;
-    AudioDevice setDevice;
-    setDevice.id = audioDevice.id;
-    setDevice.name = audioDevice.name;
-    setDeviceInfo.audioDevice = setDevice;
-    setDeviceInfo.type = 1;
-    std::string setdeviceInfoStr;
-    ljtransfer::mediaSox::PacketToString(setDeviceInfo, setdeviceInfoStr);
-    media_engine_send_event(mMediaEngine, AUDIO_SET_DEVICE_EVENT, (char*)setdeviceInfoStr.c_str(), setdeviceInfoStr.length());
+    //SetDeviceInfoEvent setDeviceInfo;
+    //AudioDevice setDevice;
+    //setDevice.id = audioDevice.id;
+    //setDevice.name = audioDevice.name;
+    //setDeviceInfo.audioDevice = setDevice;
+    //setDeviceInfo.type = 1;
+    //std::string setdeviceInfoStr;
+    //ljtransfer::mediaSox::PacketToString(setDeviceInfo, setdeviceInfoStr);
+    //media_engine_send_event(mMediaEngine, AUDIO_SET_DEVICE_EVENT, (char*)setdeviceInfoStr.c_str(), setdeviceInfoStr.length());
 
     // 订阅解码视频
     //media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
@@ -408,9 +409,9 @@ static void testWindowPull() {
     audioPlayerEvent.directDecode = false;
     audioPlayerEvent.callbackDecodeData = false;
     audioPlayerEvent.renderAudioData = true;
-    std::string audio_enable_data;
-    ljtransfer::mediaSox::PacketToString(audioPlayerEvent, audio_enable_data);
-    media_engine_send_event(mMediaEngine, AUDIO_PLAYER_EVENT, (char*)audio_enable_data.c_str(), audio_enable_data.length());
+    std::string PlayerEnableStr;
+    ljtransfer::mediaSox::PacketToString(audioPlayerEvent, PlayerEnableStr);
+    media_engine_send_event(mMediaEngine, AUDIO_PLAYER_EVENT, (char*)PlayerEnableStr.c_str(), PlayerEnableStr.length());
     //media_engine_subscribe_audio(mMediaEngine, onDecodeAudioData, nullptr);
     // 加入频道
     MIEUploadConfig c;
