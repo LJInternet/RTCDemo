@@ -52,58 +52,72 @@
 #define VIDEO_CALLBACK_DECODE_EX        54 /**< Extended video decode callback. */
 /** @} */
 
+/**
+ * @brief Structure representing transfer delay information.
+ */
+struct TransDelayInfo {
+    uint64_t id; /**< Identifier. */
+    uint64_t value; /**< Value. */
+};
+
+/**
+ * @brief Structure representing a list of transfer delay information.
+ */
+struct TransDelayInfoList {
+    TransDelayInfo* timeInfos; /**< Array of transfer delay information. */
+    uint32_t size; /**< Size of the array. */
+
+    /**
+     * @brief Constructor.
+     */
+    TransDelayInfoList() : timeInfos(nullptr), size(0) {}
+    /**
+     * @brief Destructor.
+     * Frees the dynamically allocated memory for the timeInfos array.
+     */
+    ~TransDelayInfoList() {
+        // Check if timeInfos is not null to avoid double free or invalid memory access
+        if (timeInfos != nullptr) {
+            delete[] timeInfos;  // Free the allocated memory
+            timeInfos = nullptr;  // Set the pointer to nullptr to avoid dangling pointer
+        }
+    }
+};
+/**
+  * @brief Structure representing a video frame that needs to be decoded.
+  */
+struct CNeedDecodeVideoFrame {
+    uint8_t* buf; /**< Pointer to the video frame buffer. */
+    int32_t len; /**< Length of the video frame buffer. */
+    int32_t width; /**< Width of the video frame. */
+    int32_t height; /**< Height of the video frame. */
+    int32_t frameType; /**< Type of the video frame (VideoFrameType). */
+    uint64_t pts; /**< Presentation timestamp of the video frame. */
+    int32_t pixel_fmt; /**< Pixel format of the video frame (e.g., PIXEL_FMT_H264 or PIXEL_FMT_H265). */
+    TransDelayInfoList* delayData;/**< Delay data associated with the video frame. */
+
+    /**
+     * @brief Constructor.
+     */
+    CNeedDecodeVideoFrame() : width(0), height(0), frameType(0), pts(0), pixel_fmt(0),
+    buf(nullptr), len(0), delayData(nullptr) {}
+
+    /**
+     * @brief Destructor.
+     */
+    ~CNeedDecodeVideoFrame() {
+        buf = nullptr;
+        if (delayData) {
+            delete delayData;
+            delayData = nullptr;
+        }
+    }
+};
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-    /**
-     * @brief Structure representing a video frame that needs to be decoded.
-     */
-    struct CNeedDecodeVideoFrame {
-        uint8_t* buf; /**< Pointer to the video frame buffer. */
-        int32_t len; /**< Length of the video frame buffer. */
-        int32_t width; /**< Width of the video frame. */
-        int32_t height; /**< Height of the video frame. */
-        int32_t frameType; /**< Type of the video frame (VideoFrameType). */
-        uint64_t pts; /**< Presentation timestamp of the video frame. */
-        int32_t pixel_fmt; /**< Pixel format of the video frame (e.g., PIXEL_FMT_H264 or PIXEL_FMT_H265). */
-        std::map<uint64_t, uint64_t> delayData; /**< Delay data associated with the video frame. */
-
-        /**
-         * @brief Constructor.
-         */
-        CNeedDecodeVideoFrame() : width(0), height(0), frameType(0), pts(0), pixel_fmt(0), buf(nullptr), len(0) {}
-
-        /**
-         * @brief Destructor.
-         */
-        ~CNeedDecodeVideoFrame() {
-            buf = nullptr;
-            delayData.clear();
-        }
-    };
-
-    /**
-     * @brief Structure representing transfer delay information.
-     */
-    struct TransDelayInfo {
-        uint64_t id; /**< Identifier. */
-        uint64_t value; /**< Value. */
-    };
-
-    /**
-     * @brief Structure representing a list of transfer delay information.
-     */
-    struct TransDelayInfoList {
-        TransDelayInfo* timeInfos; /**< Array of transfer delay information. */
-        uint32_t size; /**< Size of the array. */
-
-        /**
-         * @brief Constructor.
-         */
-        TransDelayInfoList() : timeInfos(nullptr), size(0) {}
-    };
-
     /**
      * @brief Media engine structure.
      */
@@ -136,7 +150,7 @@ extern "C" {
     /**
      * @brief Callback for receiving undecoded video frames.
      */
-    MEDIATRANSFER_EXTERN typedef void (*video_undecode_cb)(CNeedDecodeVideoFrame videoFrame, void* context);
+    MEDIATRANSFER_EXTERN typedef void (*video_undecode_cb)(struct CNeedDecodeVideoFrame* videoFrame, void* context);
 
     /**
      * @brief Callback for receiving extended audio data.

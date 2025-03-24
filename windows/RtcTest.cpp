@@ -65,6 +65,7 @@ public:
 
     }
 
+
     static void onEvnCallback(int type, const char* msg, uint32_t len, int result, void* content) {
         printf("onEvnCallback %d %d \n", type, result);
         if (content == nullptr) {
@@ -120,6 +121,17 @@ private:
         }
     }
 };
+
+static  void onUndecodeVideoCallback(struct CNeedDecodeVideoFrame* videoFrame, void* context) {
+    printf("onUndecodeVideoCallback %p %d %d %d %u\n", videoFrame->buf, videoFrame->width, videoFrame->height, videoFrame->frameType, videoFrame->delayData->size);
+    if (videoFrame->delayData != nullptr) {
+        uint32_t size = videoFrame->delayData->size;
+        for (int i = 0; i < size; i++) {
+            printf("onUndecodeVideoCallback key %lld value %lld\n", videoFrame->delayData->timeInfos[i].id, videoFrame->delayData->timeInfos[i].value);
+        }
+       
+    }
+}
 
 static FILE* captureYuvFile = nullptr;
 static void on_capture_video(uint8_t* buf, int32_t len, int32_t width, int32_t height, int pixel_fmt, void* context) {
@@ -355,56 +367,12 @@ static void testWindowPull() {
     media_engine* mMediaEngine = media_engine_create(rtccfgstr.c_str(), rtccfgstr.length());
     media_engine_set_debug_env(true);
 
-    AudioEnableEvent createAudioEvent;
-    createAudioEvent.evtType = AUDIO_CREATE;
-    createAudioEvent.enabled = true;
-    std::string audio_create_data;
-    ljtransfer::mediaSox::PacketToString(createAudioEvent, audio_create_data);
-    media_engine_send_event(mMediaEngine, createAudioEvent.evtType, (char*)audio_create_data.c_str(), audio_create_data.length());
-
-    // 获取电脑的所有音频播放设备列表
-    EnumerateAudioDevicesEvent audioDeviceEvent;
-    audioDeviceEvent.type = 1;
-    std::string audioDeviceStr;
-    ljtransfer::mediaSox::PacketToString(audioDeviceEvent, audioDeviceStr);
-    int retLen = 0;
-    char * retChar = media_engine_get_event(mMediaEngine, AUDIO_ENUMERATE_DEVICES_EVENT, (char*)audioDeviceStr.c_str(), audioDeviceStr.length(), &retLen);
-    std::string retStr(retChar, retLen);
-    printf("retLen %d, retChar %s , retStr %s \n", retLen, retChar, retStr.c_str());
-    AudioDevicesEvent retDeviceEvent;
-    ljtransfer::mediaSox::Unpack up(retChar, retLen);
-    retDeviceEvent.unmarshal(up);
-    for (AudioDevice palyDevice : retDeviceEvent.devices) {
-        printf("palyDevice id = %d name = %s \n", palyDevice.id, palyDevice.name.c_str());
-    }
-
-    // 获取电脑的默认播放设备
-    char* retChar1 = media_engine_get_event(mMediaEngine, AUDIO_GET_DEFAULT_OUT_DEVICE_EVENT, "", 0, &retLen);
-    AudioDevice audioDevice;
-    ljtransfer::mediaSox::Unpack up1(retChar1, retLen);
-    audioDevice.unmarshal(up1);
-    printf("default audioDevice %s id %d \n", audioDevice.name.c_str(), audioDevice.id);
-
-    // 获取当前播放设备id
-    char* retChar2 = media_engine_get_event(mMediaEngine, AUDIO_GET_OUT_DEVICE_EVENT, "", 0, &retLen);
-    AudioDevice audioDevice2;
-    ljtransfer::mediaSox::Unpack up2(retChar2, retLen);
-    audioDevice2.unmarshal(up2);
-    printf("current audioDevice %s id %d \n", audioDevice2.name.c_str(), audioDevice2.id);
-    // 设置播放设备
-    //SetDeviceInfoEvent setDeviceInfo;
-    //AudioDevice setDevice;
-    //setDevice.id = audioDevice.id;
-    //setDevice.name = audioDevice.name;
-    //setDeviceInfo.audioDevice = setDevice;
-    //setDeviceInfo.type = 1;
-    //std::string setdeviceInfoStr;
-    //ljtransfer::mediaSox::PacketToString(setDeviceInfo, setdeviceInfoStr);
-    //media_engine_send_event(mMediaEngine, AUDIO_SET_DEVICE_EVENT, (char*)setdeviceInfoStr.c_str(), setdeviceInfoStr.length());
 
     // 订阅解码视频
     //media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
-    media_engine_subscribe_video_with_pts(mMediaEngine, OnDecodeVideoCallbackWithPts, mMediaEngine);
+    //media_engine_subscribe_video_with_pts(mMediaEngine, OnDecodeVideoCallbackWithPts, mMediaEngine);
+
+    media_engine_subscribe_undecode_video(mMediaEngine, onUndecodeVideoCallback, mMediaEngine);
     AudioPlayerEvent audioPlayerEvent;
     audioPlayerEvent.directDecode = false;
     audioPlayerEvent.callbackDecodeData = false;
