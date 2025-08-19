@@ -369,10 +369,10 @@ static void testWindowPull() {
 
 
     // 订阅解码视频
-    //media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
+    media_engine_subscribe_video(mMediaEngine, OnDecodeVideoCallback, mMediaEngine);
     //media_engine_subscribe_video_with_pts(mMediaEngine, OnDecodeVideoCallbackWithPts, mMediaEngine);
 
-    media_engine_subscribe_undecode_video(mMediaEngine, onUndecodeVideoCallback, mMediaEngine);
+    //media_engine_subscribe_undecode_video(mMediaEngine, onUndecodeVideoCallback, mMediaEngine);
     AudioPlayerEvent audioPlayerEvent;
     audioPlayerEvent.directDecode = false;
     audioPlayerEvent.callbackDecodeData = false;

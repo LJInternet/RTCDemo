@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/RtmSdk-Swift.h</key>
 		<data>
-		2VP+o3aLHAXpobEKP/5cU7xGvg0=
+		MDH5zxiLv9d391fnFUBDuM1ay5g=
 		</data>
 		<key>Headers/RtmSdk.h</key>
 		<data>
@@ -14,23 +14,23 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		POyzRsgy7roUknP/FWaa6FMv+aM=
+		b/YprJRl1swnpQwa7D2Mn9o6O3E=
 		</data>
 		<key>Modules/RtmSdk.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		zXpnIW/jPIl4SSUykPdh32zLZA8=
+		zlEAr6YPiAlBVmAAYvBZw26/kaI=
 		</data>
 		<key>Modules/RtmSdk.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		FSPnLbho3G+LL9smI3XgVOqBIQ4=
+		gcwBsH4BgyFY4sVtNt+/xOKS3vY=
 		</data>
 		<key>Modules/RtmSdk.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		HJzM8kMuDC7jyz70W+s19UAsK0g=
+		tKbWlo3KqnxOQPM3IOc7XBoIP74=
 		</data>
 		<key>Modules/RtmSdk.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		0e2yXGSLLVu0tQeQKnARf3erOPc=
+		sOKZUspQbL/2QX5C0I4cmzkAgYY=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -43,11 +43,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			2VP+o3aLHAXpobEKP/5cU7xGvg0=
+			MDH5zxiLv9d391fnFUBDuM1ay5g=
 			</data>
 			<key>hash2</key>
 			<data>
-			WvEatRFbcaCVmYoQM115N6lgU83k/U7waXk2/hAqAW4=
+			w3+7ooYwycPG/+GTSyQMPhhfXpxAKhzhM8aTAB9Myok=
 			</data>
 		</dict>
 		<key>Headers/RtmSdk.h</key>
@@ -65,44 +65,44 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zXpnIW/jPIl4SSUykPdh32zLZA8=
+			zlEAr6YPiAlBVmAAYvBZw26/kaI=
 			</data>
 			<key>hash2</key>
 			<data>
-			2PbifDU2lYmpPuTDZE+LkpxUg0nQ0y85shqdzUFAw7M=
+			sTBRoyRQEeNuggCc0O+uSilb7uRqC/6/7e2VU++OyRw=
 			</data>
 		</dict>
 		<key>Modules/RtmSdk.swiftmodule/arm64-apple-ios.abi.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			FSPnLbho3G+LL9smI3XgVOqBIQ4=
+			gcwBsH4BgyFY4sVtNt+/xOKS3vY=
 			</data>
 			<key>hash2</key>
 			<data>
-			KnRdWE4y6t4QM5zi5JDptPdHFgJy1Tku+7GLkZS2aNM=
+			Qnesa0n4URGWAopawg9bGx36dUwkYV00BoCJ8LFzlyg=
 			</data>
 		</dict>
 		<key>Modules/RtmSdk.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HJzM8kMuDC7jyz70W+s19UAsK0g=
+			tKbWlo3KqnxOQPM3IOc7XBoIP74=
 			</data>
 			<key>hash2</key>
 			<data>
-			13TzHsCfiNlVYC6umU+enZc1gB05eziOKEMgI2ocA6A=
+			zvonjOIE5vdqSBifhclruYSD5gFa2I1MSlu8mSr0g8A=
 			</data>
 		</dict>
 		<key>Modules/RtmSdk.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0e2yXGSLLVu0tQeQKnARf3erOPc=
+			sOKZUspQbL/2QX5C0I4cmzkAgYY=
 			</data>
 			<key>hash2</key>
 			<data>
-			nVpe7jrjZ4xIBL5v85k6C8/RYOp9k+X8Rq7i+I5p8iY=
+			vstp1bdRKizcafYd0TPYzWdcZm3AOsPymLw1WewXvqU=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

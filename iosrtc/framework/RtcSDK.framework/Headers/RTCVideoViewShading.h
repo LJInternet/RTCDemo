@@ -35,6 +35,23 @@ RTC_OBJC_EXPORT
                                yPlane:(GLuint)yPlane
                               uvPlane:(GLuint)uvPlane;
 
+/** Callback for I420 frames with crop matrix. Each plane is given as a texture. */
+- (void)applyShadingForFrameWithWidth:(int)width
+                               height:(int)height
+                             rotation:(RTCVideoRotation)rotation
+                               yPlane:(GLuint)yPlane
+                               uPlane:(GLuint)uPlane
+                               vPlane:(GLuint)vPlane
+                          cropMatrix:(const float *)cropMatrix;
+
+/** Callback for NV12 frames with crop matrix. Each plane is given as a texture. */
+- (void)applyShadingForFrameWithWidth:(int)width
+                               height:(int)height
+                             rotation:(RTCVideoRotation)rotation
+                               yPlane:(GLuint)yPlane
+                              uvPlane:(GLuint)uvPlane
+                          cropMatrix:(const float *)cropMatrix;
+
 @end
 
-NS_ASSUME_NONNULL_END
+NS_ASSUME_NONNULL_END

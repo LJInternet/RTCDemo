@@ -156,7 +156,7 @@ class ViewController: UIViewController {
         engine.setupRemoteVideo(view: remoteView)
         let config = ChannelConfig()
         config.userID = 111
-        config.token = "linjing@2023"
+        config.token = GlobalConstants.token
         config.appID = 1
         config.channelID = "954523133"
         let udpConfig = UdpInitConfig()
