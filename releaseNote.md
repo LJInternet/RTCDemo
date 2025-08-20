@@ -1,11 +1,14 @@
 ### 20250819 发布：
 #### 1.更新版本号为0.0.10
 #### 2.android和ios渲染远端画面增加全屏渲染模式：
-##### android: RENDER_MODE_ADAPTIVE 铺满全面并裁剪，RENDER_MODE_FILL铺满全屏，拉伸,Usage:VideoViews views = new VideoViews(surfaceView, VideoViews.RENDER_MODE_ADAPTIVE, 0);
-##### ios: RenderMode.Fill 铺满全屏，拉伸, RenderMode.Adaptive 铺满全面并裁剪.Usage: setupRemoteVideo(view:remoteView, renderMode:RenderMode.FIll)
+    android: RENDER_MODE_ADAPTIVE 铺满全面并裁剪，RENDER_MODE_FILL铺满全屏，拉伸,Usage:VideoViews views = new VideoViews(surfaceView, VideoViews.RENDER_MODE_ADAPTIVE, 0);
+    ios: RenderMode.Fill 铺满全屏，拉伸, RenderMode.Adaptive 铺满全面并裁剪.Usage: setupRemoteVideo(view:remoteView, renderMode:RenderMode.FIll)
 #### 3.ios增加回调未解码数据接口：registerNeedDecodeVideoFrameObserver(observer:NeedDecodeVideoFrameDelegate),在joinchannel前设置，设置该接口后，远端数据不会自动解码并渲染，需要用户自己实现解码和渲染
 #### 4.android增加本地解码渲染开关接口：enableLocalPlayer,设置该接口后，本地数据不会自动解码并渲染，需要用户自己实现解码和渲染
-
+#### android硬解码增加解码器选择逻辑：
+    1.设置低延时，优先选择支持低延时的解码器
+    2.手机不支持低延时解码器，则从厂商的通用解码器中选择
+    3.都没有则选择一个支持surface零拷贝的解码器
 ### 20240930 发布：
 1.调整帧率算法（编码端有效）
 PC/Linux：media_engine_register_event_listener //type== RUDP_CB_VIDEO_FRAME_RATE_CONTROL
