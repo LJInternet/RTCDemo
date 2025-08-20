@@ -1,9 +1,9 @@
 ### 20250819 发布：
 #### 1.更新版本号为0.0.10
 #### 2.android和ios渲染远端画面增加全屏渲染模式：
-    android: RENDER_MODE_ADAPTIVE 铺满全面并裁剪，RENDER_MODE_FILL铺满全屏，拉伸
-            Usage:VideoViews views = new VideoViews(surfaceView, VideoViews.RENDER_MODE_ADAPTIVE, 0);
-    ios: RenderMode.Fill 铺满全屏，拉伸, RenderMode.Adaptive 铺满全面并裁剪.
+    android: RENDER_MODE_ADAPTIVE 铺满全面并裁剪，RENDER_MODE_FILL铺满全屏拉伸
+            Usage:VideoViews views = new VideoViews(surfaceView, VideoViews.RENDER_MODE_FILL, 0);
+    ios: RenderMode.Fill 铺满全屏拉伸, RenderMode.Adaptive 铺满全面并裁剪.
             Usage: setupRemoteVideo(view:remoteView, renderMode:RenderMode.FIll)
 #### 3.ios增加回调未解码数据接口：registerNeedDecodeVideoFrameObserver(observer:NeedDecodeVideoFrameDelegate),在joinchannel前设置，设置该接口后，远端数据不会自动解码并渲染，需要用户自己实现解码和渲染
 #### 4.android增加本地解码渲染开关接口：enableLocalPlayer,设置该接口后，本地数据不会自动解码并渲染，需要用户自己实现解码和渲染
