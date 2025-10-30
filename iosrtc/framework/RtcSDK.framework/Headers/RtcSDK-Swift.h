@@ -718,6 +718,7 @@ SWIFT_CLASS("_TtC6RtcSDK11LJRtcEngine")
 - (void)enableAudio;
 - (void)disableAudio;
 - (void)setDebugWithDebug:(int32_t)debug;
+- (void)setVoipWithIsVoip:(int32_t)isVoip;
 - (void)muteLocalAudioStreamWithMute:(BOOL)mute;
 - (void)muteRemoteAudioStreamWithMute:(BOOL)mute;
 - (void)startPreview;
@@ -832,6 +833,7 @@ typedef SWIFT_ENUM(int32_t, MediaInvokeEventType, closed) {
   MediaInvokeEventTypeAUDIO_SET_PROFILE_EVENT = 1011,
   MediaInvokeEventTypeAUDIO_ENABLE_EVENT = 1012,
   MediaInvokeEventTypeAUDIO_ADJUST_SUBMIX_VOLUME_EVENT = 1013,
+  MediaInvokeEventTypeAUDIO_SET_VIOP_EVENT = 1014,
   MediaInvokeEventTypeAUDIO_ENUMERATE_DEVICES_EVENT = 1101,
   MediaInvokeEventTypeAUDIO_GET_SUBMIX_DEVICE_EVENT = 1102,
   MediaInvokeEventTypeAUDIO_GET_DEFAULT_OUT_DEVICE_EVENT = 1103,
